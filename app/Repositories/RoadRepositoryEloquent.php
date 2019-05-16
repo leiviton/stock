@@ -48,29 +48,88 @@ class RoadRepositoryEloquent extends BaseRepository implements RoadRepository
 
     /**
      * @param $data
+     * @param $user
+     * @param $cnpj
+     * @param string $lote
      * @return mixed
      */
-    public function orderFilter($data)
+    public function orderFilter($data, $user, $cnpj, $lote = '')
     {
         $order[0] = $order[0] ?? 'data_validade';
         $order[1] = $order[1] ?? 'desc';
-
-        if($data['value'] == ''){
-            $results = $this->model
-                ->orderBy($order[0],$order[1])->get();
-        }else{
-            $results = $this->model
-                ->orderBy($order[0],$order[1])
-                ->where(function ($query) use ($data) {
-                    if ($data){
-                        return $query->where($data['field'],'like','%'. $data['value'].'%');
-                    }
-                    return $query;
-                })
-                ->paginate();
+        if ($lote == '') {
+            if ($user->role == 'user_company') {
+                if ($data['value'] == '') {
+                    $results = $this->model
+                        ->orderBy($order[0], $order[1])->where('depositante', $user->company->cnpj)->get();
+                } else {
+                    $results = $this->model
+                        ->orderBy($order[0], $order[1])
+                        ->where('depositante', $user->company->cnpj)
+                        ->where(function ($query) use ($data) {
+                            if ($data) {
+                                return $query->where($data['field'], 'like', '%' . $data['value'] . '%');
+                            }
+                            return $query;
+                        })
+                        ->paginate();
+                }
+            } else {
+                if ($data['value'] == '') {
+                    $results = $this->model
+                        ->orderBy($order[0], $order[1])->where('depositante', $cnpj)->get();
+                } else {
+                    $results = $this->model
+                        ->orderBy($order[0], $order[1])
+                        ->where('depositante', $cnpj)
+                        ->where(function ($query) use ($data) {
+                            if ($data) {
+                                return $query->where($data['field'], 'like', '%' . $data['value'] . '%');
+                            }
+                            return $query;
+                        })
+                        ->paginate();
+                }
+            }
+        } else {
+            if ($user->role == 'user_company') {
+                if ($data['value'] == '') {
+                    $results = $this->model
+                        ->orderBy($order[0], $order[1])->where('depositante', $user->company->cnpj)->where('tipo_estoque', $lote)->get();
+                } else {
+                    $results = $this->model
+                        ->orderBy($order[0], $order[1])
+                        ->where('tipo_estoque', $lote)
+                        ->where('depositante', $user->company->cnpj)
+                        ->where(function ($query) use ($data) {
+                            if ($data) {
+                                return $query->where($data['field'], 'like', '%' . $data['value'] . '%');
+                            }
+                            return $query;
+                        })
+                        ->paginate();
+                }
+            } else {
+                if ($data['value'] == '') {
+                    $results = $this->model
+                        ->orderBy($order[0], $order[1])->where('depositante', $cnpj)->where('tipo_estoque', $lote)->get();
+                } else {
+                    $results = $this->model
+                        ->orderBy($order[0], $order[1])
+                        ->where('depositante', $cnpj)
+                        ->where('tipo_estoque', $lote)
+                        ->where(function ($query) use ($data) {
+                            if ($data) {
+                                return $query->where($data['field'], 'like', '%' . $data['value'] . '%');
+                            }
+                            return $query;
+                        })
+                        ->paginate();
+                }
+            }
         }
 
-        if ($results){
+        if ($results) {
             return $this->parserResult($results);
         }
 
@@ -78,21 +137,53 @@ class RoadRepositoryEloquent extends BaseRepository implements RoadRepository
     }
 
     /**
+     * @param $user
+     * @param $cnpj
+     * @param string $lote
      * @return mixed
      * @throws \Exception
      */
-    public function orderByRoads()
+    public function orderByRoads($user, $cnpj, $lote = '')
     {
         $dataEnd = new \DateTime();
-        $results = $this->model
-            ->where(function ($query) use ($dataEnd) {
-                if ($dataEnd) {
-                    return $query->whereRaw('data_geracao BETWEEN ? AND ?', [(new Carbon())->subMonth(6), $dataEnd]);
-                }
-                return $query;
-            })
-            ->paginate();
+        //dd($user->role);
+        if ($lote != '') {
+            if ($user->role == 'user_company') {
+                $results = $this->model
+                    ->where('depositante', $user->company->cnpj)
+                    ->where('tipo_estoque', $lote)
+                    ->where(function ($query) use ($dataEnd) {
+                        if ($dataEnd) {
+                            return $query->whereRaw('data_geracao BETWEEN ? AND ?', [(new Carbon())->subMonth(6), $dataEnd]);
+                        }
+                        return $query;
+                    })
+                    ->paginate();
+            } else {
+                $results = $this->model
+                    ->where('tipo_estoque', $lote)
+                    ->where('depositante', $cnpj)
+                    ->where(function ($query) use ($dataEnd) {
+                        if ($dataEnd) {
+                            return $query->whereRaw('data_geracao BETWEEN ? AND ?', [(new Carbon())->subMonth(6), $dataEnd]);
+                        }
+                        return $query;
+                    })
+                    ->paginate();
+            }
+        } else {
 
+            $results = $this->model
+                ->where('depositante', $cnpj)
+                ->where(function ($query) use ($dataEnd) {
+                    if ($dataEnd) {
+                        return $query->whereRaw('data_geracao BETWEEN ? AND ?', [(new Carbon())->subMonth(6), $dataEnd]);
+                    }
+                    return $query;
+                })
+                ->paginate();
+
+        }
         if ($results) {
             return $this->parserResult($results);
         }

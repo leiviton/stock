@@ -33,7 +33,7 @@ class User extends \Stock\Models\Base\User implements Transformable,Authenticata
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password','role','company_id'
+        'name', 'email', 'password','role','company_id','img_profile','status'
     ];
 
     /**

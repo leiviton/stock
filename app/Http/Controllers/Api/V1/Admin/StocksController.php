@@ -30,21 +30,25 @@ class StocksController extends Controller
     }
 
     /**
+     * @param $id
+     * @param $lote
+     * @param Request $request
      * @return mixed
      */
-    public function index(Request $request)
+    public function index($id,Request $request)
     {
-        return $this->service->getStocks($request->all());
+        $lote = $request->get('protocolo') ? $request->get('protocolo') : '';
+        return $this->service->getStocks($request->all(),$id,$lote);
     }
 
     /**
      * @return mixed
      */
-    public function getAll()
+    public function getAll($id,Request $request)
     {
-        return $this->service->getAll();
+        $lote = $request->get('protocolo') ? $request->get('protocolo') : '';
+        return $this->service->getAll($id,$lote);
     }
-
     /**
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
@@ -81,9 +85,9 @@ class StocksController extends Controller
             ], 406);
         }
 
-        $result =  $this->service->export($request->all());
+        $result =  $this->service->export($data);
 
-        return response()->json(['message' => 'Arquivo gerado com sucesso', 'link' => env('APP_URL').'/excel/'.$result.'.xlsx'],200);
+        return response()->json(['message' => 'Arquivo gerado com sucesso', 'link' => env('APP_URL').'/storage/excel/stocks/'.$result.'.xlsx'],200);
     }
 
     /**

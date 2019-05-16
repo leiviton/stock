@@ -24,7 +24,8 @@ class Out extends \Stock\Models\Base\Out implements Transformable
         'depositante',
         'razao_social',
         'tipo_estoque',
-        'item',
+        'desc_tipo_estoque',
+        'codigo_produto',
         'desc_produto',
         'unidade_medida',
         'lote',
@@ -38,9 +39,7 @@ class Out extends \Stock\Models\Base\Out implements Transformable
         'qtd_enviada',
         'serie',
         'peca',
-        'pedido_venda',
-        'solicitacao_carga',
-        'chave_nfe'
+        'pedido_venda'
     ];
 
 }

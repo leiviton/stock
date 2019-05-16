@@ -19,39 +19,40 @@ Route::group(['prefix' => 'v1/', 'middleware' => 'auth:api'], function () {
 
         /*Users*/
         Route::post('user', 'UserController@store');
+        Route::post('user/upload', 'UserController@upload');
         Route::get('authenticated', 'UserController@authenticated');
         Route::get('user', 'UserController@index');
         Route::get('user/{id}', 'UserController@edit');
         Route::put('user/{id}', 'UserController@update');
         Route::delete('user/{id}', 'UserController@delete');
         Route::patch('user/{id}', 'UserController@updateStatus');
+        Route::get('protocol', 'ProtocolsController@index');
 
         /*Stock*/
         Route::post('stock', 'StocksController@store');
-        Route::get('stock', 'StocksController@index');
-        Route::get('stock/all', 'StocksController@getAll');
-        Route::get('stock/export', 'StocksController@export');
-        Route::get('stock/{id}', 'StocksController@edit');
+        Route::get('stock/{id}', 'StocksController@index');
+        Route::get('stock/all/{id}', 'StocksController@getAll');
+        Route::post('stock/export', 'StocksController@export');
         Route::put('stock/{id}', 'StocksController@update');
 
         /*Road*/
         Route::post('road', 'RoadController@store');
-        Route::get('road', 'RoadController@index');
-        Route::get('road/all', 'RoadController@getAll');
-        Route::get('road/export', 'RoadController@export');
-        Route::get('road/{id}', 'RoadController@edit');
+        Route::get('road/{id}', 'RoadController@index');
+        Route::get('road/all/{id}', 'RoadController@getAll');
+        Route::post('road/export', 'RoadController@export');
         Route::put('road/{id}', 'RoadController@update');
 
         /*Outs*/
         Route::post('out', 'OutsController@store');
-        Route::get('out', 'OutsController@index');
-        Route::get('out/all', 'OutsController@getAll');
-        Route::get('out/export', 'OutsController@export');
-        Route::get('out/{id}', 'OutsController@edit');
+        Route::get('out/{id}', 'OutsController@index');
+        Route::get('out/all/{id}', 'OutsController@getAll');
+        Route::post('out/export', 'OutsController@export');
+        //Route::get('out/{id}', 'OutsController@edit');
         Route::put('out/{id}', 'OutsController@update');
 
         /*Company*/
         Route::post('company', 'CompaniesController@store');
+        Route::post('company/upload', 'CompaniesController@upload');
         Route::get('company', 'CompaniesController@index');
         Route::get('company/{id}', 'CompaniesController@edit');
         Route::put('company/{id}', 'CompaniesController@update');

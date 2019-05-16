@@ -47,16 +47,13 @@ class UserController extends Controller
         $validator = Validator($request->all(), [
             'name' => 'required|min:4',
             'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:6',
             'role' => 'required'
         ], [
             'name.required' => 'Nome do usuário é obrigatório',
             'name.length' => 'Nome deve conter no minimo 4 caracteres',
             'email.email' => 'Email precisa ser um endereço válido',
             'email.unique' => 'Email já está em uso no sistema',
-            'password.required' => 'Senha é obrigatória',
-            'password.length' => 'Senha deve conter no minimo 6 caracteres',
-            'role.required' => 'Nível de usuário é obrigatório'
+            'role.required' => 'Tipo de usuário é obrigatório'
         ]);
 
         if ($validator->fails()) {
@@ -78,6 +75,26 @@ class UserController extends Controller
         }
     }
 
+    public function upload(Request $request)
+    {
+        $nameFile = null;
+
+        if ($request->hasFile('image') && $request->file('image')->isValid()) {
+            $name = uniqid(date('HisYmd'));
+            $extension = $request->image->extension();
+            $nameFile = "{$name}.{$extension}";
+            $upload = $request->image->storeAs('users', $nameFile, 'public');
+            if (!$upload) {
+                return response()->json(['message' => 'Verifique o arquivo enviado', 'status' => 'error','title' => 'Erro'], 400);
+            } else {
+                return response()->json(['file' => $nameFile]);
+            }
+        } else if($request->get('image') == null || $request->get('image') == ''){
+            return response()->json(['file' => 'default.png']);
+        } else {
+            return response()->json(['message' => 'Verifique o arquivo enviado 1', 'status' => 'error','title' => 'Erro'], 400);
+        }
+    }
     /**
      * @param $id
      * @param Request $request

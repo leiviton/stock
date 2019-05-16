@@ -8,6 +8,7 @@
 
 namespace Stock\Services;
 
+use Stock\Repositories\UserProtocolRepository;
 use Stock\Repositories\UserRepository;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -18,14 +19,20 @@ class UserService
      * @var UserRepository
      */
     private $userRepository;
+    /**
+     * @var UserProtocolRepository
+     */
+    private $protocolRepository;
 
     /**
      * SellerService constructor.
      * @param UserRepository $userRepository
+     * @param UserProtocolRepository $protocolRepository
      */
-    public function __construct(UserRepository $userRepository)
+    public function __construct(UserRepository $userRepository, UserProtocolRepository $protocolRepository)
     {
         $this->userRepository = $userRepository;
+        $this->protocolRepository = $protocolRepository;
     }
 
     /**
@@ -74,9 +81,23 @@ class UserService
 
             $data['email_verified_at'] = new \DateTime();
 
-            $data['password'] = bcrypt($data['password']);
+            $data['password'] = bcrypt(123456);
 
             $result = $this->userRepository->create($data);
+
+            if($result->role == 'user_company') {
+
+                $protocols = $data['protocols'];
+                for($i = 0; $i < count($protocols); $i++){
+                //foreach($protocols as $protocol) {
+                    $data = [
+                        "user_id" => $result->id,
+                        "protocol_id" => $protocols[$i]["id"]
+                    ];
+
+                    $this->protocolRepository->create($data);
+                }
+            }
 
             DB::commit();
 

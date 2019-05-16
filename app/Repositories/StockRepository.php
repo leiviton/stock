@@ -13,13 +13,18 @@ interface StockRepository extends RepositoryInterface
 {
     /**
      * @param $data
+     * @param $user
+     * @param $cnpj
+     * @param string $lote
      * @return mixed
      */
-    public function orderFilter($data);
+    public function orderFilter($data, $user,$cnpj,$lote = '');
 
     /**
+     * @param $user
+     * @param $cnpj
+     * @param string $lote
      * @return mixed
-     * @throws \Exception
      */
-    public function orderByStocks();
+    public function orderByStocks($user, $cnpj,$lote = '');
 }

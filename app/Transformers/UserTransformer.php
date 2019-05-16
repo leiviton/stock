@@ -4,6 +4,7 @@ namespace Stock\Transformers;
 
 use League\Fractal\TransformerAbstract;
 use Stock\Models\User;
+use Stock\Models\UserProtocol;
 
 /**
  * Class UserTransformer.
@@ -13,6 +14,8 @@ use Stock\Models\User;
 class UserTransformer extends TransformerAbstract
 {
     protected $availableIncludes = ['company'];
+
+    protected $defaultIncludes = ['protocols'];
     /**
      * Transform the User entity.
      *
@@ -27,6 +30,8 @@ class UserTransformer extends TransformerAbstract
             'name' => $model->name,
             'email' => $model->email,
             'role' => $model->role,
+            'status' => $model->status,
+            'img_profile' => env('APP_URL').'/storage/users/'.$model->img_profile,
             /* place your other model properties here */
 
             'created_at' => $model->created_at,
@@ -34,8 +39,21 @@ class UserTransformer extends TransformerAbstract
         ];
     }
 
+    /**
+     * @param User $user
+     * @return \League\Fractal\Resource\Item|null
+     */
     public function includeCompany(User $user)
     {
         return $user->company ? $this->item($user->company, new CompanyTransformer()): null;
+    }
+
+    /**
+     * @param User $user
+     * @return \League\Fractal\Resource\Collection|null
+     */
+    public function includeProtocols(User $user)
+    {
+        return $user->protocols ? $this->collection($user->protocols, new ProtocolTransformer()) : null;
     }
 }

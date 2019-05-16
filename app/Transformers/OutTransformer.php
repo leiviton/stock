@@ -2,6 +2,7 @@
 
 namespace Stock\Transformers;
 
+use Faker\Provider\DateTime;
 use League\Fractal\TransformerAbstract;
 use Stock\Models\Out;
 
@@ -32,8 +33,8 @@ class OutTransformer extends TransformerAbstract
             'desc_produto' => $model->desc_produto,
             'unidade_medida' => $model->unidade_medida,
             'lote' => $model->lote,
-            'data_validade' => date_format($model->data_validade,'d/m/Y'),
-            'data_envio' =>  date_format($model->data_envio,'d/m/Y'),
+            'data_validade' => date('d/m/Y', strtotime($model->data_validade)),
+            'data_envio' =>  date( 'd/m/Y', strtotime($model->data_envio)),
             'nota_fiscal' => $model->nota_fiscal,
             'serie_nf' => $model->serie_nf,
             'nome_destino_final' => $model->nome_destino_final,

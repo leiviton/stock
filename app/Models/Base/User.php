@@ -2,7 +2,7 @@
 
 /**
  * Created by Reliese Model.
- * Date: Wed, 24 Apr 2019 12:13:53 -0300.
+ * Date: Tue, 07 May 2019 21:26:36 +0000.
  */
 
 namespace Stock\Models\Base;
@@ -18,6 +18,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property string $role
  * @property string $status
  * @property string $email
+ * @property string $img_profile
  * @property \Carbon\Carbon $email_verified_at
  * @property string $password
  * @property string $remember_token
@@ -26,6 +27,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property \Carbon\Carbon $updated_at
  * 
  * @property \Stock\Models\Company $company
+ * @property \Illuminate\Database\Eloquent\Collection $protocols
  *
  * @package Stock\Models\Base
  */
@@ -43,5 +45,12 @@ class User extends Eloquent
 	public function company()
 	{
 		return $this->belongsTo(\Stock\Models\Company::class);
+	}
+
+	public function protocols()
+	{
+		return $this->belongsToMany(\Stock\Models\Protocol::class, 'user_protocols')
+					->withPivot('id')
+					->withTimestamps();
 	}
 }

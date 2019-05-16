@@ -28,19 +28,24 @@ class OutsController extends Controller
     }
 
     /**
+     * @param $id
+     * @param $lote
+     * @param Request $request
      * @return mixed
      */
-    public function index(Request $request)
+    public function index($id,Request $request)
     {
-        return $this->service->getOuts($request->all());
+        $lote = $request->get('protocolo') ? $request->get('protocolo') : '';
+        return $this->service->getOuts($request->all(),$id,$lote);
     }
 
     /**
      * @return mixed
      */
-    public function getAll()
+    public function getAll($id,Request $request)
     {
-        return $this->service->getAll();
+        $lote = $request->get('protocolo') ? $request->get('protocolo') : '';
+        return $this->service->getAll($id,$lote);
     }
 
     /**
@@ -79,9 +84,9 @@ class OutsController extends Controller
             ], 406);
         }
 
-        $result =  $this->service->export($request->all());
+        $result =  $this->service->export($data);
 
-        return response()->json(['message' => 'Arquivo gerado com sucesso', 'link' => env('APP_URL').'/excel/'.$result.'.xlsx'],200);
+        return response()->json(['message' => 'Arquivo gerado com sucesso', 'link' => env('APP_URL').'/storage/excel/outs/'.$result.'.xlsx'],200);
     }
 
 
@@ -100,49 +105,6 @@ class OutsController extends Controller
         } else if ($result['status'] == 'error') {
             return response()->json(['message' => $result['message'], 'status' => 'error', 'title' => 'Erro'], 400);
         }
-    }
-
-    /**
-     * @param $id
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function updatePassword($id, Request $request)
-    {
-        $validator = Validator($request->all(),
-            [
-                'password' => 'required|min:6'
-            ],
-            [
-                'password.required' => 'Senha é obritaoria',
-                'password.length' => 'Tamanho da senha invádio'
-            ]
-        );
-
-        if ($validator->fails()) {
-            return response()->json([
-                'title' => 'Erro',
-                'status' => 'error',
-                'message' => $validator->errors()->unique()
-            ], 406);
-        }
-
-        $result = $this->service->updatePassword($id, $request->get('password'));
-
-        if ($result['status'] == 'success') {
-            return response()->json(['message' => 'Cadastro realizado com sucesso', 'status' => 'success', 'title' => 'Sucesso'], 201);
-        } else if ($result['status'] == 'error') {
-            return response()->json(['message' => $result['message'], 'status' => 'error', 'title' => 'Erro'], 400);
-        }
-    }
-
-    /**
-     * @return mixed
-     */
-    public function authenticated()
-    {
-        $user = \Auth::guard('api')->user();
-        return $this->service->authenticated($user->id, $user->role);
     }
 
     /**

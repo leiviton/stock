@@ -227,10 +227,10 @@ return [
     */
     'generator'  => [
         'basePath'      => app()->path(),
-        'rootNamespace' => 'App\\',
+        'rootNamespace' => 'Stock\\',
         'stubsOverridePath' => app()->path(),
         'paths'         => [
-            'models'       => 'Entities',
+            'models'       => 'Models',
             'repositories' => 'Repositories',
             'interfaces'   => 'Repositories',
             'transformers' => 'Transformers',

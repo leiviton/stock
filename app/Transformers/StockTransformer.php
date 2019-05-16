@@ -18,6 +18,7 @@ class StockTransformer extends TransformerAbstract
      * @param \Stock\Models\Stock $model
      *
      * @return array
+     * @throws \Exception
      */
     public function transform(Stock $model)
     {
@@ -34,7 +35,7 @@ class StockTransformer extends TransformerAbstract
             'desc_produto' => $model->desc_produto,
             'unidade_medida' => $model->unidade_medida,
             'lote' => $model->lote,
-            'data_validade' => date_format($model->data_validade,'d/m/Y'),
+            'data_validade' => date_format(new \DateTime($model->data_validade),'d/m/Y'),
             'desc_restricao' => $model->desc_restricao,
             'qtd_regul_reser' => $model->qtd_regul_reser,
             'qtd_produto' => $model->qtd_produto,

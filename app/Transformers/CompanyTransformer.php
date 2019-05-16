@@ -12,6 +12,7 @@ use Stock\Models\Company;
  */
 class CompanyTransformer extends TransformerAbstract
 {
+    protected $defaultIncludes = ['protocols'];
     /**
      * Transform the Company entity.
      *
@@ -25,11 +26,20 @@ class CompanyTransformer extends TransformerAbstract
             'id'         => (int) $model->id,
             'cnpj' => $model->cnpj,
             'nome' => $model->nome,
-            'logo' => $model->logo,
+            'logo' => env('APP_URL').'/storage/companies/'.$model->logo,
             /* place your other model properties here */
 
             'created_at' => $model->created_at,
             'updated_at' => $model->updated_at
         ];
+    }
+
+    /**
+     * @param Company $company
+     * @return \League\Fractal\Resource\Collection|null
+     */
+    public function includeProtocols(Company $company)
+    {
+        return $company->protocols ? $this->collection($company->protocols, new ProtocolTransformer()) : null;
     }
 }

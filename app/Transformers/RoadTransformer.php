@@ -18,6 +18,7 @@ class RoadTransformer extends TransformerAbstract
      * @param \Stock\Models\Road $model
      *
      * @return array
+     * @throws \Exception
      */
     public function transform(Road $model)
     {
@@ -26,7 +27,7 @@ class RoadTransformer extends TransformerAbstract
             'data_geracao' => $model->data_geracao,
             'depositante' => $model->depositante,
             'razao_social' => $model->razao_social,
-            'data_recebimento' =>date_format($model->data_recibimento,'d/m/Y'),
+            'data_recebimento' => date_format(new \DateTime($model->data_recebimento),'d/m/Y'),
             'tipo_estoque' => $model->tipo_estoque,
             'desc_tipo_estoque' => $model->desc_tipo_estoque,
             'cnpj_emissor_nfe' => $model->cnpj_emissor_nfe,
@@ -35,7 +36,7 @@ class RoadTransformer extends TransformerAbstract
             'desc_produto' => $model->desc_produto,
             'unidade_medida' => $model->unidade_medida,
             'lote' => $model->lote,
-            'data_validade' => date_format($model->data_validade,'d/m/Y'),
+            'data_validade' => date_format(new \DateTime($model->data_validade),'d/m/Y'),
             'serie_nf' => $model->serie_nf,
             'tipo_nf' => $model->tipo_nf,
             'desc_restricao' => $model->desc_restricao,
@@ -43,6 +44,7 @@ class RoadTransformer extends TransformerAbstract
             'peca' => $model->peca,
             'qtd_recebida' => $model->qtd_recebida,
             'qtd_avariada' => $model->qtd_avariada,
+            'qtd_fiscal' => $model->qtd_fiscal,
             /* place your other model properties here */
             'created_at' => $model->created_at,
             'updated_at' => $model->updated_at

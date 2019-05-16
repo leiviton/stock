@@ -13,12 +13,18 @@ interface OutRepository extends RepositoryInterface
 {
     /**
      * @param $data
+     * @param $user
+     * @param $cnpj
+     * @param string $lote
      * @return mixed
      */
-    public function orderFilter($data);
+    public function orderFilter($data, $user,$cnpj,$lote = '');
 
     /**
+     * @param $user
+     * @param $cnpj
+     * @param string $lote
      * @return mixed
      */
-    public function orderByOuts();
+    public function orderByOuts($user, $cnpj,$lote = '');
 }

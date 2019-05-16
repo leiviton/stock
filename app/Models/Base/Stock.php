@@ -2,7 +2,7 @@
 
 /**
  * Created by Reliese Model.
- * Date: Mon, 22 Apr 2019 08:32:20 -0300.
+ * Date: Fri, 26 Apr 2019 19:52:48 +0000.
  */
 
 namespace Stock\Models\Base;
@@ -13,10 +13,11 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * Class Stock
  * 
  * @property int $id
- * @property \Carbon\Carbon $data_geracao
+ * @property int $company_id
+ * @property string $data_geracao
  * @property string $depositante
  * @property string $cnpj_origem
- * @property \Carbon\Carbon $data_atual
+ * @property string $data_atual
  * @property string $hora_atual
  * @property string $tipo_estoque
  * @property string $desc_tipo_estoque
@@ -24,7 +25,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property string $desc_produto
  * @property string $unidade_medida
  * @property string $lote
- * @property \Carbon\Carbon $data_validade
+ * @property string $data_validade
  * @property string $desc_restricao
  * @property int $qtd_produto
  * @property int $qtd_regul_reser
@@ -35,12 +36,15 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property string $serie
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
+ * 
+ * @property \Stock\Models\Company $company
  *
  * @package Stock\Models\Base
  */
 class Stock extends Eloquent
 {
 	protected $casts = [
+		'company_id' => 'int',
 		'qtd_produto' => 'int',
 		'qtd_regul_reser' => 'int',
 		'qtd_fiscal' => 'int',
@@ -48,8 +52,11 @@ class Stock extends Eloquent
 	];
 
 	protected $dates = [
-		'data_geracao',
-		'data_atual',
-		'data_validade'
+		'data_geracao'
 	];
+
+	public function company()
+	{
+		return $this->belongsTo(\Stock\Models\Company::class);
+	}
 }

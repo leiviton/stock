@@ -2,7 +2,7 @@
 
 /**
  * Created by Reliese Model.
- * Date: Mon, 22 Apr 2019 08:32:14 -0300.
+ * Date: Fri, 26 Apr 2019 19:52:44 +0000.
  */
 
 namespace Stock\Models\Base;
@@ -13,10 +13,11 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * Class Road
  * 
  * @property int $id
- * @property \Carbon\Carbon $data_geracao
+ * @property int $company_id
+ * @property string $data_geracao
  * @property string $depositante
  * @property string $razao_social
- * @property \Carbon\Carbon $data_recibimento
+ * @property string $data_recebimento
  * @property string $tipo_estoque
  * @property string $desc_tipo_estoque
  * @property string $cnpj_emissor_nfe
@@ -25,7 +26,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property string $desc_produto
  * @property string $unidade_medida
  * @property string $lote
- * @property \Carbon\Carbon $data_validade
+ * @property string $data_validade
  * @property string $serie_nf
  * @property string $tipo_nf
  * @property string $qtd_recebida
@@ -36,14 +37,23 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property string $qtd_fiscal
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
+ * 
+ * @property \Stock\Models\Company $company
  *
  * @package Stock\Models\Base
  */
 class Road extends Eloquent
 {
-	protected $dates = [
-		'data_geracao',
-		'data_recibimento',
-		'data_validade'
+	protected $casts = [
+		'company_id' => 'int'
 	];
+
+	protected $dates = [
+		'data_geracao'
+	];
+
+	public function company()
+	{
+		return $this->belongsTo(\Stock\Models\Company::class);
+	}
 }

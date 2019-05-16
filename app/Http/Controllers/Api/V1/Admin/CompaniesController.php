@@ -74,4 +74,23 @@ class CompaniesController extends Controller
                 'title' => 'Erro'], 400);
         }
     }
+
+    public function upload(Request $request)
+    {
+        $nameFile = null;
+
+        if ($request->hasFile('image') && $request->file('image')->isValid()) {
+            $name = uniqid(date('HisYmd'));
+            $extension = $request->image->extension();
+            $nameFile = "{$name}.{$extension}";
+            $upload = $request->image->storeAs('companies', $nameFile, 'public');
+            if (!$upload) {
+                return response()->json(['message' => 'Verifique o arquivo enviado', 'status' => 'error','title' => 'Erro'], 400);
+            } else {
+                return response()->json(['file' => $nameFile]);
+            }
+        }else{
+            return response()->json(['message' => 'Verifique o arquivo enviado 1', 'status' => 'error','title' => 'Erro'], 400);
+        }
+    }
 }

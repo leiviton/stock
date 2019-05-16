@@ -8,6 +8,7 @@
 
 namespace Stock\Services;
 
+use Stock\Repositories\CompanyRepository;
 use Stock\Repositories\RoadRepository;
 use Illuminate\Support\Facades\DB;
 
@@ -17,14 +18,20 @@ class RoadService
      * @var RoadRepository
      */
     private $repository;
+    /**
+     * @var CompanyRepository
+     */
+    private $companyRepository;
 
     /**
      * RoadService constructor.
      * @param RoadRepository $repository
+     * @param CompanyRepository $companyRepository
      */
-    public function __construct(RoadRepository $repository)
+    public function __construct(RoadRepository $repository, CompanyRepository $companyRepository)
     {
         $this->repository = $repository;
+        $this->companyRepository = $companyRepository;
     }
 
     /**
@@ -59,19 +66,27 @@ class RoadService
 
     /**
      * @param $data
+     * @param $id
+     * @param string $lote
      * @return mixed
      */
-    public function getRoads($data)
+    public function getRoads($data,$id,$lote = '')
     {
-        return $this->repository->skipPresenter(false)->orderFilter($data);
+        $user = \Auth::guard()->user();
+        $cnpj = $this->companyRepository->find($id)->cnpj;
+        return $this->repository->skipPresenter(false)->orderFilter($data,$user,$cnpj,$lote);
     }
 
     /**
+     * @param $id
+     * @param $lote
      * @return mixed
      */
-    public function getAll()
+    public function getAll($id,$lote)
     {
-        return $this->repository->skipPresenter(false)->orderByRoads();
+        $user = \Auth::guard()->user();
+        $cnpj = $this->companyRepository->find($id)->cnpj;
+        return $this->repository->skipPresenter(false)->orderByRoads($user,$cnpj,$lote);
     }
 
     /**
@@ -82,29 +97,43 @@ class RoadService
     public function export($data)
     {
         $arquivo = new \DateTime();
-
+        $user = \Auth::guard()->user();
         // $query = \DB::table('outs')->select();
-        $query = $this->repository->scopeQuery(function ($query) use ($data) {
-            return $query->whereRaw('data_geracao BETWEEN ? AND ?',
-                [$this->invertDate($data['start']), $this->invertDate($data['end'])]);
-        })->all(['data_recibimento','tipo_estoque', 'desc_tipo_estoque','cnpj_emissor_nfe', 'razao_social_fornecedor',
-            'codigo_produto', 'desc_produto', 'unidade_medida', 'lote',
-            'data_validade','serie_nf','tipo_nf','qtd_recebida', 'qtd_avariada','desc_restricao','serie', 'peca','qtd_fiscal']);
+        if ($user->role == 'admin') {
+            $query = $this->repository->scopeQuery(function ($query) use ($data) {
+                return $query->whereRaw('data_geracao BETWEEN ? AND ?',
+                    [$data['start'], $data['end']])->where('depositante',$data['cnpj']);
+            })->all(['data_recebimento', 'tipo_estoque', 'desc_tipo_estoque', 'cnpj_emissor_nfe', 'razao_social_fornecedor',
+                'codigo_produto', 'desc_produto', 'unidade_medida', 'lote',
+                'data_validade', 'serie_nf', 'tipo_nf', 'qtd_recebida', 'qtd_avariada', 'desc_restricao', 'serie', 'peca', 'qtd_fiscal']);
+        }else {
+            $query = $this->repository->scopeQuery(function ($query) use ($data) {
+                return $query->whereRaw('data_geracao BETWEEN ? AND ?',
+                    [$data['start'], $data['end']])->where('tipo_estoque',$data['protocol']);
+            })->all(['data_recebimento', 'tipo_estoque', 'desc_tipo_estoque', 'cnpj_emissor_nfe', 'razao_social_fornecedor',
+                'codigo_produto', 'desc_produto', 'unidade_medida', 'lote',
+                'data_validade', 'serie_nf', 'tipo_nf', 'qtd_recebida', 'qtd_avariada', 'desc_restricao', 'serie', 'peca', 'qtd_fiscal']);
+        }
 
-        $name = (string)$arquivo->getTimestamp();
+        $name = $user->id.'_'.str_replace(' ','',$user->name);
+
+        for($i = 0; $i < count($query) ; $i++) {
+            $query[$i]['data_recebimento'] = $this->invertDate($query[$i]['data_recebimento']);
+            $query[$i]['data_validade'] = $this->invertDate($query[$i]['data_validade']);
+        }
 
         \Excel::create($name, function($excel) use($query) {
             $excel->sheet('Sheet 1', function($sheet) use($query) {
                 $sheet->fromArray($query);
             });
-        })->store('xlsx', public_path() . '/excel');
+        })->store('xlsx', public_path() . '/storage/excel/roads');
 
         return $name;
     }
 
     /**
      * @param $date
-     * @return \DateTime
+     * @return string
      * @throws \Exception
      */
     public function invertDate($date)
@@ -112,10 +141,10 @@ class RoadService
         $result = '';
         if (count(explode("/", $date)) > 1) {
             $result = implode("-", array_reverse(explode("/", $date)));
-            return new \DateTime($result);
-        } elseif (count(explode("-", $date)) > 1) {
+            return $result;
+        } else if (count(explode("-", $date)) > 1) {
             $result = implode("/", array_reverse(explode("-", $date)));
-            return new \DateTime($result);
+            return $result;
         }
     }
 }

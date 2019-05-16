@@ -43,5 +43,13 @@ class RepositoryServiceProvider extends ServiceProvider
             'Stock\Repositories\RoadRepository',
             'Stock\Repositories\RoadRepositoryEloquent'
         );
+        $this->app->bind(
+            'Stock\Repositories\ProtocolRepository',
+            'Stock\Repositories\ProtocolRepositoryEloquent'
+        );
+        $this->app->bind(
+            'Stock\Repositories\UserProtocolRepository',
+            'Stock\Repositories\UserProtocolRepositoryEloquent'
+        );
     }
 }
