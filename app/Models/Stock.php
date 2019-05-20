@@ -20,6 +20,7 @@ class Stock extends \Stock\Models\Base\Stock implements Transformable
      * @var array
      */
     protected $fillable = [
+        'chave_logix',
         'data_geracao',
         'depositante',
         'cnpj_origem',

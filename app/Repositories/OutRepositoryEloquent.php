@@ -56,14 +56,16 @@ class OutRepositoryEloquent extends BaseRepository implements OutRepository
     {
         $order[0] = $order[0] ?? 'data_validade';
         $order[1] = $order[1] ?? 'desc';
+        //dd($lote);
         if ($lote == '') {
             if ($user->role == 'user_company') {
                 if ($data['value'] == '') {
                     $results = $this->model
-                        ->orderBy($order[0], $order[1])->where('depositante', $user->company->cnpj)->get();
+                        ->orderBy($order[0], $order[1])->where('depositante', $user->company->cnpj)->where('tipo_estoque', $lote)->get();
                 } else {
                     $results = $this->model
                         ->orderBy($order[0], $order[1])
+                        ->where('tipo_estoque', $lote)
                         ->where('depositante', $user->company->cnpj)
                         ->where(function ($query) use ($data) {
                             if ($data) {
@@ -76,10 +78,11 @@ class OutRepositoryEloquent extends BaseRepository implements OutRepository
             } else {
                 if ($data['value'] == '') {
                     $results = $this->model
-                        ->orderBy($order[0], $order[1])->where('depositante', $cnpj)->get();
+                        ->orderBy($order[0], $order[1])->where('depositante', $cnpj)->where('tipo_estoque', $lote)->get();
                 } else {
                     $results = $this->model
                         ->orderBy($order[0], $order[1])
+                        ->where('tipo_estoque', $lote)
                         ->where('depositante', $cnpj)
                         ->where(function ($query) use ($data) {
                             if ($data) {

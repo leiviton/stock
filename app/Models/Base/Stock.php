@@ -13,6 +13,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * Class Stock
  * 
  * @property int $id
+ * @property string $chave_logix
  * @property int $company_id
  * @property string $data_geracao
  * @property string $depositante

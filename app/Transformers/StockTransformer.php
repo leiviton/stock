@@ -24,6 +24,7 @@ class StockTransformer extends TransformerAbstract
     {
         return [
             'id'         => (int) $model->id,
+            'chave_logix'         => $model->chave_logix,
             'data_geracao' => $model->data_geracao,
             'depositante' => $model->depositante,
             'cnpj_origem' => $model->cnpj_origem,

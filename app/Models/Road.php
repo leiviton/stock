@@ -20,6 +20,7 @@ class Road extends \Stock\Models\Base\Road implements Transformable
      * @var array
      */
     protected $fillable = [
+        'chave_logix',
         'data_geracao',
         'depositante',
         'razao_social',

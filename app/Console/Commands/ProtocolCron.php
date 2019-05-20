@@ -99,8 +99,9 @@ class ProtocolCron extends Command
             $entradas = $data->data;
 
             for ($i = 0; $i < count($entradas); $i++) {
-                //dd($entradas[$i]->qtd_declarada_nf);
+                //dd($entradas[$i]);
                 $data1 = [
+                    'chave_logix' => $entradas[$i]->id,
                     'company_id' => $company->id,
                     'data_geracao' => new \DateTime($entradas[$i]->data_atualiza),
                     'depositante' => $entradas[$i]->cnpj_cliente,
@@ -124,7 +125,7 @@ class ProtocolCron extends Command
                     'qtd_fiscal' => (int) $entradas[$i]->qtd_declarada_nf,
                 ];
                 //dd($data1["qtd_fiscal"]);
-                $this->roadRepository->create($data1);
+                $this->roadRepository->updateOrCreate(["chave_logix" => $data1["chave_logix"]],$data1);
             }
 
             $responseSaida = $client->get("http://10.0.0.31:4488/logixrest/kbtr00003/saidasporDepositanteData/01/$company->cnpj/1/100000000/07-03-2019/30-03-2019/S/0",[
@@ -137,6 +138,7 @@ class ProtocolCron extends Command
             for ($i = 0; $i < count($saida); $i++) {
                 //dd($saida[$i]);
                 $dataSaida = [
+                    'chave_logix' => $saida[$i]->id,
                     'company_id' => $company->id,
                     'data_geracao' => new \DateTime($saida[$i]->data_atualiza),
                     'depositante' => $saida[$i]->cnpj_cliente_depos,
@@ -160,7 +162,7 @@ class ProtocolCron extends Command
                     'pedido_venda' => $saida[$i]->id_protheus
                 ];
 
-                $this->outRepository->create($dataSaida);
+                $this->outRepository->updateOrCreate(["chave_logix" => $dataSaida["chave_logix"]],$dataSaida);
             }
 
             $response = $client->get("http://10.0.0.31:4488/logixrest/kbtr00001/estoquePorDepositante/01/$company->cnpj/50/55/S/N/0",[
@@ -175,8 +177,9 @@ class ProtocolCron extends Command
             DB::table('stocks')->truncate();
 
             for ($i = 0; $i < count($stock); $i++) {
-
+                //dd($stock[$i]);
                 $dataStock = [
+                    'chave_logix' => $stock[$i]->id,
                     'company_id' => $company->id,
                     'data_geracao' => new \DateTime($stock[$i]->data_atualiza),
                     'depositante' => $stock[$i]->cnpj_cliente,
@@ -200,7 +203,7 @@ class ProtocolCron extends Command
                     'serie' => $stock[$i]->serie
                 ];
 
-                $this->stockRepository->create($dataStock);
+                $this->stockRepository->updateOrCreate(["chave_logix" => $dataStock["chave_logix"]],$dataStock);
             }
 
         }

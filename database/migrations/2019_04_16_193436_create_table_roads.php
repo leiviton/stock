@@ -15,10 +15,11 @@ class CreateTableRoads extends Migration
     {
         Schema::create('roads', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('chave_logix')->nullable();
+            $table->date('data_recebimento');
             $table->date('data_geracao');
             $table->string('depositante');
             $table->string('razao_social');
-            $table->date('data_recibimento');
             $table->string('tipo_estoque');
             $table->string('desc_tipo_estoque');
             $table->string('cnpj_emissor_nfe');

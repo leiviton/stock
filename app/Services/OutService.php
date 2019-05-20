@@ -102,14 +102,14 @@ class OutService
         // $query = \DB::table('outs')->select();
         if ($user->role == 'admin') {
             $query = $this->repository->scopeQuery(function ($query) use ($data) {
-                return $query->whereRaw('data_geracao BETWEEN ? AND ?',
+                return $query->whereRaw('data_envio BETWEEN ? AND ?',
                     [$data['start'], $data['end']])->where('depositante',$data['cnpj']);
             })->all(['tipo_estoque', 'desc_tipo_estoque', 'codigo_produto', 'desc_produto', 'unidade_medida', 'lote',
                 'data_validade', 'data_envio', 'serie_nf', 'nome_destino_final', 'centro', 'numero_ordem',
                 'qtd_enviada', 'serie', 'peca']);
         }else {
             $query = $this->repository->scopeQuery(function ($query) use ($data) {
-                return $query->whereRaw('data_geracao BETWEEN ? AND ?',
+                return $query->whereRaw('data_envio BETWEEN ? AND ?',
                     [$data['start'], $data['end']])->where('tipo_estoque',$data['protocol']);
             })->all(['tipo_estoque', 'desc_tipo_estoque', 'codigo_produto', 'desc_produto', 'unidade_medida', 'lote',
                 'data_validade', 'data_envio', 'serie_nf', 'nome_destino_final', 'centro', 'numero_ordem',

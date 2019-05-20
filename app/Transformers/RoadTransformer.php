@@ -24,6 +24,7 @@ class RoadTransformer extends TransformerAbstract
     {
         return [
             'id'         => (int) $model->id,
+            'chave_logix'         => $model->chave_logix,
             'data_geracao' => $model->data_geracao,
             'depositante' => $model->depositante,
             'razao_social' => $model->razao_social,

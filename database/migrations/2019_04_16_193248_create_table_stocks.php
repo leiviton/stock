@@ -15,6 +15,7 @@ class CreateTableStocks extends Migration
     {
         Schema::create('stocks', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('chave_logix')->nullable();
             $table->date('data_geracao');
             $table->string('depositante',20)->index();
             $table->string('cnpj_origem');
