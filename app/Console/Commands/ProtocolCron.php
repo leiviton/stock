@@ -79,8 +79,6 @@ class ProtocolCron extends Command
      */
     public function handle()
     {
-        $result = DB::connection('sqlsrv')->table('logix.wms_tip_estoque')->where('sit_registro',1)->get();
-
         $companies = $this->companyRepository->all();
 
         $client = new Client();
@@ -207,6 +205,9 @@ class ProtocolCron extends Command
             }
 
         }
+
+
+        $result = DB::connection('sqlsrv')->table('logix.wms_tip_estoque')->where('sit_registro',1)->where('empresa_deposit',$this->limpaCPF_CNPJ($company->cnpj))->get();
 
         for ($i = 0; $i < count($result); $i++) {
             //dd($result[$i]->empresa);
