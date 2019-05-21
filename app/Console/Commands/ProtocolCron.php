@@ -69,6 +69,24 @@ class ProtocolCron extends Command
         $this->stockRepository = $stockRepository;
         //$client = new Client();
         $this->companyRepository = $companyRepository;
+        $companies = $this->companyRepository->all();
+        $result = DB::connection('sqlsrv')->table('logix.wms_tip_estoque')->where('sit_registro',1)->where('empresa_deposit',$this->limpaCPF_CNPJ($company->cnpj))->get();
+
+        for ($i = 0; $i < count($result); $i++) {
+            //dd($result[$i]->empresa);
+            $data = [
+                "empresa" => rtrim($result[$i]->empresa),
+                "tip_estoque" => rtrim($result[$i]->tip_estoque),
+                "abrang" => rtrim($result[$i]->abrang),
+                "empresa_deposit" => rtrim($result[$i]->empresa_deposit),
+                "des_tip_estoque" => rtrim($result[$i]->des_tip_estoque),
+                "des_reduz_tip_estoque" => rtrim($result[$i]->des_reduz_tip_estoque),
+                "padrao" => rtrim($result[$i]->padrao),
+                "sit_registro" => rtrim($result[$i]->sit_registro)
+            ];
+
+            $this->repository->updateOrCreate(["tip_estoque" => $data["tip_estoque"]],$data);
+        }
     }
 
     /**
