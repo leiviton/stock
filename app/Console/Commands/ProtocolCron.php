@@ -69,7 +69,7 @@ class ProtocolCron extends Command
         $this->stockRepository = $stockRepository;
         $this->companyRepository = $companyRepository;
 
-        /*$client = new Client();
+        $client = new Client();
 
         $companies = $this->companyRepository->all();
 
@@ -113,7 +113,7 @@ class ProtocolCron extends Command
 
                 $this->outRepository->updateOrCreate(["chave_logix" => $dataSaida["chave_logix"]], $dataSaida);
             }
-        }*/
+        }
         /*    $resultContadorEntrada = $client->get("http://10.0.0.18:4488/logixrest/kbtr00002/countEntradaporDepositanteData/01/$company->cnpj/01-01-2019/$dataNow/0", [
                 'auth' => [
                     'admlog',
@@ -232,7 +232,7 @@ class ProtocolCron extends Command
                 $this->repository->updateOrCreate(["tip_estoque" => $data["tip_estoque"]], $data);
             }
 
-            $responseSaida = $client->get("http://10.0.0.18:4488/logixrest/kbtr00003/saidasporDepositanteData/01/$company->cnpj/1/100000000/01-01-2019/01-06-2019/N/0", [
+            /*$responseSaida = $client->get("http://10.0.0.18:4488/logixrest/kbtr00003/saidasporDepositanteData/01/$company->cnpj/1/100000000/01-01-2019/01-06-2019/N/0", [
                 'auth' => [
                     'admlog',
                     'Totvs330'
@@ -351,7 +351,7 @@ class ProtocolCron extends Command
                     //dd($data1["qtd_fiscal"]);
                     $this->roadRepository->updateOrCreate(["chave_logix" => $data1["chave_logix"]], $data1);
                     //dd($itemEnd);
-                }
+                }*/
         }
     }
 
