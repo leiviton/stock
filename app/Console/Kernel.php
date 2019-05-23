@@ -25,7 +25,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('protocol:cron')->twiceDaily(0, 12);
+        $schedule->command('protocol:cron');
     }
 
     /**

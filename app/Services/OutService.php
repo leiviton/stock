@@ -41,11 +41,15 @@ class OutService
      * @param $id
      * @param string $lote
      * @return mixed
+     * @throws \Exception
      */
     public function getOuts($data,$id,$lote = '')
     {
         $user = \Auth::guard()->user();
         $cnpj = $this->companyRepository->find($id)->cnpj;
+        if($data['field'] == 'data_envio') {
+            $data['value'] = $this->invertDate($data['value']);
+        }
         return $this->repository->skipPresenter(false)->orderFilter($data,$user,$cnpj,$lote);
     }
 
@@ -140,7 +144,6 @@ class OutService
      */
     public function invertDate($date)
     {
-        $result = '';
         if (count(explode("/", $date)) > 1) {
             $result = implode("-", array_reverse(explode("/", $date)));
             return $result;

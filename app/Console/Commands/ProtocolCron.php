@@ -67,29 +67,10 @@ class ProtocolCron extends Command
         $this->roadRepository = $roadRepository;
         $this->outRepository = $outRepository;
         $this->stockRepository = $stockRepository;
-        //$client = new Client();
         $this->companyRepository = $companyRepository;
-        $companies = $this->companyRepository->all();
-        for ($j = 0; $j < count($companies); $j++) {
-            $result = DB::connection('sqlsrv')->table('logix.wms_tip_estoque')->where('sit_registro', 1)->where('empresa_deposit', $this->limpaCPF_CNPJ($companies[$j]->cnpj))->get();
-
-            for ($i = 0; $i < count($result); $i++) {
-                //dd($result[$i]->empresa);
-                $data = [
-                    "empresa" => rtrim($result[$i]->empresa),
-                    "tip_estoque" => rtrim($result[$i]->tip_estoque),
-                    "abrang" => rtrim($result[$i]->abrang),
-                    "empresa_deposit" => rtrim($result[$i]->empresa_deposit),
-                    "des_tip_estoque" => rtrim($result[$i]->des_tip_estoque),
-                    "des_reduz_tip_estoque" => rtrim($result[$i]->des_reduz_tip_estoque),
-                    "padrao" => rtrim($result[$i]->padrao),
-                    "sit_registro" => rtrim($result[$i]->sit_registro)
-                ];
-
-                $this->repository->updateOrCreate(["tip_estoque" => $data["tip_estoque"]], $data);
-            }
-        }
+        //$client = new Client();
     }
+
 
     /**
      * Execute the console command.
@@ -134,7 +115,7 @@ class ProtocolCron extends Command
                     'unidade_medida' => $entradas[$i]->um,
                     'lote' => $entradas[$i]->lote,
                     'data_validade' => new \DateTime($entradas[$i]->data_validade),
-                    'serie_nf' => $entradas[$i]->ser_nf,
+                    'serie_nf' => $entradas[$i]->num_nf.'-'.$entradas[$i]->ser_nf,
                     'tipo_nf' => '5',
                     'desc_restricao' => $entradas[$i]->des_restricao,
                     'serie' => $entradas[$i]->serie,
@@ -146,8 +127,8 @@ class ProtocolCron extends Command
                 $this->roadRepository->updateOrCreate(["chave_logix" => $data1["chave_logix"]],$data1);
             }
 
-            $responseSaida = $client->get("http://10.0.0.31:4488/logixrest/kbtr00003/saidasporDepositanteData/01/$company->cnpj/1/100000000/07-03-2019/30-03-2019/S/0",[
-                'auth'    => [
+            $responseSaida = $client->get("http://10.0.0.31:4488/logixrest/kbtr00003/saidasporDepositanteData/01/$company->cnpj/1/100000000/07-03-2019/30-03-2019/S/0", [
+                'auth' => [
                     'admlog',
                     'Totvs330'
                 ]]);
@@ -180,10 +161,21 @@ class ProtocolCron extends Command
                     'pedido_venda' => $saida[$i]->id_protheus
                 ];
 
-                $this->outRepository->updateOrCreate(["chave_logix" => $dataSaida["chave_logix"]],$dataSaida);
+                $this->outRepository->updateOrCreate(["chave_logix" => $dataSaida["chave_logix"]], $dataSaida);
             }
 
             $response = $client->get("http://10.0.0.31:4488/logixrest/kbtr00001/estoquePorDepositante/01/$company->cnpj/50/55/S/N/0",[
+                'auth'    => [
+                    'admlog',
+                    'Totvs330'
+                ]]);
+            $stocks = json_decode($response->getBody(true)->getContents());
+
+            $stock = $stocks->data;
+
+            DB::table('stocks')->truncate();
+
+            $response = $client->get("http://10.0.0.31:4488/logixrest/kbtr00001/estoquePorDepositante/01/056994502000130/50/55/S/N/0",[
                 'auth'    => [
                     'admlog',
                     'Totvs330'
@@ -223,6 +215,7 @@ class ProtocolCron extends Command
 
                 $this->stockRepository->updateOrCreate(["chave_logix" => $dataStock["chave_logix"]],$dataStock);
             }
+
 
         }
 

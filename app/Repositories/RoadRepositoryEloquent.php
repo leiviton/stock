@@ -175,9 +175,10 @@ class RoadRepositoryEloquent extends BaseRepository implements RoadRepository
 
             $results = $this->model
                 ->where('depositante', $cnpj)
+                //->selectRaw('data_recebimento,tipo_estoque,desc_tipo_estoque,cnpj_emissor_nfe,razao_social_fornecedor,codigo_produto,desc_produto,unidade_medida,lote,data_validade,serie_nf,tipo_nf,desc_restricao,serie,peca,sum(qtd_fiscal) as qtd_fiscal,sum(qtd_recebida) as qtd_recebida')
                 ->where(function ($query) use ($dataEnd) {
                     if ($dataEnd) {
-                        return $query->whereRaw('data_geracao BETWEEN ? AND ?', [(new Carbon())->subMonth(6), $dataEnd]);
+                        return $query->whereRaw('data_geracao BETWEEN ? AND ?', [(new Carbon())->subMonth(6), $dataEnd])->groupBy(['lote','data_recebimento']);
                     }
                     return $query;
                 })

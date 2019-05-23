@@ -61,28 +61,37 @@ class OutRepositoryEloquent extends BaseRepository implements OutRepository
             if ($user->role == 'user_company') {
                 if ($data['value'] == '') {
                     $results = $this->model
-                        ->orderBy($order[0], $order[1])->where('depositante', $user->company->cnpj)->where('tipo_estoque', $lote)->get();
+                        ->orderBy($order[0], $order[1])
+                        ->where('depositante', $user->company->cnpj)
+                        ->where('tipo_estoque', $lote)
+                        ->groupBy('tipo_estoque')
+                        ->get();
                 } else {
                     $results = $this->model
                         ->orderBy($order[0], $order[1])
                         ->where('tipo_estoque', $lote)
                         ->where('depositante', $user->company->cnpj)
                         ->where(function ($query) use ($data) {
-                            if ($data) {
+                            if($data['field'] == 'data_envio') {
+                                return $query->where($data['field'],$data['value']);
+                            }else if ($data) {
                                 return $query->where($data['field'], 'like', '%' . $data['value'] . '%');
                             }
                             return $query;
                         })
+                        //->groupBy('tipo_estoque')
                         ->paginate();
                 }
             } else {
                 if ($data['value'] == '') {
                     $results = $this->model
-                        ->orderBy($order[0], $order[1])->where('depositante', $cnpj)->where('tipo_estoque', $lote)->get();
+                        ->orderBy($order[0], $order[1])
+                        ->where('depositante', $cnpj)
+                        // ->groupBy('tipo_estoque')
+                        ->get();
                 } else {
                     $results = $this->model
                         ->orderBy($order[0], $order[1])
-                        ->where('tipo_estoque', $lote)
                         ->where('depositante', $cnpj)
                         ->where(function ($query) use ($data) {
                             if ($data) {
@@ -90,6 +99,7 @@ class OutRepositoryEloquent extends BaseRepository implements OutRepository
                             }
                             return $query;
                         })
+                        //->groupBy('tipo_estoque')
                         ->paginate();
                 }
             }
@@ -97,7 +107,11 @@ class OutRepositoryEloquent extends BaseRepository implements OutRepository
             if ($user->role == 'user_company') {
                 if ($data['value'] == '') {
                     $results = $this->model
-                        ->orderBy($order[0], $order[1])->where('depositante', $user->company->cnpj)->where('tipo_estoque', $lote)->get();
+                        ->orderBy($order[0], $order[1])
+                        ->where('depositante', $user->company->cnpj)
+                        ->where('tipo_estoque', $lote)
+                       // ->groupBy('tipo_estoque')
+                        ->get();
                 } else {
                     $results = $this->model
                         ->orderBy($order[0], $order[1])
@@ -109,12 +123,16 @@ class OutRepositoryEloquent extends BaseRepository implements OutRepository
                             }
                             return $query;
                         })
+                        //->groupBy('tipo_estoque')
                         ->paginate();
                 }
             } else {
                 if ($data['value'] == '') {
                     $results = $this->model
-                        ->orderBy($order[0], $order[1])->where('depositante', $cnpj)->where('tipo_estoque', $lote)->get();
+                        ->orderBy($order[0], $order[1])
+                        ->where('depositante', $cnpj)
+                       // ->groupBy('tipo_estoque')
+                        ->get();
                 } else {
                     $results = $this->model
                         ->orderBy($order[0], $order[1])
@@ -126,6 +144,7 @@ class OutRepositoryEloquent extends BaseRepository implements OutRepository
                             }
                             return $query;
                         })
+                        //->groupBy('tipo_estoque')
                         ->paginate();
                 }
             }
@@ -153,6 +172,7 @@ class OutRepositoryEloquent extends BaseRepository implements OutRepository
             if ($user->role == 'user_company') {
                 $results = $this->model
                     ->where('depositante', $user->company->cnpj)
+                    //->sum('qtd_enviada')
                     ->where('tipo_estoque', $lote)
                     ->where(function ($query) use ($dataEnd) {
                         if ($dataEnd) {
@@ -160,29 +180,33 @@ class OutRepositoryEloquent extends BaseRepository implements OutRepository
                         }
                         return $query;
                     })
+                   // ->groupBy('tipo_estoque')
                     ->paginate();
             } else {
                 $results = $this->model
                     ->where('tipo_estoque', $lote)
+                   // ->sum('qtd_enviada')
                     ->where('depositante', $cnpj)
                     ->where(function ($query) use ($dataEnd) {
                         if ($dataEnd) {
-                            return $query->whereRaw('data_geracao BETWEEN ? AND ?', [(new Carbon())->subMonth(6), $dataEnd]);
+                            return $query->whereRaw('data_geracao BETWEEN ? AND ?', [(new Carbon())->subMonth(6), $dataEnd])->groupBy('tipo_estoque');
                         }
                         return $query;
                     })
+                    //->groupBy('tipo_estoque')
                     ->paginate();
             }
         } else {
 
             $results = $this->model
-                ->where('depositante', $cnpj)
-                ->where(function ($query) use ($dataEnd) {
+                ->where(function ($query) use ($dataEnd,$cnpj) {
                     if ($dataEnd) {
-                        return $query->whereRaw('data_geracao BETWEEN ? AND ?', [(new Carbon())->subMonth(6), $dataEnd]);
+                        return $query->whereRaw('data_geracao BETWEEN ? AND ?', [(new Carbon())->subMonth(6), $dataEnd])
+                            ->where('depositante', $cnpj);
                     }
                     return $query;
                 })
+                //->groupBy('tipo_estoque')
                 ->paginate();
 
         }

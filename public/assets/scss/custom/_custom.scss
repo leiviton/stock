@@ -17,6 +17,9 @@ body {
       color: #ccc;
     }
   }
+  .btn-filter:not(:last-child) {
+    margin: 0!important;
+  }
 }
 
 .primary-green {
@@ -49,7 +52,27 @@ body {
   border-top: 1px solid #ccc;
 }
 
+//Popover
+.custom-popover {
+  width: 200px;
 
+  button {
+    width: 100%;
+  }
+}
+
+// Result Table
+.table {
+  tbody {
+    tr {
+      td {
+        button:not(:last-child) {
+          margin: 0 !important;
+        }
+      }
+    }
+  }
+}
 
 
 
