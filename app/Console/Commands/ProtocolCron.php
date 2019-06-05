@@ -81,6 +81,8 @@ class ProtocolCron extends Command
     {
         $companies = $this->companyRepository->all();
 
+        DB::table('stocks')->truncate();
+
         foreach ($companies as $company) {
 
             $company->cnpj = $this->limpaCPF_CNPJ($company->cnpj);
@@ -110,7 +112,7 @@ class ProtocolCron extends Command
 
             $company->cnpj = $this->limpaCPF_CNPJ($company->cnpj);
 
-            $responseSaida = $client->get("http://10.0.0.31:4488/logixrest/kbtr00003/saidasporDepositanteData/01/$company->cnpj/1/1000/04-03-2019/04-03-2019/N/0", [
+            $responseSaida = $client->get("http://10.0.0.18:4499/logixrest/kbtr00003/saidasporDepositanteData/01/$company->cnpj/1/1000/04-03-2019/04-03-2019/N/0", [
                 'auth' => [
                     'admlog',
                     'Totvs330'
@@ -147,20 +149,20 @@ class ProtocolCron extends Command
                 $this->outRepository->updateOrCreate(["chave_logix" => $dataSaida["chave_logix"]], $dataSaida);
             }
 
-            $response = $client->get("http://10.0.0.31:4488/logixrest/kbtr00002/entradaporDepositanteData/01/$company->cnpj/1/1000/04-03-2019/04-03-2019/N/0", [
+            $response = $client->get("http://10.0.0.18:4499/logixrest/kbtr00002/entradaporDepositanteData/01/$company->cnpj/1/1000/04-03-2019/04-05-2019/N/0", [
                 'auth' => [
                     'admlog', 'Totvs330'
                 ]]);
 
             $data = json_decode($response->getBody(true)->getContents());
-
+            // dd($data->data);
             $entradas = $data->data;
 
             for ($i = 0; $i < count($entradas); $i++) {
-                //dd($entradas[$i]);
+                // dd($entradas[$i]);
                 $data1 = [
                     'chave_logix' => $entradas[$i]->id,
-                    'company_id' => $company->id,
+                    'company_id' => 1,
                     'data_geracao' => new \DateTime($entradas[$i]->data_atualiza),
                     'depositante' => $entradas[$i]->cnpj_cliente,
                     'razao_social' => $entradas[$i]->razao_social,
@@ -187,9 +189,7 @@ class ProtocolCron extends Command
                 //dd($itemEnd);
             }
 
-
-            DB::table('stocks')->truncate();
-            $response = $client->get("http://10.0.0.31:4488/logixrest/kbtr00001/estoquePorDepositante/01/056994502000130/1/500/S/N/0", [
+            $response = $client->get("http://10.0.0.18:4499/logixrest/kbtr00001/estoquePorDepositante/01/$company->cnpj/1/500/S/N/0", [
                 'auth' => [
                     'admlog',
                     'Totvs330'
