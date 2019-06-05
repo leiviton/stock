@@ -18,7 +18,7 @@ class CreateTableCompanies extends Migration
             $table->string('cnpj',20);
             $table->string('nome');
             $table->string('logo');
-            $table->smallInteger('fiscal',1)->default(0);
+            $table->smallInteger('fiscal',1)->nullable();
             $table->timestamps();
         });
     }
