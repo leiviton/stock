@@ -15,10 +15,10 @@ class CreateTableCompanies extends Migration
     {
         Schema::create('companies', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('cnpj',20);
-            $table->string('nome');
-            $table->string('logo');
-            $table->smallInteger('fiscal',1)->nullable();
+            $table->string('cnpj',20)->nullable();
+            $table->string('nome')->nullable();
+            $table->string('logo')->nullable();
+            $table->smallInteger('fiscal')->nullable();
             $table->timestamps();
         });
     }
