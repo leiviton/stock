@@ -6,7 +6,7 @@ use League\Fractal\TransformerAbstract;
 use Stock\Models\Stock;
 
 /**
- * Class StockTransformer.
+ *
  *
  * @package namespace Stock\Transformers;
  */

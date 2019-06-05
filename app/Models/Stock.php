@@ -40,7 +40,8 @@ class Stock extends \Stock\Models\Base\Stock implements Transformable
         'qtd_avariada',
         'avaria',
         'peca',
-        'serie'
+        'serie',
+        'company_id'
     ];
 
 }

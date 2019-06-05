@@ -2,7 +2,7 @@
 
 /**
  * Created by Reliese Model.
- * Date: Fri, 26 Apr 2019 19:52:26 +0000.
+ * Date: Tue, 04 Jun 2019 23:03:10 +0000.
  */
 
 namespace Stock\Models\Base;
@@ -13,22 +13,32 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * Class Company
  * 
  * @property int $id
+ * @property int $configuration_fiscal_id
  * @property string $cnpj
  * @property string $nome
  * @property string $logo
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
  * 
+ * @property \Stock\Models\ConfigurationFiscal $configuration_fiscal
  * @property \Illuminate\Database\Eloquent\Collection $outs
  * @property \Illuminate\Database\Eloquent\Collection $roads
  * @property \Illuminate\Database\Eloquent\Collection $stocks
  * @property \Illuminate\Database\Eloquent\Collection $users
- * @property \Illuminate\Database\Eloquent\Collection $protocols
  *
  * @package Stock\Models\Base
  */
 class Company extends Eloquent
 {
+	protected $casts = [
+		'configuration_fiscal_id' => 'int'
+	];
+
+	public function configuration_fiscal()
+	{
+		return $this->belongsTo(\Stock\Models\ConfigurationFiscal::class);
+	}
+
 	public function outs()
 	{
 		return $this->hasMany(\Stock\Models\Out::class);
@@ -48,9 +58,4 @@ class Company extends Eloquent
 	{
 		return $this->hasMany(\Stock\Models\User::class);
 	}
-
-	public function protocols()
-    {
-        return $this->hasMany(\Stock\Models\Protocol::class,'empresa_deposit','cnpj');
-    }
 }

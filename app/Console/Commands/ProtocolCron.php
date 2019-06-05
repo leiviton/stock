@@ -68,131 +68,6 @@ class ProtocolCron extends Command
         $this->outRepository = $outRepository;
         $this->stockRepository = $stockRepository;
         $this->companyRepository = $companyRepository;
-
-        $client = new Client();
-
-        $companies = $this->companyRepository->all();
-
-        $dataNow = date_format(new \DateTime(),'d-m-Y');
-
-        foreach ($companies as $company) {
-
-            $responseSaida = $client->get("http://10.0.0.18:4488/logixrest/kbtr00003/saidasporDepositanteData/01/056994502000130/1/100000000/01-01-2019/01-06-2019/N/0", [
-                'auth' => [
-                    'admlog',
-                    'Totvs330'
-                ]]);
-            $saidas = json_decode($responseSaida->getBody(true)->getContents());
-            $saida = $saidas->data;
-            for ($i = 0; $i < count($saida); $i++) {
-                //dd($saida[$i]);
-                $dataSaida = [
-                    'chave_logix' => $saida[$i]->id,
-                    'company_id' => $company->id,
-                    'data_geracao' => new \DateTime($saida[$i]->data_atualiza),
-                    'depositante' => $saida[$i]->cnpj_cliente_depos,
-                    'razao_social' => $saida[$i]->razao_social,
-                    'tipo_estoque' => $saida[$i]->protocolo,
-                    'codigo_produto' => $saida[$i]->cod_item,
-                    'desc_produto' => $saida[$i]->den_item,
-                    'desc_tipo_estoque' => $saida[$i]->den_protocolo,
-                    'unidade_medida' => $saida[$i]->um,
-                    'lote' => $saida[$i]->lote,
-                    'data_validade' => new \DateTime($saida[$i]->dat_hor_validade),
-                    'data_envio' => new \DateTime($saida[$i]->dat_solic_envio),
-                    'nota_fiscal' => '15',
-                    'serie_nf' => $saida[$i]->serie_nota_fiscal,
-                    'nome_destino_final' => $saida[$i]->nome_dest_final,
-                    'centro' => $saida[$i]->centro,
-                    'numero_ordem' => $saida[$i]->num_ordem,
-                    'qtd_enviada' => $saida[$i]->qtd_enviada,
-                    'serie' => $saida[$i]->serie,
-                    'peca' => $saida[$i]->peca,
-                    'pedido_venda' => $saida[$i]->id_protheus
-                ];
-
-                $this->outRepository->updateOrCreate(["chave_logix" => $dataSaida["chave_logix"]], $dataSaida);
-            }
-        }
-        /*    $resultContadorEntrada = $client->get("http://10.0.0.18:4488/logixrest/kbtr00002/countEntradaporDepositanteData/01/$company->cnpj/01-01-2019/$dataNow/0", [
-                'auth' => [
-                    'admlog',
-                    'Totvs330'
-                ]]);
-            $dataCountEntradas = json_decode($resultContadorEntrada->getBody(true)->getContents());
-
-            $qtdPaginate = (int) ceil($dataCountEntradas->data[0]->contador / 500);
-
-            $itemStart = 1;
-
-            $itemEnd = 500;
-
-            //dd((int)$qtdPaginate);
-            for ($i = 0; $i <= $qtdPaginate; $i++) {
-                $response = $client->get("http://10.0.0.18:4488/logixrest/kbtr00002/entradaporDepositanteData/01/$company->cnpj/$itemStart/$itemEnd/01-01-2019/$dataNow/S/0", [
-                    'auth' => [
-                        'admlog', 'Totvs330'
-                    ]]);
-
-                $data = json_decode($response->getBody(true)->getContents());
-
-                $entradas = $data->data;
-
-                for ($i = 0; $i < count($entradas); $i++) {
-                    //dd($entradas[$i]);
-                    $data1 = [
-                        'chave_logix' => $entradas[$i]->id,
-                        'company_id' => $company->id,
-                        'data_geracao' => new \DateTime($entradas[$i]->data_atualiza),
-                        'depositante' => $entradas[$i]->cnpj_cliente,
-                        'razao_social' => $entradas[$i]->razao_social,
-                        'data_recebimento' => new \DateTime($entradas[$i]->dat_entrada_nf),
-                        'tipo_estoque' => $entradas[$i]->protocolo,
-                        'desc_tipo_estoque' => $entradas[$i]->den_protocolo,
-                        'cnpj_emissor_nfe' => $entradas[$i]->cnpj_emissor,
-                        'razao_social_fornecedor' => $entradas[$i]->razao_social,
-                        'codigo_produto' => $entradas[$i]->cod_item,
-                        'desc_produto' => $entradas[$i]->den_item,
-                        'unidade_medida' => $entradas[$i]->um,
-                        'lote' => $entradas[$i]->lote,
-                        'data_validade' => new \DateTime($entradas[$i]->data_validade),
-                        'serie_nf' => $entradas[$i]->num_nf . '-' . $entradas[$i]->ser_nf,
-                        'tipo_nf' => '5',
-                        'desc_restricao' => $entradas[$i]->des_restricao,
-                        'serie' => $entradas[$i]->serie,
-                        'peca' => $entradas[$i]->peca,
-                        'qtd_recebida' => (int)$entradas[$i]->qtd_recebida,
-                        'qtd_fiscal' => (int)$entradas[$i]->qtd_declarada_nf,
-                    ];
-                    dd($data1["qtd_fiscal"]);
-                    $this->roadRepository->updateOrCreate(["chave_logix" => $data1["chave_logix"]], $data1);
-
-                    $itemStart = $itemEnd + 1;
-                    $itemEnd = $itemEnd + 500;
-
-                    //dd($itemEnd);
-                }
-            }
-        }*/
-
-
-        /*$result = DB::connection('sqlsrv')->table('logix.wms_tip_estoque')->where('sit_registro', 1)->where('empresa_deposit', '056994502000130')->get();
-
-        for ($i = 0; $i < count($result); $i++) {
-            //dd($result[$i]->empresa);
-            $data = [
-                "empresa" => rtrim($result[$i]->empresa),
-                "tip_estoque" => rtrim($result[$i]->tip_estoque),
-                "abrang" => rtrim($result[$i]->abrang),
-                "empresa_deposit" => rtrim($result[$i]->empresa_deposit),
-                "des_tip_estoque" => rtrim($result[$i]->des_tip_estoque),
-                "des_reduz_tip_estoque" => rtrim($result[$i]->des_reduz_tip_estoque),
-                "padrao" => rtrim($result[$i]->padrao),
-                "sit_registro" => rtrim($result[$i]->sit_registro)
-            ];
-
-            $this->repository->updateOrCreate(["tip_estoque" => $data["tip_estoque"]], $data);
-        }*/
     }
 
 
@@ -204,11 +79,7 @@ class ProtocolCron extends Command
      */
     public function handle()
     {
-        $dataNow = date_format(new \DateTime(),'d-m-Y');
-
         $companies = $this->companyRepository->all();
-
-        $client = new Client();
 
         foreach ($companies as $company) {
 
@@ -232,7 +103,14 @@ class ProtocolCron extends Command
                 $this->repository->updateOrCreate(["tip_estoque" => $data["tip_estoque"]], $data);
             }
 
-            /*$responseSaida = $client->get("http://10.0.0.18:4488/logixrest/kbtr00003/saidasporDepositanteData/01/$company->cnpj/1/100000000/01-01-2019/01-06-2019/N/0", [
+            $client = new Client();
+
+            $dataNow = date_format(new \DateTime(), 'd-m-Y');
+
+
+            $company->cnpj = $this->limpaCPF_CNPJ($company->cnpj);
+
+            $responseSaida = $client->get("http://10.0.0.31:4488/logixrest/kbtr00003/saidasporDepositanteData/01/$company->cnpj/1/1000/04-03-2019/04-03-2019/N/0", [
                 'auth' => [
                     'admlog',
                     'Totvs330'
@@ -269,10 +147,50 @@ class ProtocolCron extends Command
                 $this->outRepository->updateOrCreate(["chave_logix" => $dataSaida["chave_logix"]], $dataSaida);
             }
 
-            DB::table('stocks')->truncate();
+            $response = $client->get("http://10.0.0.31:4488/logixrest/kbtr00002/entradaporDepositanteData/01/$company->cnpj/1/1000/04-03-2019/04-03-2019/N/0", [
+                'auth' => [
+                    'admlog', 'Totvs330'
+                ]]);
 
-            $response = $client->get("http://10.0.0.18:4488/logixrest/kbtr00001/estoquePorDepositante/01/$company->cnpj/1/1000000000000/S/N/0",[
-                'auth'    => [
+            $data = json_decode($response->getBody(true)->getContents());
+
+            $entradas = $data->data;
+
+            for ($i = 0; $i < count($entradas); $i++) {
+                //dd($entradas[$i]);
+                $data1 = [
+                    'chave_logix' => $entradas[$i]->id,
+                    'company_id' => $company->id,
+                    'data_geracao' => new \DateTime($entradas[$i]->data_atualiza),
+                    'depositante' => $entradas[$i]->cnpj_cliente,
+                    'razao_social' => $entradas[$i]->razao_social,
+                    'data_recebimento' => new \DateTime($entradas[$i]->dat_entrada_nf),
+                    'tipo_estoque' => $entradas[$i]->protocolo,
+                    'desc_tipo_estoque' => $entradas[$i]->den_protocolo,
+                    'cnpj_emissor_nfe' => $entradas[$i]->cnpj_emissor,
+                    'razao_social_fornecedor' => $entradas[$i]->razao_social,
+                    'codigo_produto' => $entradas[$i]->cod_item,
+                    'desc_produto' => $entradas[$i]->den_item,
+                    'unidade_medida' => $entradas[$i]->um,
+                    'lote' => $entradas[$i]->lote,
+                    'data_validade' => new \DateTime($entradas[$i]->data_validade),
+                    'serie_nf' => $entradas[$i]->num_nf . '-' . $entradas[$i]->ser_nf,
+                    'tipo_nf' => '5',
+                    'desc_restricao' => $entradas[$i]->des_restricao,
+                    'serie' => $entradas[$i]->serie,
+                    'peca' => $entradas[$i]->peca,
+                    'qtd_recebida' => (int)$entradas[$i]->qtd_recebida,
+                    'qtd_fiscal' => (int)$entradas[$i]->qtd_declarada_nf,
+                ];
+                //dd($data1["qtd_fiscal"]);
+                $this->roadRepository->updateOrCreate(["chave_logix" => $data1["chave_logix"]], $data1);
+                //dd($itemEnd);
+            }
+
+
+            DB::table('stocks')->truncate();
+            $response = $client->get("http://10.0.0.31:4488/logixrest/kbtr00001/estoquePorDepositante/01/056994502000130/1/500/S/N/0", [
+                'auth' => [
                     'admlog',
                     'Totvs330'
                 ]]);
@@ -280,13 +198,11 @@ class ProtocolCron extends Command
 
             $stock = $stocks->data;
 
-            DB::table('stocks')->truncate();
-
             for ($i = 0; $i < count($stock); $i++) {
-                dd($stock[$i]);
+                //dd($stock[$i]);
                 $dataStock = [
                     'chave_logix' => $stock[$i]->id,
-                    'company_id' => $company->id,
+                    'company_id' => 1,
                     'data_geracao' => new \DateTime($stock[$i]->data_atualiza),
                     'depositante' => $stock[$i]->cnpj_cliente,
                     'cnpj_origem' => $stock[$i]->cnpj_origem,
@@ -309,49 +225,8 @@ class ProtocolCron extends Command
                     'serie' => $stock[$i]->serie
                 ];
 
-                $this->stockRepository->updateOrCreate(["chave_logix" => $dataStock["chave_logix"]],$dataStock);
+                $this->stockRepository->updateOrCreate(["chave_logix" => $dataStock["chave_logix"]], $dataStock);
             }
-
-
-                $response = $client->get("http://10.0.0.18:4488/logixrest/kbtr00002/entradaporDepositanteData/01/$company->cnpj/1/100000000000/01-01-2019/$dataNow/N/0", [
-                    'auth' => [
-                        'admlog', 'Totvs330'
-                    ]]);
-
-                $data = json_decode($response->getBody(true)->getContents());
-
-                $entradas = $data->data;
-
-                for ($i = 0; $i < count($entradas); $i++) {
-                    //dd($entradas[$i]);
-                    $data1 = [
-                        'chave_logix' => $entradas[$i]->id,
-                        'company_id' => $company->id,
-                        'data_geracao' => new \DateTime($entradas[$i]->data_atualiza),
-                        'depositante' => $entradas[$i]->cnpj_cliente,
-                        'razao_social' => $entradas[$i]->razao_social,
-                        'data_recebimento' => new \DateTime($entradas[$i]->dat_entrada_nf),
-                        'tipo_estoque' => $entradas[$i]->protocolo,
-                        'desc_tipo_estoque' => $entradas[$i]->den_protocolo,
-                        'cnpj_emissor_nfe' => $entradas[$i]->cnpj_emissor,
-                        'razao_social_fornecedor' => $entradas[$i]->razao_social,
-                        'codigo_produto' => $entradas[$i]->cod_item,
-                        'desc_produto' => $entradas[$i]->den_item,
-                        'unidade_medida' => $entradas[$i]->um,
-                        'lote' => $entradas[$i]->lote,
-                        'data_validade' => new \DateTime($entradas[$i]->data_validade),
-                        'serie_nf' => $entradas[$i]->num_nf . '-' . $entradas[$i]->ser_nf,
-                        'tipo_nf' => '5',
-                        'desc_restricao' => $entradas[$i]->des_restricao,
-                        'serie' => $entradas[$i]->serie,
-                        'peca' => $entradas[$i]->peca,
-                        'qtd_recebida' => (int)$entradas[$i]->qtd_recebida,
-                        'qtd_fiscal' => (int)$entradas[$i]->qtd_declarada_nf,
-                    ];
-                    //dd($data1["qtd_fiscal"]);
-                    $this->roadRepository->updateOrCreate(["chave_logix" => $data1["chave_logix"]], $data1);
-                    //dd($itemEnd);
-                }*/
         }
     }
 

@@ -40,7 +40,8 @@ class Out extends \Stock\Models\Base\Out implements Transformable
         'qtd_enviada',
         'serie',
         'peca',
-        'pedido_venda'
+        'pedido_venda',
+        'company_id'
     ];
 
 }

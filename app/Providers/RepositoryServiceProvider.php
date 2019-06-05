@@ -51,5 +51,9 @@ class RepositoryServiceProvider extends ServiceProvider
             'Stock\Repositories\UserProtocolRepository',
             'Stock\Repositories\UserProtocolRepositoryEloquent'
         );
+        $this->app->bind(
+            'Stock\Repositories\ConfigurationFiscalRepository',
+            'Stock\Repositories\ConfigurationFiscalRepositoryEloquent'
+        );
     }
 }

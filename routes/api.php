@@ -16,6 +16,9 @@ Route::group(['prefix' => 'v1/', 'middleware' => 'auth:api'], function () {
         /*util*/
         Route::get('cnpj/{cnpj}', 'UtilController@getCnpj');
         Route::get('cep/{cep}', 'UtilController@getCep');
+        Route::get('emitir', 'UtilController@emitirNfe');
+        Route::get('consulta/{recibo}', 'UtilController@consultaProtocolo');
+        Route::get('danfe', 'UtilController@emitirDanfe');
 
         /*Users*/
         Route::post('user', 'UserController@store');

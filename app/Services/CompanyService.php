@@ -48,6 +48,7 @@ class CompanyService
     /**
      * @param $data
      * @return mixed
+     * @throws \Exception
      */
     public function create($data)
     {
@@ -55,6 +56,8 @@ class CompanyService
         try {
 
             $result = $this->repository->create($data);
+
+            $result->configuration_fiscal()->create($data['config_fiscal']);
 
             DB::commit();
 

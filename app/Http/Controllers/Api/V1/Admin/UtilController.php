@@ -5,9 +5,24 @@ namespace Stock\Http\Controllers\Api\V1\Admin;
 use GuzzleHttp\Client;
 use Stock\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
+use Stock\Services\NFeService;
 
 class UtilController extends Controller
 {
+    /**
+     * @var NFeService
+     */
+    private $NFeService;
+
+    /**
+     * UtilController constructor.
+     * @param NFeService $NFeService
+     */
+    public function __construct(NFeService $NFeService)
+    {
+        $this->NFeService = $NFeService;
+    }
+
     /**
      * @param $cnpj
      * @return \Psr\Http\Message\ResponseInterface
@@ -47,6 +62,20 @@ class UtilController extends Controller
         return response()->json(['data' => $result]);
     }
 
+    public function emitirNfe() {
+        return $this->NFeService->emitirNfe();
+    }
+
+    public function consultaProtocolo($recibo) {
+        return $this->NFeService->consultaProtocolo($recibo);
+    }
+
+    /**
+     * @return string
+     */
+    public function emitirDanfe() {
+        return $this->NFeService->geraDanfe();
+    }
     /**
      * @param $valor
      * @return mixed|string
