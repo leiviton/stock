@@ -82,8 +82,6 @@ class ProtocolCron extends Command
     {
         $companies = $this->companyRepository->all();
 
-        DB::table('stocks')->truncate();
-
         foreach ($companies as $company) {
 
             $company->cnpj = $this->limpaCPF_CNPJ($company->cnpj);
