@@ -68,6 +68,44 @@ class ProtocolCron extends Command
         $this->outRepository = $outRepository;
         $this->stockRepository = $stockRepository;
         $this->companyRepository = $companyRepository;
+        $client = new Client();
+        $responseSaida = $client->get("http://10.0.0.18:4499/logixrest/kbtr00003/saidasporDepositanteData/01/56994502000130/1/1000/04-06-2019/06-06-2019/N/0", [
+            'auth' => [
+                'admlog',
+                'Totvs330'
+            ]]);
+        $saidas = json_decode($responseSaida->getBody(true)->getContents());
+        $saida = $saidas->data;
+        dd($saida);
+        for ($i = 0; $i < count($saida); $i++) {
+            dd($saida[$i]);
+            $dataSaida = [
+                'chave_logix' => $saida[$i]->id,
+                'company_id' => 1,
+                'data_geracao' => new \DateTime($saida[$i]->data_atualiza),
+                'depositante' => $saida[$i]->cnpj_cliente_depos,
+                'razao_social' => $saida[$i]->razao_social,
+                'tipo_estoque' => $saida[$i]->protocolo,
+                'codigo_produto' => $saida[$i]->cod_item,
+                'desc_produto' => $saida[$i]->den_item,
+                'desc_tipo_estoque' => $saida[$i]->den_protocolo,
+                'unidade_medida' => $saida[$i]->um,
+                'lote' => $saida[$i]->lote,
+                'data_validade' => new \DateTime($saida[$i]->dat_hor_validade),
+                'data_envio' => new \DateTime($saida[$i]->dat_solic_envio),
+                'nota_fiscal' => '15',
+                'serie_nf' => $saida[$i]->serie_nota_fiscal,
+                'nome_destino_final' => $saida[$i]->nome_dest_final,
+                'centro' => $saida[$i]->centro,
+                'numero_ordem' => $saida[$i]->num_ordem,
+                'qtd_enviada' => $saida[$i]->qtd_enviada,
+                'serie' => $saida[$i]->serie,
+                'peca' => $saida[$i]->peca,
+                'pedido_venda' => $saida[$i]->id_protheus
+            ];
+
+            $this->outRepository->updateOrCreate(["chave_logix" => $dataSaida["chave_logix"]], $dataSaida);
+        }
     }
 
 
