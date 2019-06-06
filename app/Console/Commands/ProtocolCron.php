@@ -70,7 +70,7 @@ class ProtocolCron extends Command
         $this->companyRepository = $companyRepository;
         $client = new Client();
 
-        $response = $client->get("http://10.0.0.18:4499/logixrest/kbtr00002/entradaporDepositanteData/01/056994502000130/1/1000/04-03-2019/04-05-2019/N/0", [
+        /*$response = $client->get("http://10.0.0.18:4499/logixrest/kbtr00002/entradaporDepositanteData/01/056994502000130/1/1000/04-03-2019/04-05-2019/N/0", [
             'auth' => [
                 'admlog', 'Totvs330'
             ]]);
@@ -108,7 +108,7 @@ class ProtocolCron extends Command
             //dd($data1["qtd_fiscal"]);
             $this->roadRepository->updateOrCreate(["chave_logix" => $data1["chave_logix"]], $data1);
             //dd($itemEnd);
-        }
+        }*/
 
 
     }
@@ -155,7 +155,7 @@ class ProtocolCron extends Command
 
             $company->cnpj = $this->limpaCPF_CNPJ($company->cnpj);
 
-            $responseSaida = $client->get("http://10.0.0.18:4499/logixrest/kbtr00003/saidasporDepositanteData/01/$company->cnpj/1/1000/01-04-2019/$dataNow/N/0", [
+            $responseSaida = $client->get("http://10.0.0.18:4499/logixrest/kbtr00003/saidasporDepositanteData/01/$company->cnpj/1/1000/11-05-2019/$dataNow/N/0", [
                 'auth' => [
                     'admlog',
                     'Totvs330'
@@ -193,7 +193,7 @@ class ProtocolCron extends Command
                 $this->outRepository->updateOrCreate(["chave_logix" => $dataSaida["chave_logix"]], $dataSaida);
             }
 
-            $response = $client->get("http://10.0.0.18:4499/logixrest/kbtr00002/entradaporDepositanteData/01/$company->cnpj/1/1000/04-03-2019/04-05-2019/N/0", [
+            $response = $client->get("http://10.0.0.18:4499/logixrest/kbtr00002/entradaporDepositanteData/01/$company->cnpj/1/1000/11-05-2019/$dataNow/N/0", [
                 'auth' => [
                     'admlog', 'Totvs330'
                 ]]);
