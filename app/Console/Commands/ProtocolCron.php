@@ -79,7 +79,7 @@ class ProtocolCron extends Command
         $stocks = json_decode($response->getBody(true)->getContents());
 
         $stock = $stocks->data;
-        dd($stock);
+        //dd($stock);
         for ($i = 0; $i < count($stock); $i++) {
             dd($stock[$i]);
             $dataStock = [
