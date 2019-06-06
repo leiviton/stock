@@ -69,7 +69,7 @@ class ProtocolCron extends Command
         $this->stockRepository = $stockRepository;
         $this->companyRepository = $companyRepository;
         $client = new Client();
-        $responseSaida = $client->get("http://10.0.0.18:4499/logixrest/kbtr00003/saidasporDepositanteData/01/56994502000130/1/1000/04-06-2019/06-06-2019/N/0", [
+        $responseSaida = $client->get("http://10.0.0.18:4499/logixrest/kbtr00003/saidasporDepositanteData/01/056994502000130/1/1000/04-06-2019/06-06-2019/N/0", [
             'auth' => [
                 'admlog',
                 'Totvs330'
