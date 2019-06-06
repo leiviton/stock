@@ -76,9 +76,9 @@ class ProtocolCron extends Command
             ]]);
         $saidas = json_decode($responseSaida->getBody(true)->getContents());
         $saida = $saidas->data;
-        dd($saida);
+        //dd($saida);
         for ($i = 0; $i < count($saida); $i++) {
-            dd($saida[$i]);
+            //dd($saida[$i]);
             $dataSaida = [
                 'chave_logix' => $saida[$i]->id,
                 'company_id' => 1,
@@ -94,7 +94,7 @@ class ProtocolCron extends Command
                 'data_validade' => new \DateTime($saida[$i]->dat_hor_validade),
                 'data_envio' => new \DateTime($saida[$i]->dat_solic_envio),
                 'nota_fiscal' => '15',
-                'serie_nf' => $saida[$i]->serie_nota_fiscal,
+                'serie_nf' => str_replace(' ','',$saida[$i]->serie_nota_fiscal),
                 'nome_destino_final' => $saida[$i]->nome_dest_final,
                 'centro' => $saida[$i]->centro,
                 'numero_ordem' => $saida[$i]->num_ordem,
