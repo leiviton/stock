@@ -69,43 +69,48 @@ class ProtocolCron extends Command
         $this->stockRepository = $stockRepository;
         $this->companyRepository = $companyRepository;
         $client = new Client();
-        $responseSaida = $client->get("http://10.0.0.18:4499/logixrest/kbtr00003/saidasporDepositanteData/01/056994502000130/1/1000/04-06-2019/06-06-2019/N/0", [
-            'auth' => [
-                'admlog',
-                'Totvs330'
-            ]]);
-        $saidas = json_decode($responseSaida->getBody(true)->getContents());
-        $saida = $saidas->data;
-        //dd($saida);
-        for ($i = 0; $i < count($saida); $i++) {
-            //dd($saida[$i]);
-            $dataSaida = [
-                'chave_logix' => $saida[$i]->id,
-                'company_id' => 1,
-                'data_geracao' => new \DateTime($saida[$i]->data_atualiza),
-                'depositante' => $saida[$i]->cnpj_cliente_depos,
-                'razao_social' => $saida[$i]->razao_social,
-                'tipo_estoque' => $saida[$i]->protocolo,
-                'codigo_produto' => $saida[$i]->cod_item,
-                'desc_produto' => $saida[$i]->den_item,
-                'desc_tipo_estoque' => $saida[$i]->den_protocolo,
-                'unidade_medida' => $saida[$i]->um,
-                'lote' => $saida[$i]->lote,
-                'data_validade' => new \DateTime($saida[$i]->dat_hor_validade),
-                'data_envio' => new \DateTime($saida[$i]->dat_solic_envio),
-                'nota_fiscal' => '15',
-                'serie_nf' => str_replace(' ','',$saida[$i]->serie_nota_fiscal),
-                'nome_destino_final' => $saida[$i]->nome_dest_final,
-                'centro' => $saida[$i]->centro,
-                'numero_ordem' => $saida[$i]->num_ordem,
-                'qtd_enviada' => $saida[$i]->qtd_enviada,
-                'serie' => $saida[$i]->serie,
-                'peca' => $saida[$i]->peca,
-                'pedido_venda' => $saida[$i]->id_protheus
-            ];
 
-            $this->outRepository->updateOrCreate(["chave_logix" => $dataSaida["chave_logix"]], $dataSaida);
+        $response = $client->get("http://10.0.0.18:4499/logixrest/kbtr00002/entradaporDepositanteData/01/056994502000130/1/1000/04-03-2019/04-05-2019/N/0", [
+            'auth' => [
+                'admlog', 'Totvs330'
+            ]]);
+
+        $data = json_decode($response->getBody(true)->getContents());
+        // dd($data->data);
+        $entradas = $data->data;
+
+        for ($i = 0; $i < count($entradas); $i++) {
+            // dd($entradas[$i]);
+            $data1 = [
+                'chave_logix' => $entradas[$i]->id,
+                'company_id' => 1,
+                'data_geracao' => new \DateTime($entradas[$i]->data_atualiza),
+                'depositante' => $entradas[$i]->cnpj_cliente,
+                'razao_social' => $entradas[$i]->razao_social,
+                'data_recebimento' => new \DateTime($entradas[$i]->dat_entrada_nf),
+                'tipo_estoque' => $entradas[$i]->protocolo,
+                'desc_tipo_estoque' => $entradas[$i]->den_protocolo,
+                'cnpj_emissor_nfe' => $entradas[$i]->cnpj_emissor,
+                'razao_social_fornecedor' => $entradas[$i]->razao_social,
+                'codigo_produto' => $entradas[$i]->cod_item,
+                'desc_produto' => $entradas[$i]->den_item,
+                'unidade_medida' => $entradas[$i]->um,
+                'lote' => $entradas[$i]->lote,
+                'data_validade' => new \DateTime($entradas[$i]->data_validade),
+                'serie_nf' => str_replace(' ','',$entradas[$i]->num_nf . '-' . $entradas[$i]->ser_nf),
+                'tipo_nf' => '5',
+                'desc_restricao' => $entradas[$i]->des_restricao,
+                'serie' => $entradas[$i]->serie,
+                'peca' => $entradas[$i]->peca,
+                'qtd_recebida' => (int)$entradas[$i]->qtd_recebida,
+                'qtd_fiscal' => (int)$entradas[$i]->qtd_declarada_nf,
+            ];
+            //dd($data1["qtd_fiscal"]);
+            $this->roadRepository->updateOrCreate(["chave_logix" => $data1["chave_logix"]], $data1);
+            //dd($itemEnd);
         }
+
+
     }
 
 
@@ -150,18 +155,19 @@ class ProtocolCron extends Command
 
             $company->cnpj = $this->limpaCPF_CNPJ($company->cnpj);
 
-            $responseSaida = $client->get("http://10.0.0.18:4499/logixrest/kbtr00003/saidasporDepositanteData/01/$company->cnpj/1/1000/04-03-2019/04-03-2019/N/0", [
+            $responseSaida = $client->get("http://10.0.0.18:4499/logixrest/kbtr00003/saidasporDepositanteData/01/$company->cnpj/1/1000/01-04-2019/$dataNow/N/0", [
                 'auth' => [
                     'admlog',
                     'Totvs330'
                 ]]);
             $saidas = json_decode($responseSaida->getBody(true)->getContents());
             $saida = $saidas->data;
+            //dd($saida);
             for ($i = 0; $i < count($saida); $i++) {
                 //dd($saida[$i]);
                 $dataSaida = [
                     'chave_logix' => $saida[$i]->id,
-                    'company_id' => $company->id,
+                    'company_id' => 1,
                     'data_geracao' => new \DateTime($saida[$i]->data_atualiza),
                     'depositante' => $saida[$i]->cnpj_cliente_depos,
                     'razao_social' => $saida[$i]->razao_social,
@@ -174,7 +180,7 @@ class ProtocolCron extends Command
                     'data_validade' => new \DateTime($saida[$i]->dat_hor_validade),
                     'data_envio' => new \DateTime($saida[$i]->dat_solic_envio),
                     'nota_fiscal' => '15',
-                    'serie_nf' => $saida[$i]->serie_nota_fiscal,
+                    'serie_nf' => str_replace(' ','',$saida[$i]->serie_nota_fiscal),
                     'nome_destino_final' => $saida[$i]->nome_dest_final,
                     'centro' => $saida[$i]->centro,
                     'numero_ordem' => $saida[$i]->num_ordem,
@@ -214,7 +220,7 @@ class ProtocolCron extends Command
                     'unidade_medida' => $entradas[$i]->um,
                     'lote' => $entradas[$i]->lote,
                     'data_validade' => new \DateTime($entradas[$i]->data_validade),
-                    'serie_nf' => $entradas[$i]->num_nf . '-' . $entradas[$i]->ser_nf,
+                    'serie_nf' => str_replace(' ','',$entradas[$i]->num_nf . '-' . $entradas[$i]->ser_nf),
                     'tipo_nf' => '5',
                     'desc_restricao' => $entradas[$i]->des_restricao,
                     'serie' => $entradas[$i]->serie,
