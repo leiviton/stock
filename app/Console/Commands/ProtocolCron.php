@@ -70,7 +70,7 @@ class ProtocolCron extends Command
         $this->companyRepository = $companyRepository;
         $client = new Client();
 
-        /*$response = $client->get("http://10.0.0.18:4499/logixrest/kbtr00002/entradaporDepositanteData/01/056994502000130/1/1000/04-03-2019/04-05-2019/N/0", [
+        $response = $client->get("http://10.0.0.18:4499/logixrest/kbtr00002/entradaporDepositanteData/01/056994502000130/1/1000/21-05-2019/06-06-2019/N/0", [
             'auth' => [
                 'admlog', 'Totvs330'
             ]]);
@@ -108,7 +108,7 @@ class ProtocolCron extends Command
             //dd($data1["qtd_fiscal"]);
             $this->roadRepository->updateOrCreate(["chave_logix" => $data1["chave_logix"]], $data1);
             //dd($itemEnd);
-        }*/
+        }
 
 
     }
