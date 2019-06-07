@@ -32,6 +32,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('stocks:cron')->twiceDaily(12, 19);
         $schedule->command('roads:cron')->twiceDaily(11, 19);
         $schedule->command('outs:cron')->twiceDaily(10, 19);
+        $schedule->command('protocols:cron')->twiceDaily(10, 19);
     }
 
     /**
