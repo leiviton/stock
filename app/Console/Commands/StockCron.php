@@ -66,48 +66,70 @@ class StockCron extends Command
 
             $client = new Client();
 
-            $dataNow = date_format(new \DateTime(), 'd-m-Y');
+            //$dataNow = date_format(new \DateTime(), 'd-m-Y');
 
             $company->cnpj = $this->limpaCPF_CNPJ($company->cnpj);
 
-            $response = $client->get("http://10.0.0.18:4490/logixrest/kbtr00001/estoquePorDepositante/01/$company->cnpj/1/15000/S/S/0", [
+            $responseCount = $client->get("http://10.0.0.18:4490/logixrest/kbtr00001/countEstoquePorDepositante/01/$company->cnpj/S/0", [
                 'auth' => [
                     'admlog',
                     'Totvs330'
                 ]]);
 
-            $stocks = json_decode($response->getBody(true)->getContents());
+            $countData = json_decode($responseCount->getBody(true)->getContents());
 
-            $stock = $stocks->data;
-            //dd($stock);
-            for ($i = 0; $i < count($stock); $i++) {
-                //dd($stock[$i]);
-                $dataStock = [
-                    'chave_logix' => $stock[$i]->id,
-                    'company_id' => 1,
-                    'data_geracao' => new \DateTime($stock[$i]->data_atualiza),
-                    'depositante' => $stock[$i]->cnpj_cliente,
-                    'cnpj_origem' => $stock[$i]->cnpj_origem,
-                    'data_atual' => new \DateTime($stock[$i]->data_atual),
-                    'hora_atual' => $stock[$i]->hora_atual,
-                    'tipo_estoque' => $stock[$i]->protocolo,
-                    'desc_tipo_estoque' => $stock[$i]->den_protocolo,
-                    'codigo_produto' => $stock[$i]->cod_item,
-                    'desc_produto' => $stock[$i]->den_item,
-                    'unidade_medida' => $stock[$i]->um,
-                    'lote' => $stock[$i]->lote,
-                    'data_validade' => new \DateTime($stock[$i]->data_validade),
-                    'desc_restricao' => $stock[$i]->den_restricao,
-                    'qtd_regul_reser' => $stock[$i]->qtd_reserva,
-                    'qtd_produto' => $stock[$i]->qtd_disponivel,
-                    'qtd_fiscal' => $stock[$i]->qtd_disponivel,
-                    'qtd_avariada' => $stock[$i]->qtd_avaria,
-                    'avaria' => $stock[$i]->qtd_avaria,
-                    'peca' => $stock[$i]->peca,
-                    'serie' => $stock[$i]->serie
-                ];
+            $countStock = (int) $countData->data[0]->contador;
 
-                $this->stockRepository->updateOrCreate(["chave_logix" => $dataStock["chave_logix"]], $dataStock);
+            $limit = ceil((float) $countStock / 5000);
+
+            $start = 1;
+
+            $end = 5000;
+
+            for ($j = 0; $j < $limit; $j++){
+
+                $response = $client->get("http://10.0.0.18:4490/logixrest/kbtr00001/estoquePorDepositante/01/$company->cnpj/$start/$end/S/S/0", [
+                    'auth' => [
+                        'admlog',
+                        'Totvs330'
+                    ]]);
+
+                $stocks = json_decode($response->getBody(true)->getContents());
+
+                $stock = $stocks->data;
+
+                for ($i = 0; $i < count($stock); $i++) {
+                    //dd($stock[$i]);
+                    $dataStock = [
+                        'chave_logix' => $stock[$i]->id,
+                        'company_id' => 1,
+                        'data_geracao' => new \DateTime($stock[$i]->data_atualiza),
+                        'depositante' => $stock[$i]->cnpj_cliente,
+                        'cnpj_origem' => $stock[$i]->cnpj_origem,
+                        'data_atual' => new \DateTime($stock[$i]->data_atual),
+                        'hora_atual' => $stock[$i]->hora_atual,
+                        'tipo_estoque' => $stock[$i]->protocolo,
+                        'desc_tipo_estoque' => $stock[$i]->den_protocolo,
+                        'codigo_produto' => $stock[$i]->cod_item,
+                        'desc_produto' => $stock[$i]->den_item,
+                        'unidade_medida' => $stock[$i]->um,
+                        'lote' => $stock[$i]->lote,
+                        'data_validade' => new \DateTime($stock[$i]->data_validade),
+                        'desc_restricao' => $stock[$i]->den_restricao,
+                        'qtd_regul_reser' => $stock[$i]->qtd_reserva,
+                        'qtd_produto' => $stock[$i]->qtd_disponivel,
+                        'qtd_fiscal' => $stock[$i]->qtd_disponivel,
+                        'qtd_avariada' => $stock[$i]->qtd_avaria,
+                        'avaria' => $stock[$i]->qtd_avaria,
+                        'peca' => $stock[$i]->peca,
+                        'serie' => $stock[$i]->serie
+                    ];
+
+                    $this->stockRepository->updateOrCreate(["chave_logix" => $dataStock["chave_logix"]], $dataStock);
+                }
+
+                $start = $end + 1;
+                $end = $end + 5000;
             }
         }
     }
