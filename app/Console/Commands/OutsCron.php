@@ -2,6 +2,7 @@
 
 namespace Stock\Console\Commands;
 
+use Carbon\Carbon;
 use GuzzleHttp\Client;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
@@ -67,19 +68,24 @@ class OutsCron extends Command
 
             $client = new Client();
 
-            $dataNow = date_format(new \DateTime(), 'd-m-Y');
+            $dataNow = new Carbon();
+
+            $dataNow = $dataNow->subDay(1);
+
+            $dataNowReverse = date_format($dataNow, 'd-m-Y');
 
             $company->cnpj = $this->limpaCPF_CNPJ($company->cnpj);
 
-            $responseSaida = $client->get("http://10.0.0.18:4490/logixrest/kbtr00003/saidasporDepositanteData/01/$company->cnpj/1/1000/11-05-2019/$dataNow/N/0", [
+            $responseSaida = $client->get("http://10.0.0.18:4490/logixrest/kbtr00003/saidasporDepositanteData/01/$company->cnpj/1/1000/$dataNowReverse/$dataNowReverse/N/0", [
                 'auth' => [
                     'admlog',
                     'Totvs330'
                 ]]);
 
             $saidas = json_decode($responseSaida->getBody(true)->getContents());
+
             $saida = $saidas->data;
-            //dd($saida);
+
             for ($i = 0; $i < count($saida); $i++) {
                 //dd($saida[$i]);
                 $dataSaida = [

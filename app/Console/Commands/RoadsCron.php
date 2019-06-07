@@ -69,7 +69,7 @@ class RoadsCron extends Command
 
             $dataNow = date_format(new \DateTime(), 'd-m-Y');
 
-            $response = $client->get("http://10.0.0.18:4490/logixrest/kbtr00002/entradaporDepositanteData/01/$company->cnpj/1/1000/11-05-2019/$dataNow/N/0", [
+            $response = $client->get("http://10.0.0.18:4490/logixrest/kbtr00002/entradaporDepositanteData/01/$company->cnpj/1/1000/$dataNow/$dataNow/N/0", [
                 'auth' => [
                     'admlog', 'Totvs330'
                 ]]);
