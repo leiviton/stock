@@ -57,7 +57,7 @@ class CompanyService
 
             $result = $this->repository->create($data);
 
-            $result->configuration_fiscal()->create($data['config_fiscal']);
+            //$result->configuration_fiscal()->create($data['config_fiscal']);
 
             DB::commit();
 

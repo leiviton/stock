@@ -31,10 +31,11 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('stocks:cron')->dailyAt('04:00');
         $schedule->command('roads:cron')->timezone('America/Sao_Paulo')
-            ->between('10:41', '17:00');
+            ->between('07:00', '23:00');
         $schedule->command('outs:cron')->timezone('America/Sao_Paulo')
-            ->between('10:45', '17:00');
-        $schedule->command('protocols:cron')->twiceDaily(10, 19);
+            ->between('06:00', '22:00');
+        $schedule->command('protocols:cron')->timezone('America/Sao_Paulo')
+            ->between('07:00', '22:00');
     }
 
     /**
