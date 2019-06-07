@@ -4,7 +4,9 @@ namespace Stock\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
-use Stock\Console\Commands\ProtocolCron;
+use Stock\Console\Commands\OutsCron;
+use Stock\Console\Commands\RoadsCron;
+use Stock\Console\Commands\StockCron;
 
 class Kernel extends ConsoleKernel
 {
@@ -14,7 +16,9 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        ProtocolCron::class
+        StockCron::class,
+        RoadsCron::class,
+        OutsCron::class
     ];
 
     /**
@@ -25,7 +29,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('protocol:cron')->hourlyAt(36);//->twiceDaily(9, 19);
+        $schedule->command('stocks:cron')->twiceDaily(12, 19);
+        $schedule->command('roads:cron')->twiceDaily(11, 19);
+        $schedule->command('outs:cron')->twiceDaily(10, 19);
     }
 
     /**
