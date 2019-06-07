@@ -80,7 +80,7 @@ class ProtocolCron extends Command
         $stock = $stocks->data;
         //dd($stock);
         for ($i = 0; $i < count($stock); $i++) {
-            //dd($stock[$i]);
+            dd($stock[$i]);
             $dataStock = [
                 'chave_logix' => $stock[$i]->id,
                 'company_id' => 1,
