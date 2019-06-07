@@ -2,15 +2,10 @@
 
 namespace Stock\Console\Commands;
 
-use Carbon\Carbon;
-use GuzzleHttp\Client;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Stock\Repositories\CompanyRepository;
-use Stock\Repositories\OutRepository;
 use Stock\Repositories\ProtocolRepository;
-use Stock\Repositories\RoadRepository;
-use Stock\Repositories\StockRepository;
 
 class ProtocolsCron extends Command
 {
@@ -32,18 +27,7 @@ class ProtocolsCron extends Command
      * @var ProtocolRepository
      */
     private $repository;
-    /**
-     * @var RoadRepository
-     */
-    private $roadRepository;
-    /**
-     * @var OutRepository
-     */
-    private $outRepository;
-    /**
-     * @var StockRepository
-     */
-    private $stockRepository;
+
     /**
      * @var CompanyRepository
      */
@@ -53,20 +37,13 @@ class ProtocolsCron extends Command
      * Create a new command instance.
      *
      * @param ProtocolRepository $repository
-     * @param RoadRepository $roadRepository
-     * @param OutRepository $outRepository
-     * @param StockRepository $stockRepository
      * @param CompanyRepository $companyRepository
      */
-    public function __construct(ProtocolRepository $repository, RoadRepository $roadRepository,
-                                OutRepository $outRepository, StockRepository $stockRepository,
+    public function __construct(ProtocolRepository $repository,
                                 CompanyRepository $companyRepository)
     {
         parent::__construct();
         $this->repository = $repository;
-        $this->roadRepository = $roadRepository;
-        $this->outRepository = $outRepository;
-        $this->stockRepository = $stockRepository;
         $this->companyRepository = $companyRepository;
     }
 
