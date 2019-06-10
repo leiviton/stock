@@ -19,8 +19,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         StockCron::class,
         RoadsCron::class,
-        OutsCron::class,
-        Stock2Cron::class
+        OutsCron::class
     ];
 
     /**
@@ -31,8 +30,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('stocks:cron')->dailyAt('08:50');
-        $schedule->command('stocks2:cron')->dailyAt('10:39');
+        $schedule->command('stocks:cron')->dailyAt('03:00');
+        //$schedule->command('stocks2:cron')->dailyAt('10:39');
         $schedule->command('roads:cron')->timezone('America/Sao_Paulo')
             ->between('07:00', '23:00');
         $schedule->command('outs:cron')->timezone('America/Sao_Paulo')

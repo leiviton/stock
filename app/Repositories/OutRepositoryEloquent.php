@@ -62,7 +62,7 @@ class OutRepositoryEloquent extends BaseRepository implements OutRepository
                 if ($data['value'] == '') {
                     $results = $this->model
                         ->orderBy($order[0], $order[1])
-                        ->where('depositante', $user->company->cnpj)
+                        ->where('depositante', $cnpj)
                         ->where('tipo_estoque', $lote)
                         ->groupBy('tipo_estoque')
                         ->get();
@@ -70,7 +70,7 @@ class OutRepositoryEloquent extends BaseRepository implements OutRepository
                     $results = $this->model
                         ->orderBy($order[0], $order[1])
                         ->where('tipo_estoque', $lote)
-                        ->where('depositante', $user->company->cnpj)
+                        ->where('depositante', $cnpj)
                         ->where(function ($query) use ($data) {
                             if($data['field'] == 'data_envio') {
                                 return $query->where($data['field'],$data['value']);
@@ -108,7 +108,7 @@ class OutRepositoryEloquent extends BaseRepository implements OutRepository
                 if ($data['value'] == '') {
                     $results = $this->model
                         ->orderBy($order[0], $order[1])
-                        ->where('depositante', $user->company->cnpj)
+                        ->where('depositante', $cnpj)
                         ->where('tipo_estoque', $lote)
                        // ->groupBy('tipo_estoque')
                         ->get();
@@ -116,7 +116,7 @@ class OutRepositoryEloquent extends BaseRepository implements OutRepository
                     $results = $this->model
                         ->orderBy($order[0], $order[1])
                         ->where('tipo_estoque', $lote)
-                        ->where('depositante', $user->company->cnpj)
+                        ->where('depositante', $cnpj)
                         ->where(function ($query) use ($data) {
                             if ($data) {
                                 return $query->where($data['field'], 'like', '%' . $data['value'] . '%');
@@ -171,7 +171,7 @@ class OutRepositoryEloquent extends BaseRepository implements OutRepository
         if ($lote != '') {
             if ($user->role == 'user_company') {
                 $results = $this->model
-                    ->where('depositante', $user->company->cnpj)
+                    ->where('depositante', $cnpj)
                     //->sum('qtd_enviada')
                     ->where('tipo_estoque', $lote)
                     ->where(function ($query) use ($dataEnd) {

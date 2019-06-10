@@ -65,7 +65,7 @@ class StockRepositoryEloquent extends BaseRepository implements StockRepository
                 } else {
                     $results = $this->model
                         ->orderBy($order[0], $order[1])
-                        ->where('depositante', $user->company->cnpj)
+                        ->where('depositante', $cnpj)
                         ->where(function ($query) use ($data) {
                             if ($data) {
                                 return $query->where($data['field'], 'like', '%' . $data['value'] . '%');
@@ -100,7 +100,7 @@ class StockRepositoryEloquent extends BaseRepository implements StockRepository
                     $results = $this->model
                         ->orderBy($order[0], $order[1])
                         ->where('tipo_estoque', $lote)
-                        ->where('depositante', $user->company->cnpj)
+                        ->where('depositante', $cnpj)
                         ->where(function ($query) use ($data) {
                             if ($data) {
                                 return $query->where($data['field'], 'like', '%' . $data['value'] . '%');

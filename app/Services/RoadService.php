@@ -74,7 +74,7 @@ class RoadService
     public function getRoads($data,$id,$lote = '')
     {
         $user = \Auth::guard()->user();
-        $cnpj = $this->companyRepository->find($id)->cnpj;
+        $cnpj = $this->limpaCPF_CNPJ($this->companyRepository->find($id)->cnpj);
         return $this->repository->skipPresenter(false)->orderFilter($data,$user,$cnpj,$lote);
     }
 
@@ -86,7 +86,7 @@ class RoadService
     public function getAll($id,$lote)
     {
         $user = \Auth::guard()->user();
-        $cnpj = $this->companyRepository->find($id)->cnpj;
+        $cnpj = $this->limpaCPF_CNPJ($this->companyRepository->find($id)->cnpj);
         return $this->repository->skipPresenter(false)->orderByRoads($user,$cnpj,$lote);
     }
 
@@ -147,5 +147,19 @@ class RoadService
             $result = implode("/", array_reverse(explode("-", $date)));
             return $result;
         }
+    }
+
+    /**
+     * @param $valor
+     * @return mixed|string
+     */
+    public function limpaCPF_CNPJ($valor)
+    {
+        $valor = trim($valor);
+        $valor = str_replace(".", "", $valor);
+        $valor = str_replace(",", "", $valor);
+        $valor = str_replace("-", "", $valor);
+        $valor = str_replace("/", "", $valor);
+        return $valor;
     }
 }

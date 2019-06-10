@@ -44,7 +44,7 @@ class StockService
     public function getStocks($data,$id,$lote = '')
     {
         $user = \Auth::guard()->user();
-        $cnpj = $this->companyRepository->find($id)->cnpj;
+        $cnpj = $this->limpaCPF_CNPJ($this->companyRepository->find($id)->cnpj);
         return $this->stockRepository->skipPresenter(false)->orderFilter($data,$user,$cnpj,$lote);
     }
 

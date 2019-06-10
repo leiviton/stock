@@ -61,11 +61,11 @@ class RoadRepositoryEloquent extends BaseRepository implements RoadRepository
             if ($user->role == 'user_company') {
                 if ($data['value'] == '') {
                     $results = $this->model
-                        ->orderBy($order[0], $order[1])->where('depositante', $user->company->cnpj)->get();
+                        ->orderBy($order[0], $order[1])->where('depositante', $cnpj)->get();
                 } else {
                     $results = $this->model
                         ->orderBy($order[0], $order[1])
-                        ->where('depositante', $user->company->cnpj)
+                        ->where('depositante', $cnpj)
                         ->where(function ($query) use ($data) {
                             if ($data) {
                                 return $query->where($data['field'], 'like', '%' . $data['value'] . '%');
@@ -95,12 +95,12 @@ class RoadRepositoryEloquent extends BaseRepository implements RoadRepository
             if ($user->role == 'user_company') {
                 if ($data['value'] == '') {
                     $results = $this->model
-                        ->orderBy($order[0], $order[1])->where('depositante', $user->company->cnpj)->where('tipo_estoque', $lote)->get();
+                        ->orderBy($order[0], $order[1])->where('depositante', $cnpj)->where('tipo_estoque', $lote)->get();
                 } else {
                     $results = $this->model
                         ->orderBy($order[0], $order[1])
                         ->where('tipo_estoque', $lote)
-                        ->where('depositante', $user->company->cnpj)
+                        ->where('depositante', $cnpj)
                         ->where(function ($query) use ($data) {
                             if ($data) {
                                 return $query->where($data['field'], 'like', '%' . $data['value'] . '%');
@@ -150,7 +150,7 @@ class RoadRepositoryEloquent extends BaseRepository implements RoadRepository
         if ($lote != '') {
             if ($user->role == 'user_company') {
                 $results = $this->model
-                    ->where('depositante', $user->company->cnpj)
+                    ->where('depositante', $cnpj)
                     ->where('tipo_estoque', $lote)
                     ->where(function ($query) use ($dataEnd) {
                         if ($dataEnd) {
