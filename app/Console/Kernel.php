@@ -32,7 +32,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('stocks:cron')->dailyAt('08:50');
-        $schedule->command('stocks2:cron')->dailyAt('10:23');
+        $schedule->command('stocks2:cron')->dailyAt('10:39');
         $schedule->command('roads:cron')->timezone('America/Sao_Paulo')
             ->between('07:00', '23:00');
         $schedule->command('outs:cron')->timezone('America/Sao_Paulo')
