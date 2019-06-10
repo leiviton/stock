@@ -72,6 +72,7 @@ class StockService
     /**
      * @param $data
      * @return mixed
+     * @throws \Exception
      */
     public function create($data)
     {

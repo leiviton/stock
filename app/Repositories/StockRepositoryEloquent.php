@@ -149,8 +149,9 @@ class StockRepositoryEloquent extends BaseRepository implements StockRepository
         //dd($user->role);
         if ($lote != '') {
             if ($user->role == 'user_company') {
+                //dd($lote);
                 $results = $this->model
-                    ->where('depositante', $user->company->cnpj)
+                    ->where('depositante', $cnpj)
                     ->where('tipo_estoque', $lote)
                     ->where(function ($query) use ($dataEnd) {
                         if ($dataEnd) {
