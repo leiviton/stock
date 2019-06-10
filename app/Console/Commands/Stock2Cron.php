@@ -79,8 +79,11 @@ class Stock2Cron extends Command
             $countData = json_decode($responseCount->getBody(true)->getContents());
 
             $countStock = (int) $countData->data[0]->contador;
-
-            $limit = ceil((float) $countStock / 5000);
+            if ($countStock > 5000) {
+                $limit = ceil((float) $countStock / 5000);
+            }else {
+                $limit = 1;
+            }
 
             $start = 1;
 
