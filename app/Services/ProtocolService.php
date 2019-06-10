@@ -41,7 +41,7 @@ class ProtocolService
     public function getProtocols($id)
     {
         $company = $this->companyRepository->find($id);
-        return $this->repository->skipPresenter(false)->getProtocolsCompany($company->cnpj);
+        return $this->repository->skipPresenter(false)->getProtocolsCompany($this->limpaCPF_CNPJ($company->cnpj));
     }
 
     /**
@@ -56,6 +56,7 @@ class ProtocolService
     /**
      * @param $data
      * @return mixed
+     * @throws \Exception
      */
     public function create($data)
     {
@@ -80,5 +81,19 @@ class ProtocolService
     public function getCompanies()
     {
         return $this->repository->skipPresenter(false)->paginate();
+    }
+
+    /**
+     * @param $valor
+     * @return mixed|string
+     */
+    public function limpaCPF_CNPJ($valor)
+    {
+        $valor = trim($valor);
+        $valor = str_replace(".", "", $valor);
+        $valor = str_replace(",", "", $valor);
+        $valor = str_replace("-", "", $valor);
+        $valor = str_replace("/", "", $valor);
+        return $valor;
     }
 }
