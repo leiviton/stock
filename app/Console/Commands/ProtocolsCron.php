@@ -67,14 +67,14 @@ class ProtocolsCron extends Command
             for ($i = 0; $i < count($result); $i++) {
                 //dd($result[$i]->empresa);
                 $data = [
-                    "empresa" => rtrim($result[$i]->empresa),
-                    "tip_estoque" => rtrim($result[$i]->tip_estoque),
-                    "abrang" => rtrim($result[$i]->abrang),
-                    "empresa_deposit" => rtrim($result[$i]->empresa_deposit),
-                    "des_tip_estoque" => rtrim($result[$i]->des_tip_estoque),
-                    "des_reduz_tip_estoque" => rtrim($result[$i]->des_reduz_tip_estoque),
-                    "padrao" => rtrim($result[$i]->padrao),
-                    "sit_registro" => rtrim($result[$i]->sit_registro)
+                    "empresa" => trim($result[$i]->empresa),
+                    "tip_estoque" => trim($result[$i]->tip_estoque),
+                    "abrang" => trim($result[$i]->abrang),
+                    "empresa_deposit" => trim($result[$i]->empresa_deposit),
+                    "des_tip_estoque" => trim($result[$i]->des_tip_estoque),
+                    "des_reduz_tip_estoque" => trim($result[$i]->des_reduz_tip_estoque),
+                    "padrao" => trim($result[$i]->padrao),
+                    "sit_registro" => trim($result[$i]->sit_registro)
                 ];
 
                 $this->repository->updateOrCreate(["tip_estoque" => $data["tip_estoque"]], $data);
