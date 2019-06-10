@@ -58,8 +58,6 @@ class RoadsCron extends Command
      */
     public function handle()
     {
-        DB::table('stocks')->truncate();
-
         $companies = $this->companyRepository->all();
 
         foreach ($companies as $company) {

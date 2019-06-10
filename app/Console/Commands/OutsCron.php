@@ -58,7 +58,6 @@ class OutsCron extends Command
      */
     public function handle()
     {
-        DB::table('stocks')->truncate();
 
         $companies = $this->companyRepository->all();
 
