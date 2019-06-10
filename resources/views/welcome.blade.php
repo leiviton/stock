@@ -4,8 +4,8 @@
     <meta charset="utf-8">
     <base href="/">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="Area do Cliente DRS">
-    <meta name="author" content="Leiviton Carlos">
+    <meta name="description" content="Start your development with a Dashboard for Bootstrap 4.">
+    <meta name="author" content="Creative Tim">
     <title>Portal Estoque</title>
     <!-- Favicon -->
     <link href="./assets/img/brand/logo.png" rel="icon" type="image/png">
@@ -22,6 +22,6 @@
 <script type="text/javascript" src="runtime.c9c253f74f8f51a41074.js"></script>
 <script type="text/javascript" src="polyfills.8754121e1108d81841a1.js"></script>
 <script type="text/javascript" src="scripts.2db4cbc668a10a0c2a68.js"></script>
-<script type="text/javascript" src="main.e9b8049e3d46796b13d2.js"></script>
+<script type="text/javascript" src="main.e998dd7fa3b561fedb58.js"></script>
 </body>
 </html>
