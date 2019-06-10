@@ -35,7 +35,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('outs:cron')->timezone('America/Sao_Paulo')
             ->between('06:00', '22:00');
         $schedule->command('protocols:cron')->timezone('America/Sao_Paulo')
-            ->between('07:00', '22:00');
+            ->dailyAt('09:00');
     }
 
     /**
