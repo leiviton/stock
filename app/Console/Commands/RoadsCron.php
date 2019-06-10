@@ -2,6 +2,7 @@
 
 namespace Stock\Console\Commands;
 
+use Carbon\Carbon;
 use GuzzleHttp\Client;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
@@ -67,9 +68,13 @@ class RoadsCron extends Command
 
             $client = new Client();
 
-            $dataNow = date_format(new \DateTime(), 'd-m-Y');
+            $dataNow = new Carbon();
 
-            $response = $client->get("http://10.0.0.18:4490/logixrest/kbtr00002/entradaporDepositanteData/01/$company->cnpj/1/1000/$dataNow/$dataNow/N/0", [
+            $dataNow = $dataNow->subDay(1);
+
+            $dataNowReverse = date_format($dataNow, 'd-m-Y');
+
+            $response = $client->get("http://10.0.0.18:4490/logixrest/kbtr00002/entradaporDepositanteData/01/$company->cnpj/1/1000/$dataNowReverse/$dataNowReverse/N/0", [
                 'auth' => [
                     'admlog', 'Totvs330'
                 ]]);
@@ -82,7 +87,7 @@ class RoadsCron extends Command
                 // dd($entradas[$i]);
                 $data1 = [
                     'chave_logix' => $entradas[$i]->id,
-                    'company_id' => 1,
+                    'company_id' => $company->id,
                     'data_geracao' => new \DateTime($entradas[$i]->data_atualiza),
                     'depositante' => $entradas[$i]->cnpj_cliente,
                     'razao_social' => $entradas[$i]->razao_social,

@@ -102,7 +102,7 @@ class StockCron extends Command
                     //dd($stock[$i]);
                     $dataStock = [
                         'chave_logix' => $stock[$i]->id,
-                        'company_id' => 1,
+                        'company_id' => $company->id,
                         'data_geracao' => new \DateTime($stock[$i]->data_atualiza),
                         'depositante' => $stock[$i]->cnpj_cliente,
                         'cnpj_origem' => $stock[$i]->cnpj_origem,

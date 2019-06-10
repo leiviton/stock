@@ -90,7 +90,7 @@ class OutsCron extends Command
                 //dd($saida[$i]);
                 $dataSaida = [
                     'chave_logix' => $saida[$i]->id,
-                    'company_id' => 1,
+                    'company_id' => $company->id,
                     'data_geracao' => new \DateTime($saida[$i]->data_atualiza),
                     'depositante' => $saida[$i]->cnpj_cliente_depos,
                     'razao_social' => $saida[$i]->razao_social,
