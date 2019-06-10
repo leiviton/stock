@@ -6,6 +6,7 @@ use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Stock\Console\Commands\OutsCron;
 use Stock\Console\Commands\RoadsCron;
+use Stock\Console\Commands\Stock2Cron;
 use Stock\Console\Commands\StockCron;
 
 class Kernel extends ConsoleKernel
@@ -18,7 +19,8 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         StockCron::class,
         RoadsCron::class,
-        OutsCron::class
+        OutsCron::class,
+        Stock2Cron::class
     ];
 
     /**
@@ -30,6 +32,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('stocks:cron')->dailyAt('08:50');
+        $schedule->command('stocks2:cron')->dailyAt('10:23');
         $schedule->command('roads:cron')->timezone('America/Sao_Paulo')
             ->between('07:00', '23:00');
         $schedule->command('outs:cron')->timezone('America/Sao_Paulo')
