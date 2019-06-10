@@ -80,7 +80,11 @@ class StockCron extends Command
 
             $countStock = (int) $countData->data[0]->contador;
 
-            $limit = ceil((float) $countStock / 5000);
+            if ($countStock > 5000) {
+                $limit = ceil((float) $countStock / 5000);
+            }else {
+                $limit = 1;
+            }
 
             $start = 1;
 
