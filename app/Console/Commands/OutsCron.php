@@ -61,9 +61,9 @@ class OutsCron extends Command
 
         $companies = $this->companyRepository->all();
 
-        foreach ($companies as $company) {
+        for($k = 0; $k < count($companies); $k++) {
 
-            $company->cnpj = $this->limpaCPF_CNPJ($company->cnpj);
+            $cnpj = $this->limpaCPF_CNPJ($companies[$k]->cnpj);
 
             $client = new Client();
 
@@ -77,7 +77,7 @@ class OutsCron extends Command
 
             $now = date_format($now, 'd-m-Y');
 
-            $responseCount = $client->get("http://10.0.0.31:4488/logixrest/kbtr00003/countsaidasporDepositanteData/01/$company->cnpj/$dataNowReverse/$now/0", [
+            $responseCount = $client->get("http://10.0.0.31:4488/logixrest/kbtr00003/countsaidasporDepositanteData/01/$cnpj/$dataNowReverse/$now/0", [
                 'auth' => [
                     'admlog',
                     'Totvs330'
@@ -99,7 +99,7 @@ class OutsCron extends Command
 
             for ($j = 0; $j < $limit; $j++) {
 
-                $responseSaida = $client->get("http://10.0.0.18:4490/logixrest/kbtr00003/saidasporDepositanteData/01/$company->cnpj/$start/$end/$dataNowReverse/$now/S/0", [
+                $responseSaida = $client->get("http://10.0.0.18:4490/logixrest/kbtr00003/saidasporDepositanteData/01/$cnpj/$start/$end/$dataNowReverse/$now/S/0", [
                     'auth' => [
                         'admlog',
                         'Totvs330'
@@ -113,7 +113,7 @@ class OutsCron extends Command
                     //dd($saida[$i]);
                     $dataSaida = [
                         'chave_logix' => $saida[$i]->id,
-                        'company_id' => $company->id,
+                        'company_id' => $companies[$k]->id,
                         'data_geracao' => new \DateTime($saida[$i]->data_atualiza),
                         'depositante' => $saida[$i]->cnpj_cliente_depos,
                         'razao_social' => $saida[$i]->razao_social,

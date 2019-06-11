@@ -60,9 +60,9 @@ class RoadsCron extends Command
     {
         $companies = $this->companyRepository->all();
 
-        foreach ($companies as $company) {
+        for($k = 0; $k < count($companies); $k++) {
 
-            $company->cnpj = $this->limpaCPF_CNPJ($company->cnpj);
+            $cnpj = $this->limpaCPF_CNPJ($companies[$k]->cnpj);
 
             $client = new Client();
 
@@ -76,7 +76,7 @@ class RoadsCron extends Command
 
             $now = date_format($now, 'd-m-Y');
 
-            $responseCount = $client->get("http://10.0.0.31:4488/logixrest/kbtr00002/countEntradaporDepositanteData/01/$company->cnpj/$dataNowReverse/$now/0", [
+            $responseCount = $client->get("http://10.0.0.31:4488/logixrest/kbtr00002/countEntradaporDepositanteData/01/$cnpj/$dataNowReverse/$now/0", [
                 'auth' => [
                     'admlog',
                     'Totvs330'
@@ -97,7 +97,7 @@ class RoadsCron extends Command
             $end = 5000;
 
             for ($j = 0; $j < $limit; $j++){
-                $response = $client->get("http://10.0.0.18:4490/logixrest/kbtr00002/entradaporDepositanteData/01/$company->cnpj/$start/$end/$dataNowReverse/$dataNowReverse/S/0", [
+                $response = $client->get("http://10.0.0.18:4490/logixrest/kbtr00002/entradaporDepositanteData/01/$cnpj/$start/$end/$dataNowReverse/$dataNowReverse/S/0", [
                     'auth' => [
                         'admlog', 'Totvs330'
                     ]]);
@@ -110,7 +110,7 @@ class RoadsCron extends Command
                     // dd($entradas[$i]);
                     $data1 = [
                         'chave_logix' => $entradas[$i]->id,
-                        'company_id' => $company->id,
+                        'company_id' => $companies[$k]->id,
                         'data_geracao' => new \DateTime($entradas[$i]->data_atualiza),
                         'depositante' => $entradas[$i]->cnpj_cliente,
                         'razao_social' => $entradas[$i]->razao_social,
