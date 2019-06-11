@@ -6,7 +6,6 @@ use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Stock\Console\Commands\OutsCron;
 use Stock\Console\Commands\RoadsCron;
-use Stock\Console\Commands\Stock2Cron;
 use Stock\Console\Commands\StockCron;
 
 class Kernel extends ConsoleKernel
@@ -37,7 +36,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('outs:cron')->timezone('America/Sao_Paulo')
             ->dailyAt('05:00');
         $schedule->command('protocols:cron')->timezone('America/Sao_Paulo')
-            ->dailyAt('09:05');
+            ->dailyAt('09:19');
     }
 
     /**
