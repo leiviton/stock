@@ -79,7 +79,7 @@ class RoadsCron extends Command
 
             $now = date_format($now, 'd-m-Y');
 
-            $responseCount = $client->get("http://10.0.0.31:4488/logixrest/kbtr00002/countEntradaporDepositanteData/01/$cnpj/$dataNowReverse/$now/0", [
+            $responseCount = $client->get("http://10.0.0.31:4488/logixrest/kbtr00002/countEntradaporDepositanteData/01/$cnpj/2019-01-01/$now/0", [
                 'auth' => [
                     'admlog',
                     'Totvs330'
@@ -91,17 +91,17 @@ class RoadsCron extends Command
 
             if ($countRoads > 5000) {
                 $limit = ceil((float) $countRoads / 5000);
+                $end = 5000;
             }else {
                 $limit = 1;
+                $end = $countRoads;
             }
 
             $start = 1;
 
-            $end = 5000;
-
             for ($j = 0; $j < $limit; $j++){
 
-                $response = $client->get("http://10.0.0.18:4490/logixrest/kbtr00002/entradaporDepositanteData/01/$cnpj/$start/$end/$dataNowReverse/$dataNowReverse/S/0", [
+                $response = $client->get("http://10.0.0.18:4490/logixrest/kbtr00002/entradaporDepositanteData/01/$cnpj/$start/$end/2019-01-01/$now/S/0", [
                     'auth' => [
                         'admlog', 'Totvs330'
                     ]]);
@@ -145,6 +145,8 @@ class RoadsCron extends Command
                 $start = $end + 1;
                 $end = $end + 5000;
             }
+
+            Log::info('Finalizou integraçao entradas:'.$countRoads);
         }
     }
 

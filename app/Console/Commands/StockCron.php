@@ -6,6 +6,8 @@ use GuzzleHttp\Client;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
 use Stock\Repositories\CompanyRepository;
 use Stock\Repositories\StockRepository;
 
@@ -81,15 +83,16 @@ class StockCron extends Command
 
             if ($countStock > 5000) {
                 $limit = ceil((float) $countStock / 5000);
+                $end = 5000;
             }else {
                 $limit = 1;
+                $end = $countStock;
             }
 
             $start = 1;
 
-            $end = 5000;
 
-            for ($j = 0; $j < $limit; $j++){
+            for ($j = 0; $j < $limit; $j++) {
 
                 $response = $client->get("http://10.0.0.18:4490/logixrest/kbtr00001/estoquePorDepositante/01/$cnpj/$start/$end/S/S/0", [
                     'auth' => [
@@ -131,10 +134,11 @@ class StockCron extends Command
                     $this->stockRepository->updateOrCreate(["chave_logix" => $dataStock["chave_logix"]], $dataStock);
                 }
 
-                Log::info('Finalizou registros estoque: '.$start.' a '.$end);
                 $start = $end + 1;
                 $end = $end + 5000;
             }
+
+            Log::info('Finalizou integraçao estoque:'.$countStock);
         }
     }
 
