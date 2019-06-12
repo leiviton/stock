@@ -55,8 +55,8 @@ class StockRepositoryEloquent extends BaseRepository implements StockRepository
      */
     public function orderFilter($data, $user, $cnpj, $lote = '')
     {
-        $order[0] = $order[0] ?? 'data_validade';
-        $order[1] = $order[1] ?? 'desc';
+        $order[0] = $order[0] ?? 'data_atual';
+        $order[1] = $order[1] ?? 'asc';
         if ($lote == '') {
             if ($user->role == 'user_company') {
                 if ($data['value'] == '') {
@@ -146,11 +146,13 @@ class StockRepositoryEloquent extends BaseRepository implements StockRepository
     public function orderByStocks($user, $cnpj, $lote = '')
     {
         $dataEnd = new \DateTime();
+        $order[0] = $order[0] ?? 'data_atual';
+        $order[1] = $order[1] ?? 'asc';
         //dd($user->role);
         if ($lote != '') {
             if ($user->role == 'user_company') {
                 //dd($lote);
-                $results = $this->model
+                $results = $this->model->orderBy($order[0], $order[1])
                     ->where('depositante', $cnpj)
                     ->where('tipo_estoque', $lote)
                     ->where(function ($query) use ($dataEnd) {
@@ -161,7 +163,7 @@ class StockRepositoryEloquent extends BaseRepository implements StockRepository
                     })
                     ->paginate();
             } else {
-                $results = $this->model
+                $results = $this->model->orderBy($order[0], $order[1])
                     ->where('tipo_estoque', $lote)
                     ->where('depositante', $cnpj)
                     ->where(function ($query) use ($dataEnd) {
@@ -174,7 +176,7 @@ class StockRepositoryEloquent extends BaseRepository implements StockRepository
             }
         } else {
 
-            $results = $this->model
+            $results = $this->model->orderBy($order[0], $order[1])
                 ->where('depositante', $cnpj)
                 ->where(function ($query) use ($dataEnd) {
                     if ($dataEnd) {

@@ -54,8 +54,8 @@ class OutRepositoryEloquent extends BaseRepository implements OutRepository
      */
     public function orderFilter($data, $user, $cnpj, $lote = '')
     {
-        $order[0] = $order[0] ?? 'data_validade';
-        $order[1] = $order[1] ?? 'desc';
+        $order[0] = $order[0] ?? 'data_envio';
+        $order[1] = $order[1] ?? 'asc';
         //dd($lote);
         if ($lote == '') {
             if ($user->role == 'user_company') {
@@ -167,10 +167,12 @@ class OutRepositoryEloquent extends BaseRepository implements OutRepository
     public function orderByOuts($user, $cnpj, $lote = '')
     {
         $dataEnd = new \DateTime();
+        $order[0] = $order[0] ?? 'data_envio';
+        $order[1] = $order[1] ?? 'asc';
         //dd($user->role);
         if ($lote != '') {
             if ($user->role == 'user_company') {
-                $results = $this->model
+                $results = $this->model->orderBy($order[0], $order[1])
                     ->where('depositante', $cnpj)
                     //->sum('qtd_enviada')
                     ->where('tipo_estoque', $lote)
@@ -183,7 +185,7 @@ class OutRepositoryEloquent extends BaseRepository implements OutRepository
                    // ->groupBy('tipo_estoque')
                     ->paginate();
             } else {
-                $results = $this->model
+                $results = $this->model->orderBy($order[0], $order[1])
                     ->where('tipo_estoque', $lote)
                    // ->sum('qtd_enviada')
                     ->where('depositante', $cnpj)
@@ -198,7 +200,7 @@ class OutRepositoryEloquent extends BaseRepository implements OutRepository
             }
         } else {
 
-            $results = $this->model
+            $results = $this->model->orderBy($order[0], $order[1])
                 ->where(function ($query) use ($dataEnd,$cnpj) {
                     if ($dataEnd) {
                         return $query->whereRaw('data_geracao BETWEEN ? AND ?', [(new Carbon())->subMonth(6), $dataEnd])

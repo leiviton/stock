@@ -55,8 +55,8 @@ class RoadRepositoryEloquent extends BaseRepository implements RoadRepository
      */
     public function orderFilter($data, $user, $cnpj, $lote = '')
     {
-        $order[0] = $order[0] ?? 'data_validade';
-        $order[1] = $order[1] ?? 'desc';
+        $order[0] = $order[0] ?? 'data_recebimento';
+        $order[1] = $order[1] ?? 'asc';
         if ($lote == '') {
             if ($user->role == 'user_company') {
                 if ($data['value'] == '') {
@@ -146,10 +146,12 @@ class RoadRepositoryEloquent extends BaseRepository implements RoadRepository
     public function orderByRoads($user, $cnpj, $lote = '')
     {
         $dataEnd = new \DateTime();
+        $order[0] = $order[0] ?? 'data_recebimento';
+        $order[1] = $order[1] ?? 'asc';
         //dd($user->role);
         if ($lote != '') {
             if ($user->role == 'user_company') {
-                $results = $this->model
+                $results = $this->model->orderBy($order[0], $order[1])
                     ->where('depositante', $cnpj)
                     ->where('tipo_estoque', $lote)
                     ->where(function ($query) use ($dataEnd) {
@@ -160,7 +162,7 @@ class RoadRepositoryEloquent extends BaseRepository implements RoadRepository
                     })
                     ->paginate();
             } else {
-                $results = $this->model
+                $results = $this->model->orderBy($order[0], $order[1])
                     ->where('tipo_estoque', $lote)
                     ->where('depositante', $cnpj)
                     ->where(function ($query) use ($dataEnd) {
@@ -173,7 +175,7 @@ class RoadRepositoryEloquent extends BaseRepository implements RoadRepository
             }
         } else {
 
-            $results = $this->model
+            $results = $this->model->orderBy($order[0], $order[1])
                 ->where('depositante', $cnpj)
                 //->selectRaw('data_recebimento,tipo_estoque,desc_tipo_estoque,cnpj_emissor_nfe,razao_social_fornecedor,codigo_produto,desc_produto,unidade_medida,lote,data_validade,serie_nf,tipo_nf,desc_restricao,serie,peca,sum(qtd_fiscal) as qtd_fiscal,sum(qtd_recebida) as qtd_recebida')
                 ->where(function ($query) use ($dataEnd) {
