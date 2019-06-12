@@ -5,6 +5,7 @@ namespace Stock\Console;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Stock\Console\Commands\OutsCron;
+use Stock\Console\Commands\ProtocolsCron;
 use Stock\Console\Commands\RoadsCron;
 use Stock\Console\Commands\StockCron;
 
@@ -18,7 +19,8 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         StockCron::class,
         RoadsCron::class,
-        OutsCron::class
+        OutsCron::class,
+        ProtocolsCron::class
     ];
 
     /**
