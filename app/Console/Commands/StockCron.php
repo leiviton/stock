@@ -5,6 +5,7 @@ namespace Stock\Console\Commands;
 use GuzzleHttp\Client;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Stock\Repositories\CompanyRepository;
 use Stock\Repositories\StockRepository;
 
@@ -61,6 +62,8 @@ class StockCron extends Command
         $companies = $this->companyRepository->all();
 
         for($k = 0; $k < count($companies); $k++) {
+
+            Log::info('Iniciou empresa: '.$companies[$k]->nome);
 
             $cnpj = $this->limpaCPF_CNPJ($companies[$k]->cnpj);
 
@@ -128,8 +131,8 @@ class StockCron extends Command
                     $this->stockRepository->updateOrCreate(["chave_logix" => $dataStock["chave_logix"]], $dataStock);
                 }
 
+                Log::info('Finalizou registros estoque: '.$start.' a '.$end);
                 $start = $end + 1;
-
                 $end = $end + 5000;
             }
         }

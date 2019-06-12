@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use GuzzleHttp\Client;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Stock\Repositories\CompanyRepository;
 use Stock\Repositories\RoadRepository;
 
@@ -62,6 +63,8 @@ class RoadsCron extends Command
 
         for($k = 0; $k < count($companies); $k++) {
 
+            Log::info('Iniciou empresa: '.$companies[$k]->nome);
+
             $cnpj = $this->limpaCPF_CNPJ($companies[$k]->cnpj);
 
             $client = new Client();
@@ -97,6 +100,7 @@ class RoadsCron extends Command
             $end = 5000;
 
             for ($j = 0; $j < $limit; $j++){
+
                 $response = $client->get("http://10.0.0.18:4490/logixrest/kbtr00002/entradaporDepositanteData/01/$cnpj/$start/$end/$dataNowReverse/$dataNowReverse/S/0", [
                     'auth' => [
                         'admlog', 'Totvs330'
@@ -135,10 +139,11 @@ class RoadsCron extends Command
                     //dd($data1["qtd_fiscal"]);
                     $this->roadRepository->updateOrCreate(["chave_logix" => $data1["chave_logix"]], $data1);
                     //dd($itemEnd);
-
-                    $start = $end + 1;
-                    $end = $end + 5000;
                 }
+
+                Log::info('Finalizou registros entradas: '.$start.' a '.$end);
+                $start = $end + 1;
+                $end = $end + 5000;
             }
         }
     }
