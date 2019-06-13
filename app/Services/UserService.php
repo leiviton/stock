@@ -71,6 +71,7 @@ class UserService
     /**
      * @param $data
      * @return mixed
+     * @throws \Exception
      */
     public function create($data)
     {
