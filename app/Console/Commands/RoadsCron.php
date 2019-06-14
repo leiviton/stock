@@ -79,7 +79,7 @@ class RoadsCron extends Command
 
             $now = date_format($now, 'd-m-Y');
 
-            $responseCount = $client->get("http://10.0.0.18:4490/logixrest/kbtr00002/countEntradaporDepositanteData/01/$cnpj/2019-01-01/$dataNowReverse/0", [
+            $responseCount = $client->get("http://10.0.0.18:4490/logixrest/kbtr00002/countEntradaporDepositanteData/01/$cnpj/$dataNowReverse/$dataNowReverse/0", [
                 'auth' => [
                     'admlog',
                     'Totvs330'
@@ -102,7 +102,7 @@ class RoadsCron extends Command
 
                 for ($j = 0; $j < $limit; $j++) {
 
-                    $response = $client->get("http://10.0.0.18:4490/logixrest/kbtr00002/entradaporDepositanteData/01/$cnpj/$start/$end/2019-01-01/$dataNowReverse/S/0", [
+                    $response = $client->get("http://10.0.0.18:4490/logixrest/kbtr00002/entradaporDepositanteData/01/$cnpj/$start/$end/$dataNowReverse/$dataNowReverse/S/0", [
                         'auth' => [
                             'admlog', 'Totvs330'
                         ]]);

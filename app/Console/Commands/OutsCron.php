@@ -79,7 +79,7 @@ class OutsCron extends Command
 
             $now = date_format($now, 'd-m-Y');
 
-            $responseCount = $client->get("http://10.0.0.18:4490/logixrest/kbtr00003/countsaidasporDepositanteData/01/$cnpj/2019-01-01/$dataNowReverse/0", [
+            $responseCount = $client->get("http://10.0.0.18:4490/logixrest/kbtr00003/countsaidasporDepositanteData/01/$cnpj/$dataNowReverse/$dataNowReverse/0", [
                 'auth' => [
                     'admlog',
                     'Totvs330'
@@ -102,7 +102,7 @@ class OutsCron extends Command
 
                 for ($j = 0; $j < $limit; $j++) {
 
-                    $responseSaida = $client->get("http://10.0.0.18:4490/logixrest/kbtr00003/saidasporDepositanteData/01/$cnpj/$start/$end/2019-01-01/$dataNowReverse/S/0", [
+                    $responseSaida = $client->get("http://10.0.0.18:4490/logixrest/kbtr00003/saidasporDepositanteData/01/$cnpj/$start/$end/$dataNowReverse/$dataNowReverse/S/0", [
                         'auth' => [
                             'admlog',
                             'Totvs330'
