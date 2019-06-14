@@ -113,6 +113,7 @@ class OutsCron extends Command
                     $saida = $saidas->data;
                     DB::beginTransaction();
                     try{
+                        Log::info("Finalizou registros saidas: $start a $end");
                         for ($i = 0; $i < count($saida); $i++) {
                             //dd($saida[$i]);
                             $dataSaida = [
@@ -148,15 +149,15 @@ class OutsCron extends Command
                         Log::error($e->getMessage());
                     }
 
-                    Log::info("Finalizou registros saidas: $start a $end");
-
-                    if ($countRoads > 10000) {
-                        $start = $end + 1;
-                        $end = $end + 10000;
-                    }
-
+                    $start = $end + 1;
+                    $end = $end + 10000;
                 }
+            }else{
+
+                Log::info("Sem movimento: $dataNowReverse, quantidade $countRoads");
             }
+
+
             Log::info("Finalizou integraçao saidas: $dataNowReverse, quantidade $countRoads");
         }
     }
