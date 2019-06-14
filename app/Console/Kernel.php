@@ -32,11 +32,11 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('stocks:cron')->timezone('America/Sao_Paulo')
-            ->dailyAt('11:25');
+            ->dailyAt('01:30');
         $schedule->command('roads:cron')->timezone('America/Sao_Paulo')
-            ->dailyAt('13:05');
+            ->dailyAt('04:05');
         $schedule->command('outs:cron')->timezone('America/Sao_Paulo')
-            ->dailyAt('14:10');
+            ->dailyAt('05:10');
         $schedule->command('protocols:cron')->timezone('America/Sao_Paulo')
             ->dailyAt('09:15');
     }
