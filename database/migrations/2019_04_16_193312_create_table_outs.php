@@ -15,7 +15,7 @@ class CreateTableOuts extends Migration
     {
         Schema::create('outs', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('chave_logix')->nullable();
+            $table->string('chave_logix')->nullable()->unique();
             $table->date('data_geracao')->nullable();
             $table->string('depositante')->nullable();
             $table->string('razao_social')->nullable();

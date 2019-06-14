@@ -79,7 +79,7 @@ class RoadsCron extends Command
 
             $now = date_format($now, 'd-m-Y');
 
-            $responseCount = $client->get("http://10.0.0.31:4488/logixrest/kbtr00002/countEntradaporDepositanteData/01/$cnpj/$dataNowReverse/$dataNowReverse/0", [
+            $responseCount = $client->get("http://10.0.0.18:4490/logixrest/kbtr00002/countEntradaporDepositanteData/01/$cnpj/2019-01-01/$dataNowReverse/0", [
                 'auth' => [
                     'admlog',
                     'Totvs330'
@@ -90,9 +90,9 @@ class RoadsCron extends Command
             $countRoads = (int)$countData->data[0]->contador;
 
             if($countRoads > 0) {
-                if ($countRoads > 5000) {
-                    $limit = ceil((float)$countRoads / 5000);
-                    $end = 5000;
+                if ($countRoads > 10000) {
+                    $limit = ceil((float)$countRoads / 10000);
+                    $end = 10000;
                 } else {
                     $limit = 1;
                     $end = $countRoads;
@@ -102,7 +102,7 @@ class RoadsCron extends Command
 
                 for ($j = 0; $j < $limit; $j++) {
 
-                    $response = $client->get("http://10.0.0.18:4490/logixrest/kbtr00002/entradaporDepositanteData/01/$cnpj/$start/$end/$dataNowReverse/$dataNowReverse/S/0", [
+                    $response = $client->get("http://10.0.0.18:4490/logixrest/kbtr00002/entradaporDepositanteData/01/$cnpj/$start/$end/2019-01-01/$dataNowReverse/S/0", [
                         'auth' => [
                             'admlog', 'Totvs330'
                         ]]);
@@ -149,8 +149,12 @@ class RoadsCron extends Command
                     }
 
                     Log::info('Finalizou registros entradas: ' . $start . ' a ' . $end);
-                    $start = $end + 1;
-                    $end = $end + 5000;
+
+                    if ($countRoads > 10000) {
+                        $start = $end + 1;
+                        $end = $end + 10000;
+                    }
+
                 }
             }
             Log::info("Finalizou integraçao entradas: $dataNowReverse, quantidade $countRoads");

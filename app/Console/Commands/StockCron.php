@@ -57,7 +57,14 @@ class StockCron extends Command
      */
     public function handle()
     {
-        DB::table('stocks')->truncate();
+        DB::beginTransaction();
+        try {
+            DB::table('stocks')->truncate();
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error($e->getMessage());
+        }
 
         $companies = $this->companyRepository->all();
 

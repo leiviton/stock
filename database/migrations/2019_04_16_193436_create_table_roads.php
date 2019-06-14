@@ -15,7 +15,7 @@ class CreateTableRoads extends Migration
     {
         Schema::create('roads', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('chave_logix')->nullable();
+            $table->string('chave_logix')->nullable()->unique();
             $table->date('data_recebimento')->nullable();
             $table->date('data_geracao')->nullable();
             $table->string('depositante')->nullable();
