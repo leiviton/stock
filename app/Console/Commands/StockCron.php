@@ -6,8 +6,6 @@ use GuzzleHttp\Client;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Monolog\Handler\StreamHandler;
-use Monolog\Logger;
 use Stock\Repositories\CompanyRepository;
 use Stock\Repositories\StockRepository;
 

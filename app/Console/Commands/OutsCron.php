@@ -7,7 +7,6 @@ use GuzzleHttp\Client;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use mysql_xdevapi\Exception;
 use Stock\Repositories\CompanyRepository;
 use Stock\Repositories\OutRepository;
 
