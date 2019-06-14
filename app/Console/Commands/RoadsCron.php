@@ -89,7 +89,7 @@ class RoadsCron extends Command
 
             $countRoads = (int)$countData->data[0]->contador;
 
-            if($countRoads > 0) {
+            if ($countRoads > 0) {
                 if ($countRoads > 10000) {
                     $limit = ceil((float)$countRoads / 10000);
                     $end = 10000;
@@ -110,10 +110,11 @@ class RoadsCron extends Command
                     $data = json_decode($response->getBody(true)->getContents());
                     // dd($data->data);
                     $entradas = $data->data;
-                    DB::beginTransaction();
-                    try {
-                        for ($i = 0; $i < count($entradas); $i++) {
-                            // dd($entradas[$i]);
+
+                    for ($i = 0; $i < count($entradas); $i++) {
+                        // dd($entradas[$i]);
+                        DB::beginTransaction();
+                        try {
                             $data1 = [
                                 'chave_logix' => $entradas[$i]->id,
                                 'company_id' => $companies[$k]->id,
@@ -141,11 +142,11 @@ class RoadsCron extends Command
                             //dd($data1["qtd_fiscal"]);
                             $this->roadRepository->updateOrCreate(["chave_logix" => $data1["chave_logix"]], $data1);
                             //dd($itemEnd);
+                            DB::commit();
+                        } catch (\Exception $e) {
+                            DB::rollBack();
+                            Log::error("Erro entrada: $i |".$e->getMessage());
                         }
-                        DB::commit();
-                    } catch (\Exception $e) {
-                        DB::rollBack();
-                        Log::error($e->getMessage());
                     }
 
                     Log::info('Finalizou registros entradas: ' . $start . ' a ' . $end);
