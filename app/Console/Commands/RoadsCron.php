@@ -82,9 +82,9 @@ class RoadsCron extends Command
             $countRoads = (int)$countData->data[0]->contador;
 
 
-            Log::info('Iniciou empresa: ' . $companies[$k]->nome);
+            Log::info("Iniciou empresa: $k" . $companies[$k]->nome);
 
-            Log::info("Contador de entradas: ". $companies[$k]->nome ." | http://10.0.0.18:4490/logixrest/kbtr00002/countEntradaporDepositanteData/01/$cnpj/$dataNowReverse/$dataNowReverse/0");
+            Log::info("Contador de entradas: $k". $companies[$k]->nome ." | http://10.0.0.18:4490/logixrest/kbtr00002/countEntradaporDepositanteData/01/$cnpj/$dataNowReverse/$dataNowReverse/0");
 
             if ($countRoads > 0) {
 
