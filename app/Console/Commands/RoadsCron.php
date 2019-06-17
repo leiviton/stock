@@ -75,7 +75,9 @@ class RoadsCron extends Command
 
             $dataNow = new Carbon();
 
-            $dataNowReverse = $dataNow->subDay(1)->format('d-m-Y');
+            //$dataNowReverse = $dataNow->subDay(1)->format('d-m-Y');
+
+            $dataNowReverse = '2019-06-13';
 
             $responseCount = $client->get("http://10.0.0.18:4490/logixrest/kbtr00002/countEntradaporDepositanteData/01/$cnpj/$dataNowReverse/$dataNowReverse/0", [
                 'auth' => [
@@ -141,7 +143,7 @@ class RoadsCron extends Command
                                     'qtd_fiscal' => (int)$entradas[$i]->qtd_declarada_nf,
                                 ];
                                 //dd($data1["qtd_fiscal"]);
-                                $this->roadRepository->updateOrCreate(["chave_logix" => $data1["chave_logix"]], $data1);
+                                $this->roadRepository->firstOrCreate($data1);
                                 //dd($itemEnd);
                                 DB::commit();
                             } catch (\Exception $e) {
