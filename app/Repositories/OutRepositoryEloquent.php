@@ -169,7 +169,7 @@ class OutRepositoryEloquent extends BaseRepository implements OutRepository
         $dataEnd = new \DateTime();
         $order[0] = $order[0] ?? 'data_envio';
         $order[1] = $order[1] ?? 'asc';
-        //dd($user->role);
+        dd($user->role);
         if ($lote != '') {
             if ($user->role == 'user_company') {
                 $results = $this->model->orderBy($order[0], $order[1])
