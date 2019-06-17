@@ -118,7 +118,7 @@ class RoadsCron extends Command
                             // dd($entradas[$i]);
                             DB::beginTransaction();
                             try {
-                                $verifyRoads = $this->roadRepository->findByLogix($entradas[$i]->id) ? $this->roadRepository->findByLogix($entradas[$i]->id) : null;
+                                $verifyRoads = $this->roadRepository->findByLogix($entradas[$i]->id);
 
                                 Log::info('Registro chave: ' . $verifyRoads);
 

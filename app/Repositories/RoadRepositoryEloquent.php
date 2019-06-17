@@ -206,6 +206,6 @@ class RoadRepositoryEloquent extends BaseRepository implements RoadRepository
             return $this->parserResult($results);
         }
 
-        return $results;
+        return null;
     }
 }
