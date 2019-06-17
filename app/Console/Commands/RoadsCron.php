@@ -120,7 +120,7 @@ class RoadsCron extends Command
                             try {
                                 $verifyRoads = $this->roadRepository->findByField('chave_logix', $entradas[$i]->id) ? $this->roadRepository->findByField('chave_logix', $entradas[$i]->id) : null;
 
-                                Log::info('Registro chave: '. $verifyRoads);
+                                Log::info('Registro chave: ' . $verifyRoads);
 
                                 if ($verifyRoads == null) {
 
@@ -151,8 +151,8 @@ class RoadsCron extends Command
                                     //dd($data1["qtd_fiscal"]);
                                     $this->roadRepository->updateOrCreate(["chave_logix" => $data1["chave_logix"]], $data1);
                                     //dd($itemEnd);
-                                }else {
-                                    Log::info('Registro encontrado chave: '. $entradas[$i]->id);
+                                } else {
+                                    Log::info('Registro encontrado chave: ' . $entradas[$i]->id);
                                 }
 
                                 DB::commit();
@@ -191,38 +191,36 @@ class RoadsCron extends Command
 
                             $verifyRoads = $this->roadRepository->findByField('chave_logix', $entradas[$i]->id) ? $this->roadRepository->findByField('chave_logix', $entradas[$i]->id) : null;
 
-                            Log::info('Registro chave: '. $verifyRoads);
-
                             if ($verifyRoads == null) {
-                            $data1 = [
-                                'chave_logix' => $entradas[$i]->id,
-                                'company_id' => $companies[$k]->id,
-                                'data_geracao' => new \DateTime($entradas[$i]->data_atualiza),
-                                'depositante' => $entradas[$i]->cnpj_cliente,
-                                'razao_social' => $entradas[$i]->razao_social,
-                                'data_recebimento' => new \DateTime($entradas[$i]->dat_entrada_nf),
-                                'tipo_estoque' => $entradas[$i]->protocolo,
-                                'desc_tipo_estoque' => $entradas[$i]->den_protocolo,
-                                'cnpj_emissor_nfe' => $entradas[$i]->cnpj_emissor,
-                                'razao_social_fornecedor' => $entradas[$i]->razao_social,
-                                'codigo_produto' => $entradas[$i]->cod_item,
-                                'desc_produto' => $entradas[$i]->den_item,
-                                'unidade_medida' => $entradas[$i]->um,
-                                'lote' => $entradas[$i]->lote,
-                                'data_validade' => new \DateTime($entradas[$i]->data_validade),
-                                'serie_nf' => str_replace(' ', '', $entradas[$i]->num_nf . '-' . $entradas[$i]->ser_nf),
-                                'tipo_nf' => '5',
-                                'desc_restricao' => $entradas[$i]->des_restricao,
-                                'serie' => $entradas[$i]->serie,
-                                'peca' => $entradas[$i]->peca,
-                                'qtd_recebida' => (int)$entradas[$i]->qtd_recebida,
-                                'qtd_fiscal' => (int)$entradas[$i]->qtd_declarada_nf,
-                            ];
-                            //dd($data1["qtd_fiscal"]);
-                            $this->roadRepository->firstOrCreate($data1);
-                            //dd($itemEnd);
-                            }else {
-                                Log::info('Registro encontrado chave: '. $entradas[$i]->id);
+                                $data1 = [
+                                    'chave_logix' => $entradas[$i]->id,
+                                    'company_id' => $companies[$k]->id,
+                                    'data_geracao' => new \DateTime($entradas[$i]->data_atualiza),
+                                    'depositante' => $entradas[$i]->cnpj_cliente,
+                                    'razao_social' => $entradas[$i]->razao_social,
+                                    'data_recebimento' => new \DateTime($entradas[$i]->dat_entrada_nf),
+                                    'tipo_estoque' => $entradas[$i]->protocolo,
+                                    'desc_tipo_estoque' => $entradas[$i]->den_protocolo,
+                                    'cnpj_emissor_nfe' => $entradas[$i]->cnpj_emissor,
+                                    'razao_social_fornecedor' => $entradas[$i]->razao_social,
+                                    'codigo_produto' => $entradas[$i]->cod_item,
+                                    'desc_produto' => $entradas[$i]->den_item,
+                                    'unidade_medida' => $entradas[$i]->um,
+                                    'lote' => $entradas[$i]->lote,
+                                    'data_validade' => new \DateTime($entradas[$i]->data_validade),
+                                    'serie_nf' => str_replace(' ', '', $entradas[$i]->num_nf . '-' . $entradas[$i]->ser_nf),
+                                    'tipo_nf' => '5',
+                                    'desc_restricao' => $entradas[$i]->des_restricao,
+                                    'serie' => $entradas[$i]->serie,
+                                    'peca' => $entradas[$i]->peca,
+                                    'qtd_recebida' => (int)$entradas[$i]->qtd_recebida,
+                                    'qtd_fiscal' => (int)$entradas[$i]->qtd_declarada_nf,
+                                ];
+                                //dd($data1["qtd_fiscal"]);
+                                $this->roadRepository->firstOrCreate($data1);
+                                //dd($itemEnd);
+                            } else {
+                                Log::info('Registro encontrado chave: ' . $verifyRoads->chave_logix);
                             }
                         }
                         DB::commit();
