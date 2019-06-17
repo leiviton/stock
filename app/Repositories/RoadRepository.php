@@ -27,4 +27,10 @@ interface RoadRepository extends RepositoryInterface
      * @return mixed
      */
     public function orderByRoads($user, $cnpj,$lote = '');
+
+    /**
+     * @param $chave
+     * @return mixed
+     */
+    public function findByLogix($chave);
 }

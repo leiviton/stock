@@ -118,7 +118,7 @@ class RoadsCron extends Command
                             // dd($entradas[$i]);
                             DB::beginTransaction();
                             try {
-                                $verifyRoads = $this->roadRepository->findByField('chave_logix', $entradas[$i]->id) ? $this->roadRepository->findByField('chave_logix', $entradas[$i]->id) : null;
+                                $verifyRoads = $this->roadRepository->findByLogix($entradas[$i]->id) ? $this->roadRepository->findByLogix($entradas[$i]->id) : null;
 
                                 Log::info('Registro chave: ' . $verifyRoads);
 
@@ -189,7 +189,7 @@ class RoadsCron extends Command
                     try {
                         for ($i = 0; $i < count($entradas); $i++) {
 
-                            $verifyRoads = $this->roadRepository->findByField('chave_logix', $entradas[$i]->id) ? $this->roadRepository->findByField('chave_logix', $entradas[$i]->id) : null;
+                            $verifyRoads = $this->roadRepository->findByLogix($entradas[$i]->id) ? $this->roadRepository->findByLogix($entradas[$i]->id) : null;
 
                             if ($verifyRoads == null) {
                                 $data1 = [
