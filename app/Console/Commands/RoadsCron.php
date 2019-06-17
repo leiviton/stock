@@ -195,7 +195,7 @@ class RoadsCron extends Command
 
                             $verifyRoads = $this->roadRepository->findByLogix($entradas[$i]->id);
 
-                            if($verifyRoads->id){
+                            if(empty($verifyRoads->id)){
                                 Log::info('Registro chave: ' . $verifyRoads);
                             }else{
                                 $verifyRoads = null;

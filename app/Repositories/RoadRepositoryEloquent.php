@@ -3,6 +3,7 @@
 namespace Stock\Repositories;
 
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Stock\Presenters\RoadPresenter;
@@ -200,7 +201,10 @@ class RoadRepositoryEloquent extends BaseRepository implements RoadRepository
      */
     public function findByLogix($chave) {
 
-        return $this->model->where('chave_logix',$chave)->get() ?? null;
+        $result = $this->model->where('chave_logix',$chave)->get() ?? null;
 
+        Log::info('Registro entradas: ' . $result);
+
+        return $result;
     }
 }
