@@ -201,10 +201,15 @@ class RoadRepositoryEloquent extends BaseRepository implements RoadRepository
      */
     public function findByLogix($chave) {
 
-        $result = $this->model->where('chave_logix', $chave)->first() ?? null;
+        $result = $this->model->where('chave_logix', $chave)->get()->first();
 
-        Log::info('Registro entradas: ' . $result);
+        if (!$result) {
+            Log::info('Registro entradas vazio: ' . $result);
+            return null;
+        }else {
+            Log::info('Registro entradas: ' . $result);
 
-        return $result;
+            return $result;
+        }
     }
 }
