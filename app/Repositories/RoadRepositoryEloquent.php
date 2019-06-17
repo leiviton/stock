@@ -202,10 +202,11 @@ class RoadRepositoryEloquent extends BaseRepository implements RoadRepository
 
         $results = $this->model->where('chave_logix',$chave)->get();
 
-        if ($results) {
+        if (empty($results->id)) {
             return $this->parserResult($results);
-        }
+        }else {
 
-        return null;
+            return null;
+        }
     }
 }

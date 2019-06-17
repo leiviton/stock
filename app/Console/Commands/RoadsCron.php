@@ -123,7 +123,7 @@ class RoadsCron extends Command
                                 Log::info('Registro chave: ' . $verifyRoads);
 
                                 if ($verifyRoads == null) {
-
+                                    Log::info('Registro entrada novo: '. $entradas[$i]->id);
                                     $data1 = [
                                         'chave_logix' => $entradas[$i]->id,
                                         'company_id' => $companies[$k]->id,
@@ -152,7 +152,7 @@ class RoadsCron extends Command
                                     $this->roadRepository->updateOrCreate(["chave_logix" => $data1["chave_logix"]], $data1);
                                     //dd($itemEnd);
                                 } else {
-                                    Log::info('Registro encontrado chave: ' . $entradas[$i]->id);
+                                    Log::info('Registro encontrado chave: ' . $verifyRoads);
                                 }
 
                                 DB::commit();
