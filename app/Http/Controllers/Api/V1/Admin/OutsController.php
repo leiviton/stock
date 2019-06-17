@@ -32,6 +32,7 @@ class OutsController extends Controller
      * @param $lote
      * @param Request $request
      * @return mixed
+     * @throws \Exception
      */
     public function index($id,Request $request)
     {

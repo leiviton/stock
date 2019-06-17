@@ -174,11 +174,10 @@ class OutRepositoryEloquent extends BaseRepository implements OutRepository
             if ($user->role == 'user_company') {
                 $results = $this->model->orderBy($order[0], $order[1])
                     ->where('depositante', $cnpj)
-                    //->sum('qtd_enviada')
                     ->where('tipo_estoque', $lote)
                     ->where(function ($query) use ($dataEnd) {
                         if ($dataEnd) {
-                            return $query->whereRaw('data_geracao BETWEEN ? AND ?', [(new Carbon())->subMonth(6), $dataEnd]);
+                            return $query->whereRaw('data_envio BETWEEN ? AND ?', [(new Carbon())->subMonth(6), $dataEnd]);
                         }
                         return $query;
                     })
@@ -186,12 +185,12 @@ class OutRepositoryEloquent extends BaseRepository implements OutRepository
                     ->paginate();
             } else {
                 $results = $this->model->orderBy($order[0], $order[1])
-                    ->where('tipo_estoque', $lote)
                    // ->sum('qtd_enviada')
                     ->where('depositante', $cnpj)
+                    ->where('tipo_estoque', $lote)
                     ->where(function ($query) use ($dataEnd) {
                         if ($dataEnd) {
-                            return $query->whereRaw('data_geracao BETWEEN ? AND ?', [(new Carbon())->subMonth(6), $dataEnd])->groupBy('tipo_estoque');
+                            return $query->whereRaw('data_envio BETWEEN ? AND ?', [(new Carbon())->subMonth(6), $dataEnd]);
                         }
                         return $query;
                     })
@@ -203,12 +202,11 @@ class OutRepositoryEloquent extends BaseRepository implements OutRepository
             $results = $this->model->orderBy($order[0], $order[1])
                 ->where(function ($query) use ($dataEnd,$cnpj) {
                     if ($dataEnd) {
-                        return $query->whereRaw('data_geracao BETWEEN ? AND ?', [(new Carbon())->subMonth(6), $dataEnd])
+                        return $query->whereRaw('data_envio BETWEEN ? AND ?', [(new Carbon())->subMonth(6), $dataEnd])
                             ->where('depositante', $cnpj);
                     }
                     return $query;
                 })
-                //->groupBy('tipo_estoque')
                 ->paginate();
 
         }
