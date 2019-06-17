@@ -61,7 +61,7 @@ class RoadsCron extends Command
     {
         $companies = $this->companyRepository->all();
 
-        $k = 0;
+        $k = 1;
         while ($k < count($companies)) {
             $cnpj = $this->limpaCPF_CNPJ($companies[$k]->cnpj);
 
