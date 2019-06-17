@@ -170,9 +170,10 @@ class OutRepositoryEloquent extends BaseRepository implements OutRepository
         $order[0] = $order[0] ?? 'data_envio';
         $order[1] = $order[1] ?? 'asc';
         //dd($user->role);
+        dd($lote);
         if ($lote != '') {
             if ($user->role == 'user_company') {
-                dd("chegou");
+                //dd("chegou");
                 $results = $this->model->orderBy($order[0], $order[1])
                     ->where('depositante', $cnpj)
                     ->where('tipo_estoque', $lote)
@@ -185,6 +186,7 @@ class OutRepositoryEloquent extends BaseRepository implements OutRepository
                    // ->groupBy('tipo_estoque')
                     ->paginate();
             } else {
+                dd("chegou");
                 $results = $this->model->orderBy($order[0], $order[1])
                    // ->sum('qtd_enviada')
                     ->where('depositante', $cnpj)
