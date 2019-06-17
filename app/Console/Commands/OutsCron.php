@@ -60,22 +60,18 @@ class OutsCron extends Command
     public function handle()
     {
         $companies = $this->companyRepository->all();
+        foreach ($companies as $company){
+        //for ($k = 0; $k < count($companies); $k++) {
 
-        for ($k = 0; $k < count($companies); $k++) {
+            Log::info('Iniciou empresa: ' . $company->nome);
 
-            Log::info('Iniciou empresa: ' . $companies[$k]->nome);
-
-            $cnpj = $this->limpaCPF_CNPJ($companies[$k]->cnpj);
+            $cnpj = $this->limpaCPF_CNPJ($company->cnpj);
 
             $client = new Client();
 
             $dataNow = new Carbon();
 
-            $dataNowReverse = $dataNow->subDay(1)->format('d-m-Y');
-
-            $now = new Carbon();
-
-            $now = date_format($now, 'd-m-Y');
+            $dataNowReverse = (string) $dataNow->subDay(1);//->format('d-m-Y');
 
             $responseCount = $client->get("http://10.0.0.18:4490/logixrest/kbtr00003/countsaidasporDepositanteData/01/$cnpj/$dataNowReverse/$dataNowReverse/0", [
                 'auth' => [
@@ -98,7 +94,7 @@ class OutsCron extends Command
 
                     for ($j = 0; $j < $limit; $j++) {
 
-                        Log::info("Inicio Consulta Saidas $j de $limit | inicio - $start e fim - $end: ". $companies[$k]->nome ."http://10.0.0.18:4490/logixrest/kbtr00003/saidasporDepositanteData/01/$cnpj/$start/$end/$dataNowReverse/$dataNowReverse/S/0");
+                        Log::info("Inicio Consulta Saidas $j de $limit | inicio - $start e fim - $end: ". $company->nome ."http://10.0.0.18:4490/logixrest/kbtr00003/saidasporDepositanteData/01/$cnpj/$start/$end/$dataNowReverse/$dataNowReverse/S/0");
 
                         $responseSaida = $client->get("http://10.0.0.18:4490/logixrest/kbtr00003/saidasporDepositanteData/01/$cnpj/$start/$end/$dataNowReverse/$dataNowReverse/S/0", [
                             'auth' => [
@@ -118,7 +114,7 @@ class OutsCron extends Command
                             try {
                                 $dataSaida = [
                                     'chave_logix' => $saida[$i]->id,
-                                    'company_id' => $companies[$k]->id,
+                                    'company_id' => $company->id,
                                     'data_geracao' => new \DateTime($saida[$i]->data_atualiza),
                                     'depositante' => $saida[$i]->cnpj_cliente_depos,
                                     'razao_social' => $saida[$i]->razao_social,
@@ -156,7 +152,7 @@ class OutsCron extends Command
                 } else {
                     $end = $countRoads;
 
-                    Log::info("Inicio Consulta saidas 1 de 1: ". $companies[$k]->nome ."http://10.0.0.18:4490/logixrest/kbtr00003/saidasporDepositanteData/01/$cnpj/$start/$end/$dataNowReverse/$dataNowReverse/S/0");
+                    Log::info("Inicio Consulta saidas 1 de 1: ". $company->nome ."http://10.0.0.18:4490/logixrest/kbtr00003/saidasporDepositanteData/01/$cnpj/$start/$end/$dataNowReverse/$dataNowReverse/S/0");
 
 
                     $responseSaida = $client->get("http://10.0.0.18:4490/logixrest/kbtr00003/saidasporDepositanteData/01/$cnpj/$start/$end/$dataNowReverse/$dataNowReverse/S/0", [
@@ -177,7 +173,7 @@ class OutsCron extends Command
                         try {
                             $dataSaida = [
                                 'chave_logix' => $saida[$i]->id,
-                                'company_id' => $companies[$k]->id,
+                                'company_id' => $company->id,
                                 'data_geracao' => new \DateTime($saida[$i]->data_atualiza),
                                 'depositante' => $saida[$i]->cnpj_cliente_depos,
                                 'razao_social' => $saida[$i]->razao_social,
