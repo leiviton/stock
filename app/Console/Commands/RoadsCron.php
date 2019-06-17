@@ -63,8 +63,6 @@ class RoadsCron extends Command
 
         for ($k = 0; $k < count($companies); $k++) {
 
-            Log::info('Iniciou empresa: ' . $companies[$k]->nome);
-
             $cnpj = $this->limpaCPF_CNPJ($companies[$k]->cnpj);
 
             $client = new Client();
@@ -79,11 +77,14 @@ class RoadsCron extends Command
                     'Totvs330'
                 ]]);
 
-            Log::info("Contador de saidas: ". $companies[$k]->nome ." | http://10.0.0.18:4490/logixrest/kbtr00002/countEntradaporDepositanteData/01/$cnpj/$dataNowReverse/$dataNowReverse/0");
-
             $countData = json_decode($responseCount->getBody(true)->getContents());
 
             $countRoads = (int)$countData->data[0]->contador;
+
+
+            Log::info('Iniciou empresa: ' . $companies[$k]->nome);
+
+            Log::info("Contador de entradas: ". $companies[$k]->nome ." | http://10.0.0.18:4490/logixrest/kbtr00002/countEntradaporDepositanteData/01/$cnpj/$dataNowReverse/$dataNowReverse/0");
 
             if ($countRoads > 0) {
 

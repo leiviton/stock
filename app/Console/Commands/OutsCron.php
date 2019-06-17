@@ -63,8 +63,6 @@ class OutsCron extends Command
 
         foreach ($companies as $company){
         //for ($k = 0; $k < count($companies); $k++) {
-            Log::info('Iniciou empresa: ' . $company->nome);
-
             $cnpj = $this->limpaCPF_CNPJ($company->cnpj);
 
             $client = new Client();
@@ -79,13 +77,16 @@ class OutsCron extends Command
                     'Totvs330'
                 ]]);
 
-            Log::info("Contador de saidas: ". $company->nome ." | http://10.0.0.18:4490/logixrest/kbtr00003/countsaidasporDepositanteData/01/$cnpj/$dataNowReverse/$dataNowReverse/0");
-
             $countData = json_decode($responseCount->getBody(true)->getContents());
 
             $countRoads = (int) $countData->data[0]->contador;
 
             $start = 1;
+
+            Log::info('Iniciou empresa: ' . $company->nome);
+
+            Log::info("Contador de saidas: ". $company->nome ." | http://10.0.0.18:4490/logixrest/kbtr00003/countsaidasporDepositanteData/01/$cnpj/$dataNowReverse/$dataNowReverse/0");
+
             if ($countRoads > 0) {
 
                 if ($countRoads > 10000) {
