@@ -170,7 +170,7 @@ class OutRepositoryEloquent extends BaseRepository implements OutRepository
         $order[0] = $order[0] ?? 'data_envio';
         $order[1] = $order[1] ?? 'asc';
         //dd($user->role);
-        dd($lote);
+        //dd($lote);
         if ($lote != '') {
             if ($user->role == 'user_company') {
                 //dd("chegou");
