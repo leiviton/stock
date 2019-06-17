@@ -60,9 +60,9 @@ class OutsCron extends Command
     public function handle()
     {
         $companies = $this->companyRepository->all();
+
         foreach ($companies as $company){
         //for ($k = 0; $k < count($companies); $k++) {
-
             Log::info('Iniciou empresa: ' . $company->nome);
 
             $cnpj = $this->limpaCPF_CNPJ($company->cnpj);
@@ -78,6 +78,8 @@ class OutsCron extends Command
                     'admlog',
                     'Totvs330'
                 ]]);
+
+            Log::info("Contador de saidas: ". $company->nome ."http://10.0.0.18:4490/logixrest/kbtr00003/countsaidasporDepositanteData/01/$cnpj/$dataNowReverse/$dataNowReverse/0");
 
             $countData = json_decode($responseCount->getBody(true)->getContents());
 
