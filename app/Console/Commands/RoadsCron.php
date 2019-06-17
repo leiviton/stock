@@ -217,6 +217,7 @@ class RoadsCron extends Command
             }
 
             $k++;
+            Log::info("Indice array emrpesas: $k");
         } while ($k < $count);
 
     }
