@@ -67,7 +67,7 @@ class RoadsCron extends Command
 
         do {
 
-        //for ($k = 0; $k < count($companies); $k = $k + 1) {
+            //for ($k = 0; $k < count($companies); $k = $k + 1) {
 
             $cnpj = $this->limpaCPF_CNPJ($companies[$k]->cnpj);
 
@@ -91,7 +91,7 @@ class RoadsCron extends Command
 
             Log::info("Iniciou empresa: $k " . $companies[$k]->nome);
 
-            Log::info("Contador de entradas: $k ". $companies[$k]->nome ." | quantidade: $count | http://10.0.0.18:4490/logixrest/kbtr00002/countEntradaporDepositanteData/01/$cnpj/$dataNowReverse/$dataNowReverse/0");
+            Log::info("Contador de entradas: $k " . $companies[$k]->nome . " | quantidade: $count | http://10.0.0.18:4490/logixrest/kbtr00002/countEntradaporDepositanteData/01/$cnpj/$dataNowReverse/$dataNowReverse/0");
 
             if ($countRoads > 0) {
 
@@ -103,7 +103,7 @@ class RoadsCron extends Command
                     $end = 10000;
 
                     for ($j = 0; $j < $limit; $j++) {
-                        Log::info("Inicio Consulta Entradas $j de $limit | inicio - $start e fim - $end: ". $companies[$k]->nome ."http://10.0.0.18:4490/logixrest/kbtr00002/entradaporDepositanteData/01/$cnpj/$start/$end/$dataNowReverse/$dataNowReverse/S/0");
+                        Log::info("Inicio Consulta Entradas $j de $limit | inicio - $start e fim - $end: " . $companies[$k]->nome . "http://10.0.0.18:4490/logixrest/kbtr00002/entradaporDepositanteData/01/$cnpj/$start/$end/$dataNowReverse/$dataNowReverse/S/0");
 
                         $response = $client->get("http://10.0.0.18:4490/logixrest/kbtr00002/entradaporDepositanteData/01/$cnpj/$start/$end/$dataNowReverse/$dataNowReverse/S/0", [
                             'auth' => [
@@ -118,33 +118,41 @@ class RoadsCron extends Command
                             // dd($entradas[$i]);
                             DB::beginTransaction();
                             try {
-                                $data1 = [
-                                    'chave_logix' => $entradas[$i]->id,
-                                    'company_id' => $companies[$k]->id,
-                                    'data_geracao' => new \DateTime($entradas[$i]->data_atualiza),
-                                    'depositante' => $entradas[$i]->cnpj_cliente,
-                                    'razao_social' => $entradas[$i]->razao_social,
-                                    'data_recebimento' => new \DateTime($entradas[$i]->dat_entrada_nf),
-                                    'tipo_estoque' => $entradas[$i]->protocolo,
-                                    'desc_tipo_estoque' => $entradas[$i]->den_protocolo,
-                                    'cnpj_emissor_nfe' => $entradas[$i]->cnpj_emissor,
-                                    'razao_social_fornecedor' => $entradas[$i]->razao_social,
-                                    'codigo_produto' => $entradas[$i]->cod_item,
-                                    'desc_produto' => $entradas[$i]->den_item,
-                                    'unidade_medida' => $entradas[$i]->um,
-                                    'lote' => $entradas[$i]->lote,
-                                    'data_validade' => new \DateTime($entradas[$i]->data_validade),
-                                    'serie_nf' => str_replace(' ', '', $entradas[$i]->num_nf . '-' . $entradas[$i]->ser_nf),
-                                    'tipo_nf' => '5',
-                                    'desc_restricao' => $entradas[$i]->des_restricao,
-                                    'serie' => $entradas[$i]->serie,
-                                    'peca' => $entradas[$i]->peca,
-                                    'qtd_recebida' => (int)$entradas[$i]->qtd_recebida,
-                                    'qtd_fiscal' => (int)$entradas[$i]->qtd_declarada_nf,
-                                ];
-                                //dd($data1["qtd_fiscal"]);
-                                $this->roadRepository->updateOrCreate(["chave_logix" => $data1["chave_logix"]], $data1);
-                                //dd($itemEnd);
+                                $verifyRoads = $this->roadRepository->findByField('chave_logix', $entradas[$i]->id) ? $this->roadRepository->findByField('chave_logix', $entradas[$i]->id) : null;
+
+                                if ($verifyRoads == null) {
+
+                                    $data1 = [
+                                        'chave_logix' => $entradas[$i]->id,
+                                        'company_id' => $companies[$k]->id,
+                                        'data_geracao' => new \DateTime($entradas[$i]->data_atualiza),
+                                        'depositante' => $entradas[$i]->cnpj_cliente,
+                                        'razao_social' => $entradas[$i]->razao_social,
+                                        'data_recebimento' => new \DateTime($entradas[$i]->dat_entrada_nf),
+                                        'tipo_estoque' => $entradas[$i]->protocolo,
+                                        'desc_tipo_estoque' => $entradas[$i]->den_protocolo,
+                                        'cnpj_emissor_nfe' => $entradas[$i]->cnpj_emissor,
+                                        'razao_social_fornecedor' => $entradas[$i]->razao_social,
+                                        'codigo_produto' => $entradas[$i]->cod_item,
+                                        'desc_produto' => $entradas[$i]->den_item,
+                                        'unidade_medida' => $entradas[$i]->um,
+                                        'lote' => $entradas[$i]->lote,
+                                        'data_validade' => new \DateTime($entradas[$i]->data_validade),
+                                        'serie_nf' => str_replace(' ', '', $entradas[$i]->num_nf . '-' . $entradas[$i]->ser_nf),
+                                        'tipo_nf' => '5',
+                                        'desc_restricao' => $entradas[$i]->des_restricao,
+                                        'serie' => $entradas[$i]->serie,
+                                        'peca' => $entradas[$i]->peca,
+                                        'qtd_recebida' => (int)$entradas[$i]->qtd_recebida,
+                                        'qtd_fiscal' => (int)$entradas[$i]->qtd_declarada_nf,
+                                    ];
+                                    //dd($data1["qtd_fiscal"]);
+                                    $this->roadRepository->updateOrCreate(["chave_logix" => $data1["chave_logix"]], $data1);
+                                    //dd($itemEnd);
+                                }else {
+                                    Log::info('Registro encontrado chave: '. $entradas[$i]->id);
+                                }
+
                                 DB::commit();
                             } catch (\Exception $e) {
                                 DB::rollBack();
@@ -163,7 +171,7 @@ class RoadsCron extends Command
 
                     $end = $countRoads;
 
-                    Log::info("Inicio Consulta: ". $companies[$k]->nome ."http://10.0.0.18:4490/logixrest/kbtr00002/entradaporDepositanteData/01/$cnpj/$start/$end/$dataNowReverse/$dataNowReverse/S/0");
+                    Log::info("Inicio Consulta: " . $companies[$k]->nome . "http://10.0.0.18:4490/logixrest/kbtr00002/entradaporDepositanteData/01/$cnpj/$start/$end/$dataNowReverse/$dataNowReverse/S/0");
 
                     $response = $client->get("http://10.0.0.18:4490/logixrest/kbtr00002/entradaporDepositanteData/01/$cnpj/$start/$end/$dataNowReverse/$dataNowReverse/S/0", [
                         'auth' => [
@@ -175,42 +183,42 @@ class RoadsCron extends Command
                     $entradas = $data->data;
 
                     DB::beginTransaction();
-                        // dd($entradas[$i]);
-                        try {
-                            for ($i = 0; $i < count($entradas); $i++) {
-                                $data1 = [
-                                    'chave_logix' => $entradas[$i]->id,
-                                    'company_id' => $companies[$k]->id,
-                                    'data_geracao' => new \DateTime($entradas[$i]->data_atualiza),
-                                    'depositante' => $entradas[$i]->cnpj_cliente,
-                                    'razao_social' => $entradas[$i]->razao_social,
-                                    'data_recebimento' => new \DateTime($entradas[$i]->dat_entrada_nf),
-                                    'tipo_estoque' => $entradas[$i]->protocolo,
-                                    'desc_tipo_estoque' => $entradas[$i]->den_protocolo,
-                                    'cnpj_emissor_nfe' => $entradas[$i]->cnpj_emissor,
-                                    'razao_social_fornecedor' => $entradas[$i]->razao_social,
-                                    'codigo_produto' => $entradas[$i]->cod_item,
-                                    'desc_produto' => $entradas[$i]->den_item,
-                                    'unidade_medida' => $entradas[$i]->um,
-                                    'lote' => $entradas[$i]->lote,
-                                    'data_validade' => new \DateTime($entradas[$i]->data_validade),
-                                    'serie_nf' => str_replace(' ', '', $entradas[$i]->num_nf . '-' . $entradas[$i]->ser_nf),
-                                    'tipo_nf' => '5',
-                                    'desc_restricao' => $entradas[$i]->des_restricao,
-                                    'serie' => $entradas[$i]->serie,
-                                    'peca' => $entradas[$i]->peca,
-                                    'qtd_recebida' => (int)$entradas[$i]->qtd_recebida,
-                                    'qtd_fiscal' => (int)$entradas[$i]->qtd_declarada_nf,
-                                ];
-                                //dd($data1["qtd_fiscal"]);
-                                $this->roadRepository->firstOrCreate($data1);
-                                //dd($itemEnd);
-                            }
-                            DB::commit();
-                        } catch (\Exception $e) {
-                            DB::rollBack();
-                            Log::error("Erro entrada: $i |" . $e->getMessage());
+                    // dd($entradas[$i]);
+                    try {
+                        for ($i = 0; $i < count($entradas); $i++) {
+                            $data1 = [
+                                'chave_logix' => $entradas[$i]->id,
+                                'company_id' => $companies[$k]->id,
+                                'data_geracao' => new \DateTime($entradas[$i]->data_atualiza),
+                                'depositante' => $entradas[$i]->cnpj_cliente,
+                                'razao_social' => $entradas[$i]->razao_social,
+                                'data_recebimento' => new \DateTime($entradas[$i]->dat_entrada_nf),
+                                'tipo_estoque' => $entradas[$i]->protocolo,
+                                'desc_tipo_estoque' => $entradas[$i]->den_protocolo,
+                                'cnpj_emissor_nfe' => $entradas[$i]->cnpj_emissor,
+                                'razao_social_fornecedor' => $entradas[$i]->razao_social,
+                                'codigo_produto' => $entradas[$i]->cod_item,
+                                'desc_produto' => $entradas[$i]->den_item,
+                                'unidade_medida' => $entradas[$i]->um,
+                                'lote' => $entradas[$i]->lote,
+                                'data_validade' => new \DateTime($entradas[$i]->data_validade),
+                                'serie_nf' => str_replace(' ', '', $entradas[$i]->num_nf . '-' . $entradas[$i]->ser_nf),
+                                'tipo_nf' => '5',
+                                'desc_restricao' => $entradas[$i]->des_restricao,
+                                'serie' => $entradas[$i]->serie,
+                                'peca' => $entradas[$i]->peca,
+                                'qtd_recebida' => (int)$entradas[$i]->qtd_recebida,
+                                'qtd_fiscal' => (int)$entradas[$i]->qtd_declarada_nf,
+                            ];
+                            //dd($data1["qtd_fiscal"]);
+                            $this->roadRepository->firstOrCreate($data1);
+                            //dd($itemEnd);
                         }
+                        DB::commit();
+                    } catch (\Exception $e) {
+                        DB::rollBack();
+                        Log::error("Erro entrada: $i |" . $e->getMessage());
+                    }
 
                     Log::info('Finalizou registros entradas: ' . $start . ' a ' . $end);
                 }
