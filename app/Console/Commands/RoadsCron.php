@@ -61,11 +61,12 @@ class RoadsCron extends Command
     {
         $companies = $this->companyRepository->all();
 
-        $k = 0;
-        while ($k < count($companies)) {
-            $cnpj = $this->limpaCPF_CNPJ($companies[$k]->cnpj);
 
-        //for ($k = 0; $k < count($companies); $k = $k + 1) {
+//        while ($k < count($companies)) {
+
+        for ($k = 0; $k < count($companies); ++$k) {
+
+            $cnpj = $this->limpaCPF_CNPJ($companies[$k]->cnpj);
 
             $client = new Client();
 
@@ -211,7 +212,7 @@ class RoadsCron extends Command
                 Log::info("Sem movimentos: $dataNowReverse, quantidade $countRoads");
             }
 
-            ++$k;
+            //++$k;
         }
     }
 
