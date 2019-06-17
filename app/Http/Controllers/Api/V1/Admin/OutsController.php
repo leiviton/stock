@@ -36,7 +36,7 @@ class OutsController extends Controller
      */
     public function index($id,Request $request)
     {
-        $lote = $request->get('protocol') ? $request->get('protocol') : '';
+        $lote = $request->get('protocolo') ? $request->get('protocolo') : '';
         return $this->service->getOuts($request->all(),$id,$lote);
     }
 
@@ -45,7 +45,7 @@ class OutsController extends Controller
      */
     public function getAll($id,Request $request)
     {
-        $lote = $request->get('protocol') ? $request->get('protocol') : '';
+        $lote = $request->get('protocolo') ? $request->get('protocolo') : '';
         return $this->service->getAll($id,$lote);
     }
 
