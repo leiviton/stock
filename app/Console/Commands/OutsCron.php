@@ -140,7 +140,7 @@ class OutsCron extends Command
                                     'pedido_venda' => $saida[$i]->id_protheus
                                 ];
 
-                                $this->outRepository->updateOrCreate(["chave_logix" => $dataSaida["chave_logix"]], $dataSaida);
+                                $this->outRepository->firstOrCreate($dataSaida);
 
                                 DB::commit();
 
