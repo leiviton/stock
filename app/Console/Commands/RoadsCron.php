@@ -220,7 +220,7 @@ class RoadsCron extends Command
                                 $this->roadRepository->firstOrCreate($data1);
                                 //dd($itemEnd);
                             } else {
-                                Log::info('Registro encontrado chave: ' . $verifyRoads->chave_logix);
+                                Log::info('Registro encontrado chave: ' . $verifyRoads);
                             }
                         }
                         DB::commit();
