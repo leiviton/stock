@@ -98,7 +98,7 @@ class StockCron extends Command
 
                     for ($j = 0; $j < $limit; $j++) {
 
-                        Log::info("Inicio Consulta estoque $j de $limit | inicio - $start e fim - $end: ". $companies[$k]->nome ."http://10.0.0.18:4490/logixrest/kbtr00001/estoquePorDepositante/01/$cnpj/$start/$end/S/S/0");
+                        Log::info("Inicio Consulta estoque $j de $limit | inicio - $start e fim - $end: ". $companies[$k]->nome ." | http://10.0.0.18:4490/logixrest/kbtr00001/estoquePorDepositante/01/$cnpj/$start/$end/S/S/0");
 
                         $response = $client->get("http://10.0.0.18:4490/logixrest/kbtr00001/estoquePorDepositante/01/$cnpj/$start/$end/S/S/0", [
                             'auth' => [

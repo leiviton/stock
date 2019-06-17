@@ -34,9 +34,9 @@ class Kernel extends ConsoleKernel
         $schedule->command('stocks:cron')->timezone('America/Sao_Paulo')
             ->dailyAt('01:30');
         $schedule->command('roads:cron')->timezone('America/Sao_Paulo')
-            ->dailyAt('04:05');
+            ->dailyAt('12:40');
         $schedule->command('outs:cron')->timezone('America/Sao_Paulo')
-            ->dailyAt('11:57');
+            ->dailyAt('12:41');
         $schedule->command('protocols:cron')->timezone('America/Sao_Paulo')
             ->dailyAt('09:15');
     }
