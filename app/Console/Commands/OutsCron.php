@@ -71,15 +71,13 @@ class OutsCron extends Command
 
             $dataNow = new Carbon();
 
-            $dataNow = $dataNow->subDay(1);
-
-            $dataNowReverse = date_format($dataNow, 'd-m-Y');
+            $dataNowReverse = $dataNow->subDay(1)->format('d-m-Y');
 
             $now = new Carbon();
 
             $now = date_format($now, 'd-m-Y');
 
-            $responseCount = $client->get("http://10.0.0.18:4490/logixrest/kbtr00003/countsaidasporDepositanteData/01/$cnpj/2019-01-01/$dataNowReverse/0", [
+            $responseCount = $client->get("http://10.0.0.18:4490/logixrest/kbtr00003/countsaidasporDepositanteData/01/$cnpj/$dataNowReverse/$dataNowReverse/0", [
                 'auth' => [
                     'admlog',
                     'Totvs330'
@@ -87,22 +85,81 @@ class OutsCron extends Command
 
             $countData = json_decode($responseCount->getBody(true)->getContents());
 
-            $countRoads = (int)$countData->data[0]->contador;
+            $countRoads = (int) $countData->data[0]->contador;
 
+            $start = 1;
             if ($countRoads > 0) {
+
                 if ($countRoads > 10000) {
+
                     $limit = ceil((float)$countRoads / 10000);
+
                     $end = 10000;
+
+                    for ($j = 0; $j < $limit; $j++) {
+
+                        Log::info("Inicio Consulta Saidas $j de $limit | inicio - $start e fim - $end: ". $companies[$k]->nome ."http://10.0.0.18:4490/logixrest/kbtr00003/saidasporDepositanteData/01/$cnpj/$start/$end/$dataNowReverse/$dataNowReverse/S/0");
+
+                        $responseSaida = $client->get("http://10.0.0.18:4490/logixrest/kbtr00003/saidasporDepositanteData/01/$cnpj/$start/$end/$dataNowReverse/$dataNowReverse/S/0", [
+                            'auth' => [
+                                'admlog',
+                                'Totvs330'
+                            ]]);
+
+                        $saidas = json_decode($responseSaida->getBody(true)->getContents());
+
+                        $saida = $saidas->data;
+
+                        Log::info("Finalizou registros saidas: $start a $end");
+
+                        for ($i = 0; $i < count($saida); $i++) {
+                            //dd($saida[$i]);
+                            DB::beginTransaction();
+                            try {
+                                $dataSaida = [
+                                    'chave_logix' => $saida[$i]->id,
+                                    'company_id' => $companies[$k]->id,
+                                    'data_geracao' => new \DateTime($saida[$i]->data_atualiza),
+                                    'depositante' => $saida[$i]->cnpj_cliente_depos,
+                                    'razao_social' => $saida[$i]->razao_social,
+                                    'tipo_estoque' => $saida[$i]->protocolo,
+                                    'codigo_produto' => $saida[$i]->cod_item,
+                                    'desc_produto' => $saida[$i]->den_item,
+                                    'desc_tipo_estoque' => $saida[$i]->den_protocolo,
+                                    'unidade_medida' => $saida[$i]->um,
+                                    'lote' => $saida[$i]->lote,
+                                    'data_validade' => new \DateTime($saida[$i]->dat_hor_validade),
+                                    'data_envio' => new \DateTime($saida[$i]->dat_solic_envio),
+                                    'nota_fiscal' => '15',
+                                    'serie_nf' => str_replace(' ', '', $saida[$i]->serie_nota_fiscal),
+                                    'nome_destino_final' => $saida[$i]->nome_dest_final,
+                                    'centro' => $saida[$i]->centro,
+                                    'numero_ordem' => $saida[$i]->num_ordem,
+                                    'qtd_enviada' => $saida[$i]->qtd_enviada,
+                                    'serie' => $saida[$i]->serie,
+                                    'peca' => $saida[$i]->peca,
+                                    'pedido_venda' => $saida[$i]->id_protheus
+                                ];
+
+                                $this->outRepository->updateOrCreate(["chave_logix" => $dataSaida["chave_logix"]], $dataSaida);
+
+                                DB::commit();
+
+                            } catch (\Exception $e) {
+                                DB::rollBack();
+                                Log::error("Erro saida: $i |".$e->getMessage());
+                            }
+                        }
+                        $start = $end + 1;
+                        $end = $end + 10000;
+                    }
                 } else {
-                    $limit = 1;
                     $end = $countRoads;
-                }
 
-                $start = 1;
+                    Log::info("Inicio Consulta saidas 1 de 1: ". $companies[$k]->nome ."http://10.0.0.18:4490/logixrest/kbtr00003/saidasporDepositanteData/01/$cnpj/$start/$end/$dataNowReverse/$dataNowReverse/S/0");
 
-                for ($j = 0; $j < $limit; $j++) {
 
-                    $responseSaida = $client->get("http://10.0.0.18:4490/logixrest/kbtr00003/saidasporDepositanteData/01/$cnpj/$start/$end/2019-01-01/$dataNowReverse/S/0", [
+                    $responseSaida = $client->get("http://10.0.0.18:4490/logixrest/kbtr00003/saidasporDepositanteData/01/$cnpj/$start/$end/$dataNowReverse/$dataNowReverse/S/0", [
                         'auth' => [
                             'admlog',
                             'Totvs330'
@@ -112,7 +169,7 @@ class OutsCron extends Command
 
                     $saida = $saidas->data;
 
-                    Log::info("Finalizou registros saidas: $start a $end");
+                    Log::info("Iniciou registros saidas: $start a $end");
 
                     for ($i = 0; $i < count($saida); $i++) {
                         //dd($saida[$i]);
@@ -152,16 +209,15 @@ class OutsCron extends Command
                             Log::error("Erro saida: $i |".$e->getMessage());
                         }
                     }
-                    $start = $end + 1;
-                    $end = $end + 10000;
                 }
+
+                Log::info("Finalizou integraçao saidas: $dataNowReverse, quantidade $countRoads");
             } else {
 
                 Log::info("Sem movimento: $dataNowReverse, quantidade $countRoads");
             }
 
 
-            Log::info("Finalizou integraçao saidas: $dataNowReverse, quantidade $countRoads");
         }
     }
 
