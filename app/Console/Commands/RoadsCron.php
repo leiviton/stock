@@ -120,6 +120,8 @@ class RoadsCron extends Command
                             try {
                                 $verifyRoads = $this->roadRepository->findByField('chave_logix', $entradas[$i]->id) ? $this->roadRepository->findByField('chave_logix', $entradas[$i]->id) : null;
 
+                                Log::info('Registro chave: '. $verifyRoads);
+
                                 if ($verifyRoads == null) {
 
                                     $data1 = [
