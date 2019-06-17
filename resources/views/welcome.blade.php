@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="Start your development with a Dashboard for Bootstrap 4.">
     <meta name="author" content="Creative Tim">
-    <title>Portal Estoque</title>
+    <title>Portal DRS</title>
     <!-- Favicon -->
     <link href="./assets/img/brand/logo.png" rel="icon" type="image/png">
     <!-- Fonts -->
@@ -19,9 +19,9 @@
 </head>
 <body>
 <app-root></app-root>
-<script type="text/javascript" src="runtime.3499710e83727a34ce18.js"></script>
+<script type="text/javascript" src="runtime.9fa492863923391e9a3a.js"></script>
 <script type="text/javascript" src="polyfills.8754121e1108d81841a1.js"></script>
 <script type="text/javascript" src="scripts.2db4cbc668a10a0c2a68.js"></script>
-<script type="text/javascript" src="main.5fb1e9546e406f3532e6.js"></script>
+<script type="text/javascript" src="main.f10e75fef9fabe5dbe34.js"></script>
 </body>
 </html>
