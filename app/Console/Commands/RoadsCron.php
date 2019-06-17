@@ -61,9 +61,11 @@ class RoadsCron extends Command
     {
         $companies = $this->companyRepository->all();
 
-        for ($k = 0; $k < count($companies); $k = $k + 1) {
-
+        $k = 0;
+        while ($k < count($companies)) {
             $cnpj = $this->limpaCPF_CNPJ($companies[$k]->cnpj);
+
+        //for ($k = 0; $k < count($companies); $k = $k + 1) {
 
             $client = new Client();
 
@@ -80,7 +82,6 @@ class RoadsCron extends Command
             $countData = json_decode($responseCount->getBody(true)->getContents());
 
             $countRoads = (int)$countData->data[0]->contador;
-
 
             Log::info("Iniciou empresa: $k " . $companies[$k]->nome);
 
@@ -209,6 +210,8 @@ class RoadsCron extends Command
             } else {
                 Log::info("Sem movimentos: $dataNowReverse, quantidade $countRoads");
             }
+
+            $k++;
         }
     }
 
