@@ -197,13 +197,11 @@ class RoadsCron extends Command
 
                             if(!empty($verifyRoads->id)){
                                 Log::info('Registro chave não encontrado');
-                                break;
                             }else{
                                 Log::info('Registro chave: ' . $verifyRoads);
-                                break;
                             }
 
-                            if ($verifyRoads == []) {
+                            if (!empty($verifyRoads->id)) {
                                 $data1 = [
                                     'chave_logix' => $entradas[$i]->id,
                                     'company_id' => $companies[$k]->id,
