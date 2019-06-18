@@ -34,6 +34,7 @@ Route::group(['prefix' => 'v1/', 'middleware' => 'auth:api'], function () {
         /*Stock*/
         Route::post('stock', 'StocksController@store');
         Route::get('stock/{id}', 'StocksController@index');
+        Route::get('stock', 'StocksController@groupStocks');
         Route::get('stock/all/{id}', 'StocksController@getAll');
         Route::post('stock/export', 'StocksController@export');
         Route::put('stock/{id}', 'StocksController@update');

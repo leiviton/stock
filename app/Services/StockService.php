@@ -161,4 +161,9 @@ class StockService
         $valor = str_replace("/", "", $valor);
         return $valor;
     }
+
+    public function groupStock()
+    {
+        return $this->stockRepository->groupStock();
+    }
 }

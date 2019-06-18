@@ -8,6 +8,7 @@
 
 namespace Stock\Services;
 
+use Illuminate\Support\Facades\DB;
 use NFePHP\Common\Certificate;
 use NFePHP\NFe\Common\Standardize;
 use NFePHP\NFe\Complements;
@@ -24,7 +25,204 @@ class NFeService
     /**
      *
      */
-    public function emitirNfe() {
+    public function emitirNfe()
+    {
+       $pedido = DB::connection('sqlsrv')->raw("SELECT 
+
+* FROM (
+
+SELECT TOP 5
+         saida.pedido
+       , saida.tip_docum
+       , ISNULL(F1_CHVNFE,'') [CVH_ENT]
+       , A1_EST    [UF_CLI_REM]
+       , A1_CGC AS [CNPJ_REM]
+       , (SELECT A1_CGC 
+                           FROM SA1010 A1B 
+                   WHERE A1B.D_E_L_E_T_ = '' 
+                             AND A1B.A1_COD + A1B.A1_LOJA COLLATE SQL_Latin1_General_CP1_CI_AS = (SELECT cliB.texto_parametro as [CodProtheus] 
+                                        FROM LOGIX_TESTE.logix.wms_docum_saida saidaA                                    
+                                        INNER JOIN LOGIX_TESTE.logix.vdp_cli_parametro cliB -- Relacionamento para encontrar o cliente final
+                                        on cliB.cliente   = saidaA.cliente 
+                                        and cliB.parametro = 'cod_externo_intg_eai'
+                                        WHERE saidaA.trans_docum_retorno_simbolico = saida.transacao_docum )) as [CLI_DEST]
+       , (SELECT A1_NOME
+                           FROM SA1010 A1B 
+                   WHERE A1B.D_E_L_E_T_ = '' 
+                             AND A1B.A1_COD + A1B.A1_LOJA COLLATE SQL_Latin1_General_CP1_CI_AS = (SELECT cliB.texto_parametro as [CodProtheus] 
+                                        FROM LOGIX_TESTE.logix.wms_docum_saida saidaA                                    
+                                        INNER JOIN LOGIX_TESTE.logix.vdp_cli_parametro cliB -- Relacionamento para encontrar o cliente final
+                                        on cliB.cliente   = saidaA.cliente 
+                                        and cliB.parametro = 'cod_externo_intg_eai'
+                                        WHERE saidaA.trans_docum_retorno_simbolico = saida.transacao_docum )) as [NomCli]
+       , (SELECT A1_END 
+                           FROM SA1010 A1B 
+                   WHERE A1B.D_E_L_E_T_ = '' 
+                             AND A1B.A1_COD + A1B.A1_LOJA COLLATE SQL_Latin1_General_CP1_CI_AS = (SELECT cliB.texto_parametro as [CodProtheus] 
+                                        FROM LOGIX_TESTE.logix.wms_docum_saida saidaA                                    
+                                        INNER JOIN LOGIX_TESTE.logix.vdp_cli_parametro cliB -- Relacionamento para encontrar o cliente final
+                                        on cliB.cliente   = saidaA.cliente 
+                                        and cliB.parametro = 'cod_externo_intg_eai'
+                                        WHERE saidaA.trans_docum_retorno_simbolico = saida.transacao_docum )) as [EndCli]
+       , (SELECT A1_BAIRRO 
+                           FROM SA1010 A1B 
+                   WHERE A1B.D_E_L_E_T_ = '' 
+                             AND A1B.A1_COD + A1B.A1_LOJA COLLATE SQL_Latin1_General_CP1_CI_AS = (SELECT cliB.texto_parametro as [CodProtheus] 
+                                        FROM LOGIX_TESTE.logix.wms_docum_saida saidaA                                    
+                                        INNER JOIN LOGIX_TESTE.logix.vdp_cli_parametro cliB -- Relacionamento para encontrar o cliente final
+                                        on cliB.cliente   = saidaA.cliente 
+                                        and cliB.parametro = 'cod_externo_intg_eai'
+                                        WHERE saidaA.trans_docum_retorno_simbolico = saida.transacao_docum )) as [BaiCli]
+       , (SELECT A1_COD_MUN 
+                           FROM SA1010 A1B 
+                   WHERE A1B.D_E_L_E_T_ = '' 
+                             AND A1B.A1_COD + A1B.A1_LOJA COLLATE SQL_Latin1_General_CP1_CI_AS = (SELECT cliB.texto_parametro as [CodProtheus] 
+                                        FROM LOGIX_TESTE.logix.wms_docum_saida saidaA                                    
+                                        INNER JOIN LOGIX_TESTE.logix.vdp_cli_parametro cliB -- Relacionamento para encontrar o cliente final
+                                        on cliB.cliente   = saidaA.cliente 
+                                        and cliB.parametro = 'cod_externo_intg_eai'
+                                        WHERE saidaA.trans_docum_retorno_simbolico = saida.transacao_docum )) as [CoMuCli]
+       , (SELECT A1_MUN 
+                           FROM SA1010 A1B 
+                   WHERE A1B.D_E_L_E_T_ = '' 
+                             AND A1B.A1_COD + A1B.A1_LOJA COLLATE SQL_Latin1_General_CP1_CI_AS = (SELECT cliB.texto_parametro as [CodProtheus] 
+                                        FROM LOGIX_TESTE.logix.wms_docum_saida saidaA                                    
+                                        INNER JOIN LOGIX_TESTE.logix.vdp_cli_parametro cliB -- Relacionamento para encontrar o cliente final
+                                        on cliB.cliente   = saidaA.cliente 
+                                        and cliB.parametro = 'cod_externo_intg_eai'
+                                        WHERE saidaA.trans_docum_retorno_simbolico = saida.transacao_docum )) as [MunCli]
+       , (SELECT A1_EST 
+                           FROM SA1010 A1B 
+                   WHERE A1B.D_E_L_E_T_ = '' 
+                             AND A1B.A1_COD + A1B.A1_LOJA COLLATE SQL_Latin1_General_CP1_CI_AS = (SELECT cliB.texto_parametro as [CodProtheus] 
+                                        FROM LOGIX_TESTE.logix.wms_docum_saida saidaA                                    
+                                        INNER JOIN LOGIX_TESTE.logix.vdp_cli_parametro cliB -- Relacionamento para encontrar o cliente final
+                                        on cliB.cliente   = saidaA.cliente 
+                                        and cliB.parametro = 'cod_externo_intg_eai'
+                                        WHERE saidaA.trans_docum_retorno_simbolico = saida.transacao_docum )) as [EstCli]
+       , (SELECT A1_CEP 
+                           FROM SA1010 A1B 
+                   WHERE A1B.D_E_L_E_T_ = '' 
+                             AND A1B.A1_COD + A1B.A1_LOJA COLLATE SQL_Latin1_General_CP1_CI_AS = (SELECT cliB.texto_parametro as [CodProtheus] 
+                                        FROM LOGIX_TESTE.logix.wms_docum_saida saidaA                                    
+                                        INNER JOIN LOGIX_TESTE.logix.vdp_cli_parametro cliB -- Relacionamento para encontrar o cliente final
+                                        on cliB.cliente   = saidaA.cliente 
+                                        and cliB.parametro = 'cod_externo_intg_eai'
+                                        WHERE saidaA.trans_docum_retorno_simbolico = saida.transacao_docum )) as [CepCli]
+       , (SELECT A1_CODPAIS 
+                           FROM SA1010 A1B 
+                   WHERE A1B.D_E_L_E_T_ = '' 
+                             AND A1B.A1_COD + A1B.A1_LOJA COLLATE SQL_Latin1_General_CP1_CI_AS = (SELECT cliB.texto_parametro as [CodProtheus] 
+                                        FROM LOGIX_TESTE.logix.wms_docum_saida saidaA                                    
+                                        INNER JOIN LOGIX_TESTE.logix.vdp_cli_parametro cliB -- Relacionamento para encontrar o cliente final
+                                        on cliB.cliente   = saidaA.cliente 
+                                        and cliB.parametro = 'cod_externo_intg_eai'
+                                        WHERE saidaA.trans_docum_retorno_simbolico = saida.transacao_docum )) as [CodPais]
+       , (SELECT A1_PAIS
+                           FROM SA1010 A1B 
+                   WHERE A1B.D_E_L_E_T_ = '' 
+                             AND A1B.A1_COD + A1B.A1_LOJA COLLATE SQL_Latin1_General_CP1_CI_AS = (SELECT cliB.texto_parametro as [CodProtheus] 
+                                        FROM LOGIX_TESTE.logix.wms_docum_saida saidaA                                    
+                                        INNER JOIN LOGIX_TESTE.logix.vdp_cli_parametro cliB -- Relacionamento para encontrar o cliente final
+                                        on cliB.cliente   = saidaA.cliente 
+                                        and cliB.parametro = 'cod_externo_intg_eai'
+                                        WHERE saidaA.trans_docum_retorno_simbolico = saida.transacao_docum )) as [PaisDes]
+
+--     , saida.transacao_docum
+--     , (SELECT transacao_docum FROM LOGIX_TESTE.logix.wms_docum_saida WHERE trans_docum_retorno_simbolico = saida.transacao_docum) as [a]
+    , C5_TPFRETE    AS [TIPO_TRANSP]
+       , A4_NOME       AS [NOME_TRANSP]
+       , A4_CGC        AS [CNPJ_TRANSP]
+       , A4_INSEST     AS [INS_TRANSP]
+       , A4_END        AS [END_TRANSP]
+       , A4_MUN        AS [MUN_TRANSP]
+       , A4_EST        AS [UF_TRANSP]
+       , C6.C6_PRODUTO AS [CodProd]
+       , C6.C6_DESCRI  AS [DescProd] --B1.B1_DESC    AS [DescProd]
+       , B1.B1_POSIPI  AS [NCM]
+       , C6.C6_QTDVEN  AS [Qtd]  --D2.D2_QUANT AS [Quant]
+       , C6.C6_CF      AS [CFOP] --D2.D2_CF
+       , B1.B1_UM      AS [UM]
+       , C6.C6_PRCVEN  AS [PRC]
+       , C6.C6_VALOR   AS [VALOR] 
+       , B1.B1_CODBAR  AS [EAN]
+       , ISNULL(D2.D2_CLASFIS,B1.B1_ORIGEM+F4.F4_SITTRIB) AS [CST]
+       , ISNULL(D2.D2_BASEICM,0) AS [BasIcm]
+       , ISNULL(D2.D2_PICM,0)    AS [AlqIcm]   
+       , ISNULL(D2.D2_VALICM,0)  AS [ValIcm]
+       , F4_GRPCST     AS [EnqIpi]
+       , F4.F4_CTIPI   AS [SitIpi]
+       , ISNULL(D2.D2_BASEIPI,0) AS [BasIpi]
+       , ISNULL(D2.D2_IPI,0)     AS [AlqIpi]
+       , ISNULL(D2.D2_VALIPI,0)  AS [ValIpi]
+       , ISNULL(D2.D2_BASIMP6,0) AS [BasPis]
+       , ISNULL(D2.D2_ALQIMP6,0) AS [AlqPis]
+       , ISNULL(D2.D2_VALIMP6,0) AS [ValPis]
+       , F4.F4_CSTPIS                   AS [SitPis]
+       , ISNULL(D2.D2_BASIMP5,0) AS [BasCof]
+       , ISNULL(D2.D2_ALQIMP5,0) AS [AlqCo]
+       , ISNULL(D2.D2_VALIMP5,0) AS [ValCof]
+       , F4.F4_CSTCOF  AS [SitCof]
+       --, C6_NFORI      AS [Doc]
+       --, C6_SERIORI    AS [SerOri]
+       --, C6_ITEMORI    AS [IteOri]
+
+FROM SC5010 C5
+    
+       INNER Join LOGIX_TESTE.logix.wms_docum_saida saida on -- Relaciono com a saida do Logix
+       pedido COLLATE SQL_Latin1_General_CP1_CI_AS = C5_NUM         
+
+       INNER JOIN SA1010 A1 ON -- Relaciono com o cadastro de cliente
+             A1.D_E_L_E_T_ = '' 
+       AND A1_COD  = C5_CLIENTE 
+       AND A1_LOJA = C5_LOJACLI
+
+       INNER Join LOGIX_TESTE.logix.vdp_cli_parametro cli on  -- Relaciono com a de/para do Logix
+       ltrim(rtrim(texto_parametro)) COLLATE SQL_Latin1_General_CP1_CI_AS = A1_COD + A1_LOJA
+
+       INNER JOIN SC6010 C6 ON  -- Relaciono com o item do pedido
+       C6.D_E_L_E_T_ = ''         AND
+       C6_FILIAL     = C5_FILIAL  AND
+       C6_NUM        = C5_NUM     AND
+       C6_CLI        = C5_CLIENTE AND
+       C6_LOJA       = C5_LOJACLI
+
+       LEFT JOIN SA4010 A4 ON 
+       A4_COD = C5_TRANSP
+
+       LEFT JOIN SF1010 F1 ON 
+       F1.F1_FILIAL = C6_FILIAL  AND 
+       F1.F1_DOC    = C6_NFORI   AND
+       F1.F1_SERIE  = C6_SERIORI AND
+       F1.F1_FORNECE = C6_CLI    AND 
+       F1.F1_LOJA    = C6.C6_LOJA
+
+       INNER JOIN SB1010 B1 ON -- Relaciono com o cadastro de produto
+       B1.D_E_L_E_T_ = ''        AND 
+       B1_FILIAL     = C6_FILIAL AND 
+       B1_COD        = C6_PRODUTO
+
+       LEFT JOIN SD2010 D2 ON -- Relaciono com o item da NF
+       D2.D_E_L_E_T_ = ''         AND
+       D2_FILIAL     = C6_FILIAL  AND
+       D2_PEDIDO     = C6_NUM     AND 
+       D2_ITEMPV     = C6_ITEM    AND 
+       D2_COD        = C6_PRODUTO AND 
+       D2_CLIENTE    = C6_CLI     AND
+       D2_LOJA       = C6_LOJA
+
+       LEFT JOIN SF4010 F4 ON 
+       F4.D_E_L_E_T_ = '' 
+       AND F4_FILIAL = C6_FILIAL
+       AND F4_CODIGO = C6_TES
+
+WHERE C5.D_E_L_E_T_ = '' 
+ 
+order by C5.R_E_C_N_O_ desc  
+ ) AS dados
+WHERE dados.tip_docum = 'R' AND UF_CLI_REM = 'SP';
+");
+        dd($pedido);
         $nfe = new Make();
         $std = new \stdClass();
         $nf = 40;
@@ -112,7 +310,7 @@ class NFeService
             $std->qTrib = '1.0000';
             $std->vUnTrib = '10.99';
             $std->indTot = 1;
-            $total += (float) $std->vUnTrib;
+            $total += (float)$std->vUnTrib;
             $nfe->tagprod($std);
 
             $std = new \stdClass();
@@ -223,9 +421,9 @@ class NFeService
 
         $xml = $nfe->getXML(); // O conteúdo do XML fica armazenado na variável $xml
 
-        $config  = [
-            "atualizacao"=>date('Y-m-d h:i:s'),
-            "tpAmb"=> 2,
+        $config = [
+            "atualizacao" => date('Y-m-d h:i:s'),
+            "tpAmb" => 2,
             "razaosocial" => "SUPORTEMED DISTRIBUIDORA COMERCIO E REPRESENTACAO COMERCIAL LTDA",
             "cnpj" => "11957717000142", // PRECISA SER VÁLIDO
             "ie" => '675189081113', // PRECISA SER VÁLIDO
@@ -242,7 +440,6 @@ class NFeService
                 "proxyPass" => ""
             ]
         ];
-
 
 
         $configJson = json_encode($config);
@@ -267,9 +464,9 @@ class NFeService
             //return $recibo;
             $protocolo = $tools->sefazConsultaRecibo($recibo);
 
-            file_put_contents("storage/companies/xml_gerados/$nf.xml",$xmlAssinado);
+            file_put_contents("storage/companies/xml_gerados/$nf.xml", $xmlAssinado);
             $xmlNf = file_get_contents("storage/companies/xml_gerados/$nf.xml");
-           //return $protocolo ."proximo". $xmlOriginal;
+            //return $protocolo ."proximo". $xmlOriginal;
 //            return $recibo;
 //            $xmlA = Complements::toAuthorize($xmlNf, $protocolo);
 //
@@ -288,10 +485,11 @@ class NFeService
      * @param $recibo
      * @return string
      */
-    public function consultaProtocolo($recibo) {
-        $config  = [
-            "atualizacao"=>date('Y-m-d h:i:s'),
-            "tpAmb"=> 2,
+    public function consultaProtocolo($recibo)
+    {
+        $config = [
+            "atualizacao" => date('Y-m-d h:i:s'),
+            "tpAmb" => 2,
             "razaosocial" => "SUPORTEMED DISTRIBUIDORA COMERCIO E REPRESENTACAO COMERCIAL LTDA",
             "cnpj" => "11957717000142", // PRECISA SER VÁLIDO
             "ie" => '675189081113', // PRECISA SER VÁLIDO
@@ -310,13 +508,11 @@ class NFeService
         ];
 
 
-
         $configJson = json_encode($config);
 
         $certificadoDigital = file_get_contents('storage\companies\certificates\certificado.pfx');
 
         $tools = new Tools($configJson, Certificate::readPfx($certificadoDigital, '18061960'));
-
 
 
         //consulta número de recibo
@@ -327,50 +523,51 @@ class NFeService
         $st = new Standardize();
         $std = $st->toStd($xmlRetorno);
 
-        if($std->cStat=='103') { //lote enviado
+        if ($std->cStat == '103') { //lote enviado
             //Lote ainda não foi precessado pela SEFAZ;
             return "lote ainda nao processou";
         }
-        if($std->cStat=='105') { //lote em processamento
+        if ($std->cStat == '105') { //lote em processamento
             //tente novamente mais tarde
             return "lote ainda em processo";
         }
 
-        if($std->cStat=='104'){ //lote processado (tudo ok)
-            if($std->protNFe->infProt->cStat=='100'){ //Autorizado o uso da NF-e
+        if ($std->cStat == '104') { //lote processado (tudo ok)
+            if ($std->protNFe->infProt->cStat == '100') { //Autorizado o uso da NF-e
                 $xmlOriginal = file_get_contents('storage\companies\xml_gerados\40.xml');
                 $xml = Complements::toAuthorize($xmlOriginal, $xmlRetorno);
-               file_put_contents("storage/companies/xml_autorizados/40.xml", $xml);
-                return  response()->json(["situacao"=>"autorizada",
-                    "numeroProtocolo"=>$std->protNFe->infProt->nProt,
-                    "xmlProtocolo"=>$xmlRetorno]);
-            }elseif(in_array($std->protNFe->infProt->cStat,["302"])){ //DENEGADAS
-                return  response()->json(["situacao"=>"denegada",
-                    "numeroProtocolo"=>$std->protNFe->infProt->nProt,
-                    "motivo"=>$std->protNFe->infProt->xMotivo,
-                    "cstat"=>$std->protNFe->infProt->cStat,
-                    "xmlProtocolo"=>$xmlRetorno]);
-            }else{ //não autorizada (rejeição)
-                return  response()->json(["situacao"=>"rejeitada",
-                    "motivo"=>$std->protNFe->infProt->xMotivo,
-                    "cstat"=>$std->protNFe->infProt->cStat]);
+                file_put_contents("storage/companies/xml_autorizados/40.xml", $xml);
+                return response()->json(["situacao" => "autorizada",
+                    "numeroProtocolo" => $std->protNFe->infProt->nProt,
+                    "xmlProtocolo" => $xmlRetorno]);
+            } elseif (in_array($std->protNFe->infProt->cStat, ["302"])) { //DENEGADAS
+                return response()->json(["situacao" => "denegada",
+                    "numeroProtocolo" => $std->protNFe->infProt->nProt,
+                    "motivo" => $std->protNFe->infProt->xMotivo,
+                    "cstat" => $std->protNFe->infProt->cStat,
+                    "xmlProtocolo" => $xmlRetorno]);
+            } else { //não autorizada (rejeição)
+                return response()->json(["situacao" => "rejeitada",
+                    "motivo" => $std->protNFe->infProt->xMotivo,
+                    "cstat" => $std->protNFe->infProt->cStat]);
             }
         } else { //outros erros possíveis
-            return response()->json(["situacao"=>"rejeitada",
-                "motivo"=>$std->xMotivo,
-                "cstat"=>$std->cStat]);
+            return response()->json(["situacao" => "rejeitada",
+                "motivo" => $std->xMotivo,
+                "cstat" => $std->cStat]);
         }
     }
 
-    public function geraDanfe() {
+    public function geraDanfe()
+    {
         $xml = 'storage/companies/xml_autorizados/40.xml';
         $docxml = FilesFolders::readFile($xml);
-        $logo = 'data://text/plain;base64,'. base64_encode(file_get_contents('storage/companies/suportemed/logo.jpg'));
+        $logo = 'data://text/plain;base64,' . base64_encode(file_get_contents('storage/companies/suportemed/logo.jpg'));
         try {
             $danfe = new Danfe($docxml, 'P', 'A4', $logo, 'I', 'storage/companies/pdf_danfe');
             $id = $danfe->montaDANFE();
             $pdf = $danfe->render();
-            FilesFolders::saveFile('storage\companies\pdf_danfe','danfe40.pdf',$pdf);
+            FilesFolders::saveFile('storage\companies\pdf_danfe', 'danfe40.pdf', $pdf);
             //o pdf porde ser exibido como view no browser
             //salvo em arquivo
             //ou setado para download forçado no browser

@@ -78,6 +78,17 @@ return [
             'prefix' => '',
         ],
 
+        'sqlsrvNFE' => [
+            'driver' => 'sqlsrv',
+            'host'      => env('DB_HOST_NFE'),
+            'port'      => env('DB_PORT_NFE'),
+            'database'  => env('DB_DATABASE_NFE'),
+            'username'  => env('DB_USERNAME_NFE'),
+            'password'  => env('DB_PASSWORD_NFE'),
+            'charset' => 'utf8',
+            'prefix' => '',
+        ],
+
     ],
 
     /*

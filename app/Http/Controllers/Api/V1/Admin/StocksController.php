@@ -49,6 +49,10 @@ class StocksController extends Controller
         $lote = $request->get('protocolo') ? $request->get('protocolo') : '';
         return $this->service->getAll($id,$lote);
     }
+
+    public function groupStocks() {
+        return $this->service->groupStock();
+    }
     /**
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse

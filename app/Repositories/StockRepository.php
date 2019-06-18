@@ -33,4 +33,9 @@ interface StockRepository extends RepositoryInterface
      * @return mixed
      */
     public function findByLogix($chave);
+
+    /**
+     * @return \Illuminate\Database\Query\Expression
+     */
+    public function groupStock();
 }
