@@ -41,6 +41,7 @@ Route::group(['prefix' => 'v1/', 'middleware' => 'auth:api'], function () {
         /*Road*/
         Route::post('road', 'RoadController@store');
         Route::get('road/{id}', 'RoadController@index');
+        Route::get('road', 'RoadController@find');
         Route::get('road/all/{id}', 'RoadController@getAll');
         Route::post('road/export', 'RoadController@export');
         Route::put('road/{id}', 'RoadController@update');

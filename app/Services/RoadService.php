@@ -162,4 +162,9 @@ class RoadService
         $valor = str_replace("/", "", $valor);
         return $valor;
     }
+
+    public function findChave($get)
+    {
+        return $this->repository->findByLogix($get);
+    }
 }

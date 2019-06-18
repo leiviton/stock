@@ -124,4 +124,8 @@ class RoadController extends Controller
             return response()->json(['message' => $result['message'], 'status' => 'error', 'title' => 'Erro'], 400);
         }
     }
+
+    public function find(Request $request) {
+        return $this->service->findChave($request->get('chave'));
+    }
 }
