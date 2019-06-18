@@ -117,14 +117,13 @@ class OutsCron extends Command
 
                                 $verifyOuts = $this->outRepository->findByLogix($saida[$i]->id);
 
-                                if ($verifyOuts->id) {
-                                    Log::info('Registro chave: ' . $verifyOuts);
+                                if ($verifyOuts == '') {
+                                    Log::info('Registro chave não encontrado');
                                 } else {
-                                    $verifyOuts = null;
-                                    Log::info('Registro saida nao encontrado: ' . $verifyOuts);
+                                    Log::info('Registro chave: ' . $verifyOuts);
                                 }
 
-                                if ($verifyOuts == null) {
+                                if ($verifyOuts == '') {
                                     $dataSaida = [
                                         'chave_logix' => $saida[$i]->id,
                                         'company_id' => $company->id,
@@ -190,14 +189,13 @@ class OutsCron extends Command
                         for ($i = 0; $i < count($saida); $i++) {
                             $verifyOuts = $this->outRepository->findByLogix($saida[$i]->id);
 
-                            if ($verifyOuts->id) {
-                                Log::info('Registro chave: ' . $verifyOuts);
+                            if ($verifyOuts == '') {
+                                Log::info('Registro chave não encontrado');
                             } else {
-                                $verifyOuts = null;
-                                Log::info('Registro saida nao encontrado: ' . $verifyOuts);
+                                Log::info('Registro chave: ' . $verifyOuts);
                             }
 
-                            if ($verifyOuts == null) {
+                            if ($verifyOuts == '') {
                                 $dataSaida = [
                                     'chave_logix' => $saida[$i]->id,
                                     'company_id' => $company->id,

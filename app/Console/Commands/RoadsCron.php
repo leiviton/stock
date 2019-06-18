@@ -120,13 +120,13 @@ class RoadsCron extends Command
                             for ($i = 0; $i < count($entradas); $i++) {
                                 $verifyRoads = $this->roadRepository->findByLogix($entradas[$i]->id);
 
-                                if ($verifyRoads->id) {
-                                    Log::info('Registro chave: ' . $verifyRoads);
+                                if ($verifyRoads == '') {
+                                    Log::info('Registro chave não encontrado');
                                 } else {
-                                    $verifyRoads = null;
+                                    Log::info('Registro chave: ' . $verifyRoads);
                                 }
 
-                                if ($verifyRoads == null) {
+                                if ($verifyRoads == '') {
                                     Log::info('Registro entrada novo: ' . $entradas[$i]->id);
                                     $data1 = [
                                         'chave_logix' => $entradas[$i]->id,
