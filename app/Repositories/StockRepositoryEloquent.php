@@ -212,7 +212,6 @@ class StockRepositoryEloquent extends BaseRepository implements StockRepository
                 ->groupBy('desc_restricao')
                 ->groupBy('desc_tipo_estoque')
                 ->orderBy('desc_tipo_estoque','asc')
-                ->orderBy('qtd_produto','asc')
                 ->paginate();
 
         }
