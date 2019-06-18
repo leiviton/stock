@@ -59,10 +59,10 @@ class OutsCron extends Command
      */
     public function handle()
     {
-        $companies = $this->companyRepository->orderBy('id','asc')->all();
+        $companies = $this->companyRepository->orderBy('id', 'asc')->all();
 
-        foreach ($companies as $company){
-        //for ($k = 0; $k < count($companies); $k++) {
+        foreach ($companies as $company) {
+            //for ($k = 0; $k < count($companies); $k++) {
             $cnpj = $this->limpaCPF_CNPJ($company->cnpj);
 
             $client = new Client();
@@ -79,13 +79,13 @@ class OutsCron extends Command
 
             $countData = json_decode($responseCount->getBody(true)->getContents());
 
-            $countRoads = (int) $countData->data[0]->contador;
+            $countRoads = (int)$countData->data[0]->contador;
 
             $start = 1;
 
             Log::info('Iniciou empresa: ' . $company->nome);
 
-            Log::info("Contador de saidas: ". $company->nome ." | http://10.0.0.18:4490/logixrest/kbtr00003/countsaidasporDepositanteData/01/$cnpj/$dataNowReverse/$dataNowReverse/0");
+            Log::info("Contador de saidas: " . $company->nome . " | http://10.0.0.18:4490/logixrest/kbtr00003/countsaidasporDepositanteData/01/$cnpj/$dataNowReverse/$dataNowReverse/0");
 
             if ($countRoads > 0) {
 
@@ -97,7 +97,7 @@ class OutsCron extends Command
 
                     for ($j = 0; $j < $limit; $j++) {
 
-                        Log::info("Inicio Consulta Saidas $j de $limit | inicio - $start e fim - $end: ". $company->nome ." | http://10.0.0.18:4490/logixrest/kbtr00003/saidasporDepositanteData/01/$cnpj/$start/$end/$dataNowReverse/$dataNowReverse/S/0");
+                        Log::info("Inicio Consulta Saidas $j de $limit | inicio - $start e fim - $end: " . $company->nome . " | http://10.0.0.18:4490/logixrest/kbtr00003/saidasporDepositanteData/01/$cnpj/$start/$end/$dataNowReverse/$dataNowReverse/S/0");
 
                         $responseSaida = $client->get("http://10.0.0.18:4490/logixrest/kbtr00003/saidasporDepositanteData/01/$cnpj/$start/$end/$dataNowReverse/$dataNowReverse/S/0", [
                             'auth' => [
@@ -110,52 +110,62 @@ class OutsCron extends Command
                         $saida = $saidas->data;
 
                         Log::info("Finalizou registros saidas: $start a $end");
+                        //dd($saida[$i]);
+                        DB::beginTransaction();
+                        try {
+                            for ($i = 0; $i < count($saida); $i++) {
+                                $verifyOuts = $this->outRepository->findByLogix($saida[$i]->id);
 
-                        for ($i = 0; $i < count($saida); $i++) {
-                            //dd($saida[$i]);
-                            DB::beginTransaction();
-                            try {
-                                $dataSaida = [
-                                    'chave_logix' => $saida[$i]->id,
-                                    'company_id' => $company->id,
-                                    'data_geracao' => new \DateTime($saida[$i]->data_atualiza),
-                                    'depositante' => $saida[$i]->cnpj_cliente_depos,
-                                    'razao_social' => $saida[$i]->razao_social,
-                                    'tipo_estoque' => $saida[$i]->protocolo,
-                                    'codigo_produto' => $saida[$i]->cod_item,
-                                    'desc_produto' => $saida[$i]->den_item,
-                                    'desc_tipo_estoque' => $saida[$i]->den_protocolo,
-                                    'unidade_medida' => $saida[$i]->um,
-                                    'lote' => $saida[$i]->lote,
-                                    'data_validade' => new \DateTime($saida[$i]->dat_hor_validade),
-                                    'data_envio' => new \DateTime($saida[$i]->dat_solic_envio),
-                                    'nota_fiscal' => '15',
-                                    'serie_nf' => str_replace(' ', '', $saida[$i]->serie_nota_fiscal),
-                                    'nome_destino_final' => $saida[$i]->nome_dest_final,
-                                    'centro' => $saida[$i]->centro,
-                                    'numero_ordem' => $saida[$i]->num_ordem,
-                                    'qtd_enviada' => $saida[$i]->qtd_enviada,
-                                    'serie' => $saida[$i]->serie,
-                                    'peca' => $saida[$i]->peca,
-                                    'pedido_venda' => $saida[$i]->id_protheus
-                                ];
+                                if ($verifyOuts->id) {
+                                    Log::info('Registro chave: ' . $verifyOuts);
+                                } else {
+                                    $verifyOuts = null;
+                                }
 
-                                $this->outRepository->firstOrCreate($dataSaida);
+                                if ($verifyOuts == null) {
+                                    $dataSaida = [
+                                        'chave_logix' => $saida[$i]->id,
+                                        'company_id' => $company->id,
+                                        'data_geracao' => new \DateTime($saida[$i]->data_atualiza),
+                                        'depositante' => $saida[$i]->cnpj_cliente_depos,
+                                        'razao_social' => $saida[$i]->razao_social,
+                                        'tipo_estoque' => $saida[$i]->protocolo,
+                                        'codigo_produto' => $saida[$i]->cod_item,
+                                        'desc_produto' => $saida[$i]->den_item,
+                                        'desc_tipo_estoque' => $saida[$i]->den_protocolo,
+                                        'unidade_medida' => $saida[$i]->um,
+                                        'lote' => $saida[$i]->lote,
+                                        'data_validade' => new \DateTime($saida[$i]->dat_hor_validade),
+                                        'data_envio' => new \DateTime($saida[$i]->dat_solic_envio),
+                                        'nota_fiscal' => '15',
+                                        'serie_nf' => str_replace(' ', '', $saida[$i]->serie_nota_fiscal),
+                                        'nome_destino_final' => $saida[$i]->nome_dest_final,
+                                        'centro' => $saida[$i]->centro,
+                                        'numero_ordem' => $saida[$i]->num_ordem,
+                                        'qtd_enviada' => $saida[$i]->qtd_enviada,
+                                        'serie' => $saida[$i]->serie,
+                                        'peca' => $saida[$i]->peca,
+                                        'pedido_venda' => $saida[$i]->id_protheus
+                                    ];
 
-                                DB::commit();
-
-                            } catch (\Exception $e) {
-                                DB::rollBack();
-                                Log::error("Erro saida: $i |".$e->getMessage());
+                                    $this->outRepository->firstOrCreate($dataSaida);
+                                }
                             }
+
+                            DB::commit();
+
+                        } catch (\Exception $e) {
+                            DB::rollBack();
+                            Log::error("Erro saida: $i |" . $e->getMessage());
                         }
+
                         $start = $end + 1;
                         $end = $end + 10000;
                     }
                 } else {
                     $end = $countRoads;
 
-                    Log::info("Inicio Consulta saidas 1 de 1: ". $company->nome ." | http://10.0.0.18:4490/logixrest/kbtr00003/saidasporDepositanteData/01/$cnpj/$start/$end/$dataNowReverse/$dataNowReverse/S/0");
+                    Log::info("Inicio Consulta saidas 1 de 1: " . $company->nome . " | http://10.0.0.18:4490/logixrest/kbtr00003/saidasporDepositanteData/01/$cnpj/$start/$end/$dataNowReverse/$dataNowReverse/S/0");
 
 
                     $responseSaida = $client->get("http://10.0.0.18:4490/logixrest/kbtr00003/saidasporDepositanteData/01/$cnpj/$start/$end/$dataNowReverse/$dataNowReverse/S/0", [
@@ -205,7 +215,7 @@ class OutsCron extends Command
 
                         } catch (\Exception $e) {
                             DB::rollBack();
-                            Log::error("Erro saida: $i |".$e->getMessage());
+                            Log::error("Erro saida: $i |" . $e->getMessage());
                         }
                     }
                 }

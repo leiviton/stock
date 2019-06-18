@@ -27,4 +27,10 @@ interface OutRepository extends RepositoryInterface
      * @return mixed
      */
     public function orderByOuts($user, $cnpj,$lote = '');
+
+    /**
+     * @param $chave
+     * @return mixed
+     */
+    public function findByLogix($chave);
 }
