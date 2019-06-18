@@ -114,20 +114,20 @@ class RoadsCron extends Command
                         // dd($data->data);
                         $entradas = $data->data;
 
-                        for ($i = 0; $i < count($entradas); $i++) {
-                            // dd($entradas[$i]);
-                            DB::beginTransaction();
-                            try {
+                        // dd($entradas[$i]);
+                        DB::beginTransaction();
+                        try {
+                            for ($i = 0; $i < count($entradas); $i++) {
                                 $verifyRoads = $this->roadRepository->findByLogix($entradas[$i]->id);
 
-                                if($verifyRoads->id){
+                                if ($verifyRoads->id) {
                                     Log::info('Registro chave: ' . $verifyRoads);
-                                }else{
-                                   $verifyRoads = null;
+                                } else {
+                                    $verifyRoads = null;
                                 }
 
                                 if ($verifyRoads == null) {
-                                    Log::info('Registro entrada novo: '. $entradas[$i]->id);
+                                    Log::info('Registro entrada novo: ' . $entradas[$i]->id);
                                     $data1 = [
                                         'chave_logix' => $entradas[$i]->id,
                                         'company_id' => $companies[$k]->id,
@@ -155,15 +155,15 @@ class RoadsCron extends Command
                                     //dd($data1["qtd_fiscal"]);
                                     $this->roadRepository->updateOrCreate(["chave_logix" => $data1["chave_logix"]], $data1);
                                     //dd($itemEnd);
-                                } /*else {
+                                } else {
                                     Log::info('Registro encontrado chave: ' . $verifyRoads);
-                                }*/
-
-                                DB::commit();
-                            } catch (\Exception $e) {
-                                DB::rollBack();
-                                Log::error("Erro entrada: $i |" . $e->getMessage());
+                                }
                             }
+
+                            DB::commit();
+                        } catch (\Exception $e) {
+                            DB::rollBack();
+                            Log::error("Erro entrada: $i |" . $e->getMessage());
                         }
 
                         Log::info('Finalizou registros entradas: ' . $start . ' a ' . $end);
@@ -195,9 +195,9 @@ class RoadsCron extends Command
 
                             $verifyRoads = $this->roadRepository->findByLogix($entradas[$i]->id);
 
-                            if($verifyRoads == ''){
+                            if ($verifyRoads == '') {
                                 Log::info('Registro chave não encontrado');
-                            }else{
+                            } else {
                                 Log::info('Registro chave: ' . $verifyRoads);
                             }
 

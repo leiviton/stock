@@ -151,6 +151,8 @@ class OutsCron extends Command
                                     ];
 
                                     $this->outRepository->firstOrCreate($dataSaida);
+                                }else {
+                                    Log::info('Registro saida encontrado chave: ' . $saida[$i]->id);
                                 }
                             }
 

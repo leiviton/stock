@@ -84,7 +84,7 @@ class StockCron extends Command
 
             $countData = json_decode($responseCount->getBody(true)->getContents());
 
-            $countStock = (int) $countData->data[0]->contador;
+            $countStock = (int)$countData->data[0]->contador;
 
             if ($countStock > 0) {
 
@@ -98,7 +98,7 @@ class StockCron extends Command
 
                     for ($j = 0; $j < $limit; $j++) {
 
-                        Log::info("Inicio Consulta estoque $j de $limit | inicio - $start e fim - $end: ". $companies[$k]->nome ." | http://10.0.0.18:4490/logixrest/kbtr00001/estoquePorDepositante/01/$cnpj/$start/$end/S/S/0");
+                        Log::info("Inicio Consulta estoque $j de $limit | inicio - $start e fim - $end: " . $companies[$k]->nome . " | http://10.0.0.18:4490/logixrest/kbtr00001/estoquePorDepositante/01/$cnpj/$start/$end/S/S/0");
 
                         $response = $client->get("http://10.0.0.18:4490/logixrest/kbtr00001/estoquePorDepositante/01/$cnpj/$start/$end/S/S/0", [
                             'auth' => [
@@ -110,45 +110,58 @@ class StockCron extends Command
 
                         $stock = $stocks->data;
 
-                        for ($i = 0; $i < count($stock); $i++) {
+                        DB::beginTransaction();
+                        try {
+                            for ($i = 0; $i < count($stock); $i++) {
+                                $verifyOuts = $this->stockRepository->findByLogix($stock[$i]->id);
 
-                            DB::beginTransaction();
-                            try {
-                                //dd($stock[$i]);
-                                $dataStock = [
-                                    'chave_logix' => $stock[$i]->id,
-                                    'company_id' => $companies[$k]->id,
-                                    'data_geracao' => new \DateTime($stock[$i]->data_atualiza),
-                                    'depositante' => $stock[$i]->cnpj_cliente,
-                                    'cnpj_origem' => $stock[$i]->cnpj_origem,
-                                    'data_atual' => new \DateTime($stock[$i]->data_atual),
-                                    'hora_atual' => $stock[$i]->hora_atual,
-                                    'tipo_estoque' => $stock[$i]->protocolo,
-                                    'desc_tipo_estoque' => $stock[$i]->den_protocolo,
-                                    'codigo_produto' => $stock[$i]->cod_item,
-                                    'desc_produto' => $stock[$i]->den_item,
-                                    'unidade_medida' => $stock[$i]->um,
-                                    'lote' => $stock[$i]->lote,
-                                    'data_validade' => new \DateTime($stock[$i]->data_validade),
-                                    'desc_restricao' => $stock[$i]->den_restricao,
-                                    'qtd_regul_reser' => $stock[$i]->qtd_reserva,
-                                    'qtd_produto' => $stock[$i]->qtd_disponivel,
-                                    'qtd_fiscal' => $stock[$i]->qtd_disponivel,
-                                    'qtd_avariada' => $stock[$i]->qtd_avaria,
-                                    'avaria' => $stock[$i]->qtd_avaria,
-                                    'peca' => $stock[$i]->peca,
-                                    'serie' => $stock[$i]->serie
-                                ];
+                                if ($verifyOuts->id) {
+                                    Log::info('Registro estoque chave: ' . $verifyOuts);
+                                } else {
+                                    $verifyOuts = null;
+                                    Log::info('Registro estoque nao encontrado: ' . $stock[$i]->id);
+                                }
 
-                                $this->stockRepository->updateOrCreate(["chave_logix" => $dataStock["chave_logix"]], $dataStock);
+                                if ($verifyOuts == null) {
 
-                                DB::commit();
+                                    //dd($stock[$i]);
+                                    $dataStock = [
+                                        'chave_logix' => $stock[$i]->id,
+                                        'company_id' => $companies[$k]->id,
+                                        'data_geracao' => new \DateTime($stock[$i]->data_atualiza),
+                                        'depositante' => $stock[$i]->cnpj_cliente,
+                                        'cnpj_origem' => $stock[$i]->cnpj_origem,
+                                        'data_atual' => new \DateTime($stock[$i]->data_atual),
+                                        'hora_atual' => $stock[$i]->hora_atual,
+                                        'tipo_estoque' => $stock[$i]->protocolo,
+                                        'desc_tipo_estoque' => $stock[$i]->den_protocolo,
+                                        'codigo_produto' => $stock[$i]->cod_item,
+                                        'desc_produto' => $stock[$i]->den_item,
+                                        'unidade_medida' => $stock[$i]->um,
+                                        'lote' => $stock[$i]->lote,
+                                        'data_validade' => new \DateTime($stock[$i]->data_validade),
+                                        'desc_restricao' => $stock[$i]->den_restricao,
+                                        'qtd_regul_reser' => $stock[$i]->qtd_reserva,
+                                        'qtd_produto' => $stock[$i]->qtd_disponivel,
+                                        'qtd_fiscal' => $stock[$i]->qtd_disponivel,
+                                        'qtd_avariada' => $stock[$i]->qtd_avaria,
+                                        'avaria' => $stock[$i]->qtd_avaria,
+                                        'peca' => $stock[$i]->peca,
+                                        'serie' => $stock[$i]->serie
+                                    ];
 
-                            } catch (\Exception $e) {
-                                DB::rollBack();
-                                Log::error($e->getMessage());
+                                    $this->stockRepository->updateOrCreate(["chave_logix" => $dataStock["chave_logix"]], $dataStock);
+                                } else {
+                                    Log::info('Registro estoque encontrado chave: ' . $stock[$i]->id);
+                                }
                             }
+                            DB::commit();
+
+                        } catch (\Exception $e) {
+                            DB::rollBack();
+                            Log::error($e->getMessage());
                         }
+
 
                         $start = $end + 1;
                         $end = $end + 5000;
@@ -167,49 +180,62 @@ class StockCron extends Command
 
                     $stock = $stocks->data;
 
-                    for ($i = 0; $i < count($stock); $i++) {
+
 
                         DB::beginTransaction();
                         try {
-                            //dd($stock[$i]);
-                            $dataStock = [
-                                'chave_logix' => $stock[$i]->id,
-                                'company_id' => $companies[$k]->id,
-                                'data_geracao' => new \DateTime($stock[$i]->data_atualiza),
-                                'depositante' => $stock[$i]->cnpj_cliente,
-                                'cnpj_origem' => $stock[$i]->cnpj_origem,
-                                'data_atual' => new \DateTime($stock[$i]->data_atual),
-                                'hora_atual' => $stock[$i]->hora_atual,
-                                'tipo_estoque' => $stock[$i]->protocolo,
-                                'desc_tipo_estoque' => $stock[$i]->den_protocolo,
-                                'codigo_produto' => $stock[$i]->cod_item,
-                                'desc_produto' => $stock[$i]->den_item,
-                                'unidade_medida' => $stock[$i]->um,
-                                'lote' => $stock[$i]->lote,
-                                'data_validade' => new \DateTime($stock[$i]->data_validade),
-                                'desc_restricao' => $stock[$i]->den_restricao,
-                                'qtd_regul_reser' => $stock[$i]->qtd_reserva,
-                                'qtd_produto' => $stock[$i]->qtd_disponivel,
-                                'qtd_fiscal' => $stock[$i]->qtd_disponivel,
-                                'qtd_avariada' => $stock[$i]->qtd_avaria,
-                                'avaria' => $stock[$i]->qtd_avaria,
-                                'peca' => $stock[$i]->peca,
-                                'serie' => $stock[$i]->serie
-                            ];
+                            for ($i = 0; $i < count($stock); $i++) {
+                                //dd($stock[$i]);
+                                $verifyOuts = $this->stockRepository->findByLogix($stock[$i]->id);
 
-                            $this->stockRepository->updateOrCreate(["chave_logix" => $dataStock["chave_logix"]], $dataStock);
+                                if ($verifyOuts->id) {
+                                    Log::info('Registro estoque chave: ' . $verifyOuts);
+                                } else {
+                                    $verifyOuts = null;
+                                    Log::info('Registro estoque nao encontrado: ' . $stock[$i]->id);
+                                }
 
+                                if ($verifyOuts == null) {
+                                    $dataStock = [
+                                        'chave_logix' => $stock[$i]->id,
+                                        'company_id' => $companies[$k]->id,
+                                        'data_geracao' => new \DateTime($stock[$i]->data_atualiza),
+                                        'depositante' => $stock[$i]->cnpj_cliente,
+                                        'cnpj_origem' => $stock[$i]->cnpj_origem,
+                                        'data_atual' => new \DateTime($stock[$i]->data_atual),
+                                        'hora_atual' => $stock[$i]->hora_atual,
+                                        'tipo_estoque' => $stock[$i]->protocolo,
+                                        'desc_tipo_estoque' => $stock[$i]->den_protocolo,
+                                        'codigo_produto' => $stock[$i]->cod_item,
+                                        'desc_produto' => $stock[$i]->den_item,
+                                        'unidade_medida' => $stock[$i]->um,
+                                        'lote' => $stock[$i]->lote,
+                                        'data_validade' => new \DateTime($stock[$i]->data_validade),
+                                        'desc_restricao' => $stock[$i]->den_restricao,
+                                        'qtd_regul_reser' => $stock[$i]->qtd_reserva,
+                                        'qtd_produto' => $stock[$i]->qtd_disponivel,
+                                        'qtd_fiscal' => $stock[$i]->qtd_disponivel,
+                                        'qtd_avariada' => $stock[$i]->qtd_avaria,
+                                        'avaria' => $stock[$i]->qtd_avaria,
+                                        'peca' => $stock[$i]->peca,
+                                        'serie' => $stock[$i]->serie
+                                    ];
+
+                                    $this->stockRepository->updateOrCreate(["chave_logix" => $dataStock["chave_logix"]], $dataStock);
+                                } else {
+                                    Log::info('Registro estoque encontrado chave: ' . $stock[$i]->id);
+                                }
+                            }
                             DB::commit();
 
                         } catch (\Exception $e) {
                             DB::rollBack();
                             Log::error($e->getMessage());
                         }
-                    }
                 }
 
                 Log::info('Finalizou integraçao estoque:' . $countStock);
-            }else {
+            } else {
 
                 Log::info('Sem movimento no estoque:' . $countStock);
             }

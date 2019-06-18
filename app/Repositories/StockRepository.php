@@ -27,4 +27,10 @@ interface StockRepository extends RepositoryInterface
      * @return mixed
      */
     public function orderByStocks($user, $cnpj,$lote = '');
+
+    /**
+     * @param $chave
+     * @return mixed
+     */
+    public function findByLogix($chave);
 }

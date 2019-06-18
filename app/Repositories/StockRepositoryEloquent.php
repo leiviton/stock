@@ -3,6 +3,7 @@
 namespace Stock\Repositories;
 
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Stock\Presenters\StockPresenter;
@@ -192,5 +193,25 @@ class StockRepositoryEloquent extends BaseRepository implements StockRepository
         }
 
         return $results;
+    }
+
+    /**
+     * @param $chave
+     * @return mixed
+     */
+    public function findByLogix($chave) {
+
+        $result = $this->model->where('chave_logix','=', $chave)->get()->first();
+
+        if (!$result) {
+            //dd('aqui 1');
+            Log::info('Registro estoque vazio: ' . $result);
+            return '';
+        }else {
+            //dd('aqui 2');
+            Log::info('Registro estoque: ' . $result);
+
+            return $result;
+        }
     }
 }
