@@ -66,7 +66,6 @@ class StockRepositoryEloquent extends BaseRepository implements StockRepository
                         ->orderBy($order[0], $order[1])->where('depositante', $user->company->cnpj)->get();
                 } else {
                     $results = $this->model
-                        ->orderBy($order[0], $order[1])
                         ->where('depositante', $cnpj)
                         ->where(function ($query) use ($data) {
                             if ($data) {
@@ -93,7 +92,6 @@ class StockRepositoryEloquent extends BaseRepository implements StockRepository
                         ->orderBy($order[0], $order[1])->where('depositante', $cnpj)->get();
                 } else {
                     $results = $this->model
-                        ->orderBy($order[0], $order[1])
                         ->where('depositante', $cnpj)
                         ->where(function ($query) use ($data) {
                             if ($data) {
@@ -122,7 +120,6 @@ class StockRepositoryEloquent extends BaseRepository implements StockRepository
                         ->orderBy($order[0], $order[1])->where('depositante', $user->company->cnpj)->where('tipo_estoque', $lote)->get();
                 } else {
                     $results = $this->model
-                        ->orderBy($order[0], $order[1])
                         ->where('tipo_estoque', $lote)
                         ->where('depositante', $cnpj)
                         ->where(function ($query) use ($data) {
@@ -150,7 +147,6 @@ class StockRepositoryEloquent extends BaseRepository implements StockRepository
                         ->orderBy($order[0], $order[1])->where('depositante', $cnpj)->where('tipo_estoque', $lote)->get();
                 } else {
                     $results = $this->model
-                        ->orderBy($order[0], $order[1])
                         ->where('depositante', $cnpj)
                         ->where('tipo_estoque', $lote)
                         ->where(function ($query) use ($data) {
