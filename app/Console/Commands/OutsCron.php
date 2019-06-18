@@ -114,12 +114,14 @@ class OutsCron extends Command
                         DB::beginTransaction();
                         try {
                             for ($i = 0; $i < count($saida); $i++) {
+
                                 $verifyOuts = $this->outRepository->findByLogix($saida[$i]->id);
 
                                 if ($verifyOuts->id) {
                                     Log::info('Registro chave: ' . $verifyOuts);
                                 } else {
                                     $verifyOuts = null;
+                                    Log::info('Registro saida nao encontrado: ' . $verifyOuts);
                                 }
 
                                 if ($verifyOuts == null) {
@@ -180,43 +182,53 @@ class OutsCron extends Command
 
                     Log::info("Iniciou registros saidas: $start a $end");
 
-                    for ($i = 0; $i < count($saida); $i++) {
-                        //dd($saida[$i]);
-                        DB::beginTransaction();
-                        try {
-                            $dataSaida = [
-                                'chave_logix' => $saida[$i]->id,
-                                'company_id' => $company->id,
-                                'data_geracao' => new \DateTime($saida[$i]->data_atualiza),
-                                'depositante' => $saida[$i]->cnpj_cliente_depos,
-                                'razao_social' => $saida[$i]->razao_social,
-                                'tipo_estoque' => $saida[$i]->protocolo,
-                                'codigo_produto' => $saida[$i]->cod_item,
-                                'desc_produto' => $saida[$i]->den_item,
-                                'desc_tipo_estoque' => $saida[$i]->den_protocolo,
-                                'unidade_medida' => $saida[$i]->um,
-                                'lote' => $saida[$i]->lote,
-                                'data_validade' => new \DateTime($saida[$i]->dat_hor_validade),
-                                'data_envio' => new \DateTime($saida[$i]->dat_solic_envio),
-                                'nota_fiscal' => '15',
-                                'serie_nf' => str_replace(' ', '', $saida[$i]->serie_nota_fiscal),
-                                'nome_destino_final' => $saida[$i]->nome_dest_final,
-                                'centro' => $saida[$i]->centro,
-                                'numero_ordem' => $saida[$i]->num_ordem,
-                                'qtd_enviada' => $saida[$i]->qtd_enviada,
-                                'serie' => $saida[$i]->serie,
-                                'peca' => $saida[$i]->peca,
-                                'pedido_venda' => $saida[$i]->id_protheus
-                            ];
+                    //dd($saida[$i]);
+                    DB::beginTransaction();
+                    try {
+                        for ($i = 0; $i < count($saida); $i++) {
+                            $verifyOuts = $this->outRepository->findByLogix($saida[$i]->id);
 
-                            $this->outRepository->updateOrCreate(["chave_logix" => $dataSaida["chave_logix"]], $dataSaida);
+                            if ($verifyOuts->id) {
+                                Log::info('Registro chave: ' . $verifyOuts);
+                            } else {
+                                $verifyOuts = null;
+                                Log::info('Registro saida nao encontrado: ' . $verifyOuts);
+                            }
 
-                            DB::commit();
+                            if ($verifyOuts == null) {
+                                $dataSaida = [
+                                    'chave_logix' => $saida[$i]->id,
+                                    'company_id' => $company->id,
+                                    'data_geracao' => new \DateTime($saida[$i]->data_atualiza),
+                                    'depositante' => $saida[$i]->cnpj_cliente_depos,
+                                    'razao_social' => $saida[$i]->razao_social,
+                                    'tipo_estoque' => $saida[$i]->protocolo,
+                                    'codigo_produto' => $saida[$i]->cod_item,
+                                    'desc_produto' => $saida[$i]->den_item,
+                                    'desc_tipo_estoque' => $saida[$i]->den_protocolo,
+                                    'unidade_medida' => $saida[$i]->um,
+                                    'lote' => $saida[$i]->lote,
+                                    'data_validade' => new \DateTime($saida[$i]->dat_hor_validade),
+                                    'data_envio' => new \DateTime($saida[$i]->dat_solic_envio),
+                                    'nota_fiscal' => '15',
+                                    'serie_nf' => str_replace(' ', '', $saida[$i]->serie_nota_fiscal),
+                                    'nome_destino_final' => $saida[$i]->nome_dest_final,
+                                    'centro' => $saida[$i]->centro,
+                                    'numero_ordem' => $saida[$i]->num_ordem,
+                                    'qtd_enviada' => $saida[$i]->qtd_enviada,
+                                    'serie' => $saida[$i]->serie,
+                                    'peca' => $saida[$i]->peca,
+                                    'pedido_venda' => $saida[$i]->id_protheus
+                                ];
 
-                        } catch (\Exception $e) {
-                            DB::rollBack();
-                            Log::error("Erro saida: $i |" . $e->getMessage());
+                                $this->outRepository->updateOrCreate(["chave_logix" => $dataSaida["chave_logix"]], $dataSaida);
+                            }
                         }
+                        DB::commit();
+
+                    } catch (\Exception $e) {
+                        DB::rollBack();
+                        Log::error("Erro saida: $i |" . $e->getMessage());
                     }
                 }
 
