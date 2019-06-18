@@ -193,7 +193,7 @@ class RoadsCron extends Command
                     try {
                         for ($i = 0; $i < count($entradas); $i++) {
 
-                            $verifyRoads = $this->roadRepository->findByField('chave_logix',$entradas[$i]->id)->first();
+                            $verifyRoads = $this->roadRepository->findByLogix($entradas[$i]->id);
 
                             if($verifyRoads == ''){
                                 Log::info('Registro chave não encontrado');
@@ -229,9 +229,9 @@ class RoadsCron extends Command
                                 //dd($data1["qtd_fiscal"]);
                                 $this->roadRepository->firstOrCreate($data1);
                                 //dd($itemEnd);
-                            } /*else {
+                            } else {
                                 Log::info('Registro encontrado chave: ' . $verifyRoads);
-                            }*/
+                            }
                         }
                         DB::commit();
                     } catch (\Exception $e) {
