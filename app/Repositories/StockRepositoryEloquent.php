@@ -172,6 +172,8 @@ class StockRepositoryEloquent extends BaseRepository implements StockRepository
                     ->groupBy('desc_restricao')
                     ->groupBy('desc_tipo_estoque')
                     ->groupBy('depositante')
+                    ->orderBy('desc_tipo_estoque','asc')
+                    ->orderBy('qtd_produto','asc')
                     ->paginate();
             } else {
                 $results = $this->model
@@ -191,6 +193,8 @@ class StockRepositoryEloquent extends BaseRepository implements StockRepository
                     ->groupBy('data_validade')
                     ->groupBy('desc_restricao')
                     ->groupBy('desc_tipo_estoque')
+                    ->orderBy('desc_tipo_estoque','asc')
+                    ->orderBy('qtd_produto','asc')
                     ->paginate();
             }
         } else {
@@ -212,6 +216,7 @@ class StockRepositoryEloquent extends BaseRepository implements StockRepository
                 ->groupBy('desc_restricao')
                 ->groupBy('desc_tipo_estoque')
                 ->orderBy('desc_tipo_estoque','asc')
+                ->orderBy('qtd_produto','asc')
                 ->paginate();
 
         }
