@@ -73,7 +73,7 @@ class StockRepositoryEloquent extends BaseRepository implements StockRepository
                             }
                             return $query;
                         })
-                        ->select(DB::raw('tipo_estoque,desc_tipo_estoque, sum(stocks.qtd_produto) AS qtd_produto,codigo_produto,desc_produto,lote,data_validade,desc_restricao'))
+                        ->select(DB::raw('tipo_estoque,desc_tipo_estoque, sum(stocks.qtd_produto) AS qtd_produto,codigo_produto,desc_produto,lote,data_validade,desc_restricao,unidade_medida'))
                         ->groupBy('codigo_produto')
                         ->groupBy('desc_produto')
                         ->groupBy('tipo_estoque')
@@ -82,6 +82,7 @@ class StockRepositoryEloquent extends BaseRepository implements StockRepository
                         ->groupBy('desc_restricao')
                         ->groupBy('desc_tipo_estoque')
                         ->groupBy('depositante')
+                        ->groupBy('unidade_medida')
                         ->orderBy('desc_tipo_estoque','asc')
                         ->orderBy('qtd_produto','asc')
                         ->get();
@@ -99,7 +100,7 @@ class StockRepositoryEloquent extends BaseRepository implements StockRepository
                             }
                             return $query;
                         })
-                        ->select(DB::raw('tipo_estoque,desc_tipo_estoque, sum(stocks.qtd_produto) AS qtd_produto,codigo_produto,desc_produto,lote,data_validade,desc_restricao'))
+                        ->select(DB::raw('tipo_estoque,desc_tipo_estoque, sum(stocks.qtd_produto) AS qtd_produto,codigo_produto,desc_produto,lote,data_validade,desc_restricao,unidade_medida'))
                         ->groupBy('codigo_produto')
                         ->groupBy('desc_produto')
                         ->groupBy('tipo_estoque')
@@ -108,6 +109,7 @@ class StockRepositoryEloquent extends BaseRepository implements StockRepository
                         ->groupBy('desc_restricao')
                         ->groupBy('desc_tipo_estoque')
                         ->groupBy('depositante')
+                        ->groupBy('unidade_medida')
                         ->orderBy('desc_tipo_estoque','asc')
                         ->orderBy('qtd_produto','asc')
                         ->get();
@@ -128,7 +130,7 @@ class StockRepositoryEloquent extends BaseRepository implements StockRepository
                             }
                             return $query;
                         })
-                        ->select(DB::raw('tipo_estoque,desc_tipo_estoque, sum(stocks.qtd_produto) AS qtd_produto,codigo_produto,desc_produto,lote,data_validade,desc_restricao'))
+                        ->select(DB::raw('tipo_estoque,desc_tipo_estoque, sum(stocks.qtd_produto) AS qtd_produto,codigo_produto,desc_produto,lote,data_validade,desc_restricao,unidade_medida'))
                         ->groupBy('codigo_produto')
                         ->groupBy('desc_produto')
                         ->groupBy('tipo_estoque')
@@ -137,6 +139,7 @@ class StockRepositoryEloquent extends BaseRepository implements StockRepository
                         ->groupBy('desc_restricao')
                         ->groupBy('desc_tipo_estoque')
                         ->groupBy('depositante')
+                        ->groupBy('unidade_medida')
                         ->orderBy('desc_tipo_estoque','asc')
                         ->orderBy('qtd_produto','asc')
                         ->get();
@@ -155,7 +158,7 @@ class StockRepositoryEloquent extends BaseRepository implements StockRepository
                             }
                             return $query;
                         })
-                        ->select(DB::raw('tipo_estoque,desc_tipo_estoque, sum(stocks.qtd_produto) AS qtd_produto,codigo_produto,desc_produto,lote,data_validade,desc_restricao'))
+                        ->select(DB::raw('tipo_estoque,desc_tipo_estoque, sum(stocks.qtd_produto) AS qtd_produto,codigo_produto,desc_produto,lote,data_validade,desc_restricao,unidade_medida'))
                         ->groupBy('codigo_produto')
                         ->groupBy('desc_produto')
                         ->groupBy('tipo_estoque')
@@ -164,6 +167,7 @@ class StockRepositoryEloquent extends BaseRepository implements StockRepository
                         ->groupBy('desc_restricao')
                         ->groupBy('desc_tipo_estoque')
                         ->groupBy('depositante')
+                        ->groupBy('unidade_medida')
                         ->orderBy('desc_tipo_estoque','asc')
                         ->orderBy('qtd_produto','asc')
                         ->get();
@@ -203,7 +207,7 @@ class StockRepositoryEloquent extends BaseRepository implements StockRepository
                         }
                         return $query;
                     })
-                    ->select(DB::raw('tipo_estoque,desc_tipo_estoque, sum(stocks.qtd_produto) AS qtd_produto,codigo_produto,desc_produto,lote,data_validade,desc_restricao'))
+                    ->select(DB::raw('tipo_estoque,desc_tipo_estoque, sum(stocks.qtd_produto) AS qtd_produto,codigo_produto,desc_produto,lote,data_validade,desc_restricao,unidade_medida'))
                     ->groupBy('codigo_produto')
                     ->groupBy('desc_produto')
                     ->groupBy('tipo_estoque')
@@ -212,6 +216,7 @@ class StockRepositoryEloquent extends BaseRepository implements StockRepository
                     ->groupBy('desc_restricao')
                     ->groupBy('desc_tipo_estoque')
                     ->groupBy('depositante')
+                    ->groupBy('unidade_medida')
                     ->orderBy('desc_tipo_estoque','asc')
                     ->orderBy('qtd_produto','asc')
                     ->paginate();
@@ -225,7 +230,7 @@ class StockRepositoryEloquent extends BaseRepository implements StockRepository
                         }
                         return $query;
                     })
-                    ->select(DB::raw('tipo_estoque,desc_tipo_estoque, sum(stocks.qtd_produto) AS qtd_produto,codigo_produto,desc_produto,lote,data_validade,desc_restricao'))
+                    ->select(DB::raw('tipo_estoque,desc_tipo_estoque, sum(stocks.qtd_produto) AS qtd_produto,codigo_produto,desc_produto,lote,data_validade,desc_restricao,unidade_medida'))
                     ->groupBy('codigo_produto')
                     ->groupBy('desc_produto')
                     ->groupBy('tipo_estoque')
@@ -233,6 +238,7 @@ class StockRepositoryEloquent extends BaseRepository implements StockRepository
                     ->groupBy('data_validade')
                     ->groupBy('desc_restricao')
                     ->groupBy('desc_tipo_estoque')
+                    ->groupBy('unidade_medida')
                     ->orderBy('desc_tipo_estoque','asc')
                     ->orderBy('qtd_produto','asc')
                     ->paginate();
@@ -247,7 +253,7 @@ class StockRepositoryEloquent extends BaseRepository implements StockRepository
                     }
                     return $query;
                 })
-                ->select(DB::raw('tipo_estoque,desc_tipo_estoque, sum(stocks.qtd_produto) AS qtd_produto,codigo_produto,desc_produto,lote,data_validade,desc_restricao'))
+                ->select(DB::raw('tipo_estoque,desc_tipo_estoque, sum(stocks.qtd_produto) AS qtd_produto,codigo_produto,desc_produto,lote,data_validade,desc_restricao,unidade_medida'))
                 ->groupBy('codigo_produto')
                 ->groupBy('desc_produto')
                 ->groupBy('tipo_estoque')
@@ -255,6 +261,7 @@ class StockRepositoryEloquent extends BaseRepository implements StockRepository
                 ->groupBy('data_validade')
                 ->groupBy('desc_restricao')
                 ->groupBy('desc_tipo_estoque')
+                ->groupBy('unidade_medida')
                 ->orderBy('desc_tipo_estoque','asc')
                 ->orderBy('qtd_produto','asc')
                 ->paginate();
