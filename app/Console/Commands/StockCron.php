@@ -113,7 +113,7 @@ class StockCron extends Command
                         DB::beginTransaction();
                         try {
                             for ($i = 0; $i < count($stock); $i++) {
-                                $verifyOuts = $this->stockRepository->findByLogix($stock[$i]->id);
+                                $verifyOuts = $this->stockRepository->findByLogix(trim($stock[$i]->id));
 
                                 if ($verifyOuts->id) {
                                     Log::info('Registro estoque chave: ' . $verifyOuts);
@@ -126,28 +126,28 @@ class StockCron extends Command
 
                                     //dd($stock[$i]);
                                     $dataStock = [
-                                        'chave_logix' => $stock[$i]->id,
+                                        'chave_logix' => trim($stock[$i]->id),
                                         'company_id' => $companies[$k]->id,
                                         'data_geracao' => new \DateTime($stock[$i]->data_atualiza),
-                                        'depositante' => $stock[$i]->cnpj_cliente,
-                                        'cnpj_origem' => $stock[$i]->cnpj_origem,
+                                        'depositante' => trim($stock[$i]->cnpj_cliente),
+                                        'cnpj_origem' => trim($stock[$i]->cnpj_origem),
                                         'data_atual' => new \DateTime($stock[$i]->data_atual),
-                                        'hora_atual' => $stock[$i]->hora_atual,
-                                        'tipo_estoque' => $stock[$i]->protocolo,
-                                        'desc_tipo_estoque' => $stock[$i]->den_protocolo,
-                                        'codigo_produto' => $stock[$i]->cod_item,
-                                        'desc_produto' => $stock[$i]->den_item,
-                                        'unidade_medida' => $stock[$i]->um,
-                                        'lote' => $stock[$i]->lote,
+                                        'hora_atual' => trim($stock[$i]->hora_atual),
+                                        'tipo_estoque' => trim($stock[$i]->protocolo),
+                                        'desc_tipo_estoque' => trim($stock[$i]->den_protocolo),
+                                        'codigo_produto' => trim($stock[$i]->cod_item),
+                                        'desc_produto' => trim($stock[$i]->den_item),
+                                        'unidade_medida' => trim($stock[$i]->um),
+                                        'lote' => trim($stock[$i]->lote),
                                         'data_validade' => new \DateTime($stock[$i]->data_validade),
-                                        'desc_restricao' => $stock[$i]->den_restricao,
-                                        'qtd_regul_reser' => $stock[$i]->qtd_reserva,
-                                        'qtd_produto' => $stock[$i]->qtd_disponivel,
-                                        'qtd_fiscal' => $stock[$i]->qtd_disponivel,
-                                        'qtd_avariada' => $stock[$i]->qtd_avaria,
-                                        'avaria' => $stock[$i]->qtd_avaria,
-                                        'peca' => $stock[$i]->peca,
-                                        'serie' => $stock[$i]->serie
+                                        'desc_restricao' => trim($stock[$i]->den_restricao),
+                                        'qtd_regul_reser' => trim($stock[$i]->qtd_reserva),
+                                        'qtd_produto' => trim($stock[$i]->qtd_disponivel),
+                                        'qtd_fiscal' => trim($stock[$i]->qtd_disponivel),
+                                        'qtd_avariada' => trim($stock[$i]->qtd_avaria),
+                                        'avaria' => trim($stock[$i]->qtd_avaria),
+                                        'peca' => trim($stock[$i]->peca),
+                                        'serie' => trim($stock[$i]->serie)
                                     ];
 
                                     $this->stockRepository->updateOrCreate(["chave_logix" => $dataStock["chave_logix"]], $dataStock);
@@ -197,28 +197,28 @@ class StockCron extends Command
 
                                 if ($verifyOuts == null) {
                                     $dataStock = [
-                                        'chave_logix' => $stock[$i]->id,
+                                        'chave_logix' => trim($stock[$i]->id),
                                         'company_id' => $companies[$k]->id,
                                         'data_geracao' => new \DateTime($stock[$i]->data_atualiza),
-                                        'depositante' => $stock[$i]->cnpj_cliente,
-                                        'cnpj_origem' => $stock[$i]->cnpj_origem,
+                                        'depositante' => trim($stock[$i]->cnpj_cliente),
+                                        'cnpj_origem' => trim($stock[$i]->cnpj_origem),
                                         'data_atual' => new \DateTime($stock[$i]->data_atual),
-                                        'hora_atual' => $stock[$i]->hora_atual,
-                                        'tipo_estoque' => $stock[$i]->protocolo,
-                                        'desc_tipo_estoque' => $stock[$i]->den_protocolo,
-                                        'codigo_produto' => $stock[$i]->cod_item,
-                                        'desc_produto' => $stock[$i]->den_item,
-                                        'unidade_medida' => $stock[$i]->um,
-                                        'lote' => $stock[$i]->lote,
+                                        'hora_atual' => trim($stock[$i]->hora_atual),
+                                        'tipo_estoque' => trim($stock[$i]->protocolo),
+                                        'desc_tipo_estoque' => trim($stock[$i]->den_protocolo),
+                                        'codigo_produto' => trim($stock[$i]->cod_item),
+                                        'desc_produto' => trim($stock[$i]->den_item),
+                                        'unidade_medida' => trim($stock[$i]->um),
+                                        'lote' => trim($stock[$i]->lote),
                                         'data_validade' => new \DateTime($stock[$i]->data_validade),
-                                        'desc_restricao' => $stock[$i]->den_restricao,
-                                        'qtd_regul_reser' => $stock[$i]->qtd_reserva,
-                                        'qtd_produto' => $stock[$i]->qtd_disponivel,
-                                        'qtd_fiscal' => $stock[$i]->qtd_disponivel,
-                                        'qtd_avariada' => $stock[$i]->qtd_avaria,
-                                        'avaria' => $stock[$i]->qtd_avaria,
-                                        'peca' => $stock[$i]->peca,
-                                        'serie' => $stock[$i]->serie
+                                        'desc_restricao' => trim($stock[$i]->den_restricao),
+                                        'qtd_regul_reser' => trim($stock[$i]->qtd_reserva),
+                                        'qtd_produto' => trim($stock[$i]->qtd_disponivel),
+                                        'qtd_fiscal' => trim($stock[$i]->qtd_disponivel),
+                                        'qtd_avariada' => trim($stock[$i]->qtd_avaria),
+                                        'avaria' => trim($stock[$i]->qtd_avaria),
+                                        'peca' => trim($stock[$i]->peca),
+                                        'serie' => trim($stock[$i]->serie)
                                     ];
 
                                     $this->stockRepository->updateOrCreate(["chave_logix" => $dataStock["chave_logix"]], $dataStock);
