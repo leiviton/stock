@@ -126,6 +126,6 @@ class RoadController extends Controller
     }
 
     public function find(Request $request) {
-        return $this->service->findChave($request->get('chave'));
+        return $this->service->findChave($request->get('chave')) == '' ? 'nada' : $this->service->findChave($request->get('chave'));
     }
 }

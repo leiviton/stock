@@ -204,11 +204,11 @@ class RoadRepositoryEloquent extends BaseRepository implements RoadRepository
         $result = $this->model->where('chave_logix','=', $chave)->get()->first();
 
         if (!$result) {
-            dd('aqui 1');
+            //dd('aqui 1');
             Log::info('Registro entradas vazio: ' . $result);
-            return null;
+            return '';
         }else {
-            dd('aqui 2');
+            //dd('aqui 2');
             Log::info('Registro entradas: ' . $result);
 
             return $result;

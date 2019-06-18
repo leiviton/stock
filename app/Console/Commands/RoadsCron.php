@@ -195,13 +195,13 @@ class RoadsCron extends Command
 
                             $verifyRoads = $this->roadRepository->findByField('chave_logix',$entradas[$i]->id)->first();
 
-                            if(!empty($verifyRoads->id)){
+                            if($verifyRoads == ''){
                                 Log::info('Registro chave não encontrado');
                             }else{
                                 Log::info('Registro chave: ' . $verifyRoads);
                             }
 
-                            if (!empty($verifyRoads->id)) {
+                            if ($verifyRoads == '') {
                                 $data1 = [
                                     'chave_logix' => $entradas[$i]->id,
                                     'company_id' => $companies[$k]->id,
