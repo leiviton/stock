@@ -20,3 +20,26 @@
 <app-root></app-root>
 <script type="text/javascript" src="runtime.ae40bc3f32cc5d4a598c.js"></script><script type="text/javascript" src="polyfills.8754121e1108d81841a1.js"></script><script type="text/javascript" src="scripts.2db4cbc668a10a0c2a68.js"></script><script type="text/javascript" src="main.622280b5cdcbbd8cf2c7.js"></script></body>
 </html>
+
+
+<IfModule mod_rewrite.c>
+    <IfModule mod_negotiation.c>
+        Options -MultiViews -Indexes
+    </IfModule>
+
+    RewriteEngine On
+
+    #Handle Authorization Header
+    RewriteCond %{HTTP:Authorization} .
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+    #Redirect Trailing Slashes If Nat A Folder...
+    RewriteCond %{REQUEST_FILEMANE} !-d
+    RewriteCond %{REQUEST_URI (.+)/$
+    RewriteRule ^ %1 [L,R=301]
+
+    #Handle Front Controller
+    RewriteCond %{REQUEST_FILEMANE} !-d
+    RewriteCond %{REQUEST_FILEMANE} !-f
+    RewriteRule ^ index.php [L]
+</IfModule>
