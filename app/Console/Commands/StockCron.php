@@ -121,7 +121,7 @@ class StockCron extends Command
                                     Log::info('Registro estoque nao encontrado: ' . $stock[$i]->id);
                                 }
 
-                                if ($verifyOuts == '') {
+                                //if ($verifyOuts == '') {
 
                                     //dd($stock[$i]);
                                     $dataStock = [
@@ -150,9 +150,9 @@ class StockCron extends Command
                                     ];
 
                                     $this->stockRepository->updateOrCreate(["chave_logix" => $dataStock["chave_logix"]], $dataStock);
-                                } else {
+                                /*} else {
                                     Log::info('Registro estoque encontrado chave: ' . $stock[$i]->id);
-                                }
+                                }*/
                             }
                             DB::commit();
 
