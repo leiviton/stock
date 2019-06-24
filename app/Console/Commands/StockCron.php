@@ -90,11 +90,11 @@ class StockCron extends Command
 
                 $start = 1;
 
-                if ($countStock > 5000) {
+                if ($countStock > 10000) {
 
-                    $limit = ceil((float)$countStock / 5000);
+                    $limit = ceil((float)$countStock / 10000);
 
-                    $end = 5000;
+                    $end = 10000;
 
                     for ($j = 0; $j < $limit; $j++) {
 
