@@ -15,31 +15,13 @@
     <link href="./assets/vendor/nucleo/css/nucleo.css" rel="stylesheet">
     <link href="./assets/vendor/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
-    <link rel="stylesheet" href="styles.34e0c95ab52eeb9377de.css"></head>
+    <link rel="stylesheet" href="styles.34e0c95ab52eeb9377de.css">
+</head>
 <body>
 <app-root></app-root>
-<script type="text/javascript" src="runtime.ae40bc3f32cc5d4a598c.js"></script><script type="text/javascript" src="polyfills.8754121e1108d81841a1.js"></script><script type="text/javascript" src="scripts.2db4cbc668a10a0c2a68.js"></script><script type="text/javascript" src="main.622280b5cdcbbd8cf2c7.js"></script></body>
+<script type="text/javascript" src="runtime.ae40bc3f32cc5d4a598c.js"></script>
+<script type="text/javascript" src="polyfills.8754121e1108d81841a1.js"></script>
+<script type="text/javascript" src="scripts.2db4cbc668a10a0c2a68.js"></script>
+<script type="text/javascript" src="main.fc9ac0afc14938cf9a54.js"></script>
+</body>
 </html>
-
-
-<IfModule mod_rewrite.c>
-    <IfModule mod_negotiation.c>
-        Options -MultiViews -Indexes
-    </IfModule>
-
-    RewriteEngine On
-
-    #Handle Authorization Header
-    RewriteCond %{HTTP:Authorization} .
-    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
-
-    #Redirect Trailing Slashes If Nat A Folder...
-    RewriteCond %{REQUEST_FILEMANE} !-d
-    RewriteCond %{REQUEST_URI (.+)/$
-    RewriteRule ^ %1 [L,R=301]
-
-    #Handle Front Controller
-    RewriteCond %{REQUEST_FILEMANE} !-d
-    RewriteCond %{REQUEST_FILEMANE} !-f
-    RewriteRule ^ index.php [L]
-</IfModule>
