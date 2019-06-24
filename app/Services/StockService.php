@@ -100,6 +100,8 @@ class StockService
     {
         $arquivo = new \DateTime();
         $user = \Auth::guard()->user();
+        $data['cnpj'] = $this->limpaCPF_CNPJ($data['cnpj']);
+        
         // $query = \DB::table('outs')->select();
         if ($user->role == 'admin') {
             $query = $this->stockRepository->scopeQuery(function ($query) use ($data) {
