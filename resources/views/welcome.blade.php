@@ -1,7 +1,6 @@
 <!doctype html>
 <html lang="{{ app()->getLocale() }}">
 <head>
-    <meta http-equiv="cache-control" content="no-cache"/>
     <meta charset="utf-8">
     <base href="/">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -9,20 +8,20 @@
     <meta name="author" content="Creative Tim">
     <title>Portal Estoque</title>
     <!-- Favicon -->
-    <link href="{{ URL::asset('assets/img/brand/logo.png') }}" rel="icon" type="image/png">
+    <link href="./assets/img/brand/logo.png" rel="icon" type="image/png">
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
     <!-- Icons -->
-    <link href="{{ URL::asset('assets/vendor/nucleo/css/nucleo.css') }}" rel="stylesheet">
-    <link href="{{ URL::asset('assets/vendor/@fortawesome/fontawesome-free/css/all.min.css') }}" rel="stylesheet">
+    <link href="./assets/vendor/nucleo/css/nucleo.css" rel="stylesheet">
+    <link href="./assets/vendor/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
-    <link rel="stylesheet" href="{{ URL::asset('styles.34e0c95ab52eeb9377de.css') }}">
+    <link rel="stylesheet" href="styles.34e0c95ab52eeb9377de.css">
 </head>
 <body>
 <app-root></app-root>
-<script type="text/javascript" src="{{ URL::asset('runtime.ae40bc3f32cc5d4a598c.js') }}"></script>
-<script type="text/javascript" src="{{ URL::asset('polyfills.8754121e1108d81841a1.js') }}"></script>
-<script type="text/javascript" src="{{ URL::asset('scripts.2db4cbc668a10a0c2a68.js') }}"></script>
-<script type="text/javascript" src="{{ URL::asset('main.fc9ac0afc14938cf9a54.js') }}"></script>
+<script type="text/javascript" src="runtime.a52373258f56d1668cfa.js"></script>
+<script type="text/javascript" src="polyfills.8754121e1108d81841a1.js"></script>
+<script type="text/javascript" src="scripts.2db4cbc668a10a0c2a68.js"></script>
+<script type="text/javascript" src="main.fc9ac0afc14938cf9a54.js"></script>
 </body>
 </html>

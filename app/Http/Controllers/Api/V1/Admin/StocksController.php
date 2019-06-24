@@ -8,6 +8,7 @@
 
 namespace Stock\Http\Controllers\Api\V1\Admin;
 
+use Carbon\Carbon;
 use Stock\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Stock\Services\StockService;
@@ -62,13 +63,8 @@ class StocksController extends Controller
     {
         $data = $request->all();
 
-        $data['start'] = $this->service->invertDate($request->get('start'));
-        $data['end'] = $this->service->invertDate($request->get('end'));
-
-        if($data['start'] > $data['end']) {
-            return response()->json(['message' => 'Data Final menor que Data Inicial', 'title' => 'Erro',
-                'status' => 'error'],406);
-        }
+        $data['start'] = new Carbon();
+        $data['end'] = new Carbon();
 
         $validator = Validator($data,
             [
@@ -97,6 +93,7 @@ class StocksController extends Controller
     /**
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
+     * @throws \Exception
      */
     public function store(Request $request)
     {
