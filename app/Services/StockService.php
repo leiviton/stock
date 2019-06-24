@@ -101,12 +101,12 @@ class StockService
         $arquivo = new \DateTime();
         $user = \Auth::guard()->user();
         $data['cnpj'] = $this->limpaCPF_CNPJ($data['cnpj']);
-        
+
         // $query = \DB::table('outs')->select();
         if ($user->role == 'admin') {
             $query = $this->stockRepository->scopeQuery(function ($query) use ($data) {
                 return $query->whereRaw('data_geracao BETWEEN ? AND ?',
-                    [$data['start'], $data['end']])->where('depositante',$data['cnpj']);
+                    [$data['start']->format('Y-m-d'), $data['end']->format('Y-m-d')])->where('depositante',$data['cnpj']);
             })->all(['data_atual', 'hora_atual', 'tipo_estoque', 'desc_tipo_estoque', 'codigo_produto', 'desc_produto', 'unidade_medida', 'lote',
                 'data_validade', 'desc_restricao', 'qtd_regul_reser', 'qtd_produto', 'qtd_avariada', 'peca', 'serie']);
         }else {
