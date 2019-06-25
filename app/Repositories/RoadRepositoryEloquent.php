@@ -268,6 +268,7 @@ class RoadRepositoryEloquent extends BaseRepository implements RoadRepository
                     ->groupBy('desc_restricao')
                     ->groupBy('desc_tipo_estoque')
                     ->groupBy('unidade_medida')
+                    ->groupBy('data_geracao')
                     ->orderBy($order[0], $order[1])
                     ->paginate();
             } else {
@@ -291,6 +292,7 @@ class RoadRepositoryEloquent extends BaseRepository implements RoadRepository
                     ->groupBy('desc_restricao')
                     ->groupBy('desc_tipo_estoque')
                     ->groupBy('unidade_medida')
+                    ->groupBy('data_geracao')
                     ->orderBy($order[0], $order[1])
                     ->paginate();
             }
@@ -315,6 +317,7 @@ class RoadRepositoryEloquent extends BaseRepository implements RoadRepository
                 ->groupBy('desc_restricao')
                 ->groupBy('desc_tipo_estoque')
                 ->groupBy('unidade_medida')
+                ->groupBy('data_geracao')
                 ->orderBy($order[0], $order[1])
                 ->paginate();
 
