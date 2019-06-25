@@ -79,7 +79,6 @@ class OutRepositoryEloquent extends BaseRepository implements OutRepository
                     ->groupBy('unidade_medida')
                     ->groupBy('numero_ordem')
                     ->orderBy($order[0], $order[1])
-
                     ->get();
             } else {
                 $results = $this->model
