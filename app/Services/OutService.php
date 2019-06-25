@@ -102,9 +102,7 @@ class OutService
      */
     public function export($data)
     {
-        $arquivo = new \DateTime();
         $user = \Auth::guard()->user();
-        // $query = \DB::table('outs')->select();
         if ($user->role == 'admin') {
             $query = $this->repository->scopeQuery(function ($query) use ($data) {
                 return $query->whereRaw('data_envio BETWEEN ? AND ?',
