@@ -3,6 +3,7 @@
 namespace Stock\Repositories;
 
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
@@ -203,7 +204,7 @@ class OutRepositoryEloquent extends BaseRepository implements OutRepository
             }
         } else {
 
-            $results = $this->model->orderBy($order[0], $order[1])
+            $results = $this->model
                 ->where(function ($query) use ($dataEnd,$cnpj) {
                     if ($dataEnd) {
                         return $query->whereRaw('data_envio BETWEEN ? AND ?', [(new Carbon())->subMonth(6), $dataEnd])
@@ -211,9 +212,21 @@ class OutRepositoryEloquent extends BaseRepository implements OutRepository
                     }
                     return $query;
                 })
+                ->select(DB::raw('tipo_estoque,data_envio,desc_tipo_estoque, sum(outs.qtd_enviada) AS qtd_enviada,codigo_produto,desc_produto,lote,data_validade,desc_produto,desc_restricao,unidade_medida,serie_nf'))
+                ->groupBy('codigo_produto')
+                ->groupBy('serie_nf')
+                ->groupBy('data_envio')
+                ->groupBy('desc_produto')
+                ->groupBy('tipo_estoque')
+                ->groupBy('lote')
+                ->groupBy('data_validade')
+                ->groupBy('desc_restricao')
+                ->groupBy('desc_tipo_estoque')
+                ->groupBy('unidade_medida')
+                ->orderBy($order[0], $order[1])
                 ->paginate();
-
         }
+
         if ($results) {
             return $this->parserResult($results);
         }
