@@ -239,13 +239,13 @@ class RoadRepositoryEloquent extends BaseRepository implements RoadRepository
         //dd($user->role);
         if ($lote != '') {
             if ($user->role == 'user_company') {
-                $results = $this->model->orderBy($order[0], $order[1])
+                $results = $this->model
                     ->where('depositante', $cnpj)
                     ->where('tipo_estoque', $lote)
                     ->where(function ($query) use ($dataEnd) {
                         return $query->whereRaw('data_recebimento BETWEEN ? AND ?', [(new Carbon())->subMonth(6), $dataEnd]);
                     })
-                    ->select(DB::raw('tipo_estoque,data_geracao,desc_tipo_estoque, sum(roads.qtd_recebida) AS qtd_recebida,sum(roads.qtd_avariada) as qtd_avariada,codigo_produto,desc_produto,lote,data_validade,desc_produto,desc_restricao,unidade_medida,serie_nf'))
+                    ->select(DB::raw('tipo_estoque,data_geracao,data_recebimento,desc_tipo_estoque, sum(roads.qtd_recebida) AS qtd_recebida,sum(roads.qtd_avariada) as qtd_avariada,codigo_produto,desc_produto,lote,data_validade,desc_produto,desc_restricao,unidade_medida,serie_nf'))
                     ->groupBy('codigo_produto')
                     ->groupBy('serie_nf')
                     ->groupBy('data_recebimento')
