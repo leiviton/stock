@@ -104,14 +104,14 @@ class RoadService
             $query = $this->repository->scopeQuery(function ($query) use ($data) {
                 return $query->whereRaw('data_recebimento BETWEEN ? AND ?',
                     [$data['start'], $data['end']])->where('depositante',$data['cnpj']);
-            })->all(['data_recebimento', 'tipo_estoque', 'desc_tipo_estoque', 'cnpj_emissor_nfe', 'razao_social_fornecedor',
+            })->orderBy('data_recebimento','asc')->all(['data_recebimento', 'tipo_estoque', 'desc_tipo_estoque', 'cnpj_emissor_nfe', 'razao_social_fornecedor',
                 'codigo_produto', 'desc_produto', 'unidade_medida', 'lote',
                 'data_validade', 'serie_nf', 'tipo_nf', 'qtd_recebida', 'qtd_avariada', 'desc_restricao', 'serie', 'peca', 'qtd_fiscal']);
         }else {
             $query = $this->repository->scopeQuery(function ($query) use ($data) {
                 return $query->whereRaw('data_recebimento BETWEEN ? AND ?',
                     [$data['start'], $data['end']])->where('tipo_estoque',$data['protocol']);
-            })->all(['data_recebimento', 'tipo_estoque', 'desc_tipo_estoque', 'cnpj_emissor_nfe', 'razao_social_fornecedor',
+            })->orderBy('data_recebimento','asc')->all(['data_recebimento', 'tipo_estoque', 'desc_tipo_estoque', 'cnpj_emissor_nfe', 'razao_social_fornecedor',
                 'codigo_produto', 'desc_produto', 'unidade_medida', 'lote',
                 'data_validade', 'serie_nf', 'tipo_nf', 'qtd_recebida', 'qtd_avariada', 'desc_restricao', 'serie', 'peca', 'qtd_fiscal']);
         }
