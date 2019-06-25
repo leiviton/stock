@@ -257,7 +257,7 @@ class RoadRepositoryEloquent extends BaseRepository implements RoadRepository
                         }
                         return $query;
                     })
-                    ->select(DB::raw('tipo_estoque,desc_tipo_estoque, sum(roads.qtd_recebida) AS qtd_recebida,sum(roads.qtd_avariada) as qtd_avariada,codigo_produto,desc_produto,lote,data_validade,desc_produto,desc_restricao,unidade_medida,serie_nf'))
+                    ->select(DB::raw('tipo_estoque,data_geracao,desc_tipo_estoque, sum(roads.qtd_recebida) AS qtd_recebida,sum(roads.qtd_avariada) as qtd_avariada,codigo_produto,desc_produto,lote,data_validade,desc_produto,desc_restricao,unidade_medida,serie_nf'))
                     ->groupBy('codigo_produto')
                     ->groupBy('serie_nf')
                     ->groupBy('data_recebimento')
@@ -280,7 +280,7 @@ class RoadRepositoryEloquent extends BaseRepository implements RoadRepository
                         }
                         return $query;
                     })
-                    ->select(DB::raw('tipo_estoque,desc_tipo_estoque, sum(roads.qtd_recebida) AS qtd_recebida,sum(roads.qtd_avariada) as qtd_avariada,codigo_produto,desc_produto,lote,data_validade,desc_produto,desc_restricao,unidade_medida,serie_nf'))
+                    ->select(DB::raw('tipo_estoque,data_geracao,desc_tipo_estoque, sum(roads.qtd_recebida) AS qtd_recebida,sum(roads.qtd_avariada) as qtd_avariada,codigo_produto,desc_produto,lote,data_validade,desc_produto,desc_restricao,unidade_medida,serie_nf'))
                     ->groupBy('codigo_produto')
                     ->groupBy('serie_nf')
                     ->groupBy('data_recebimento')
@@ -304,7 +304,7 @@ class RoadRepositoryEloquent extends BaseRepository implements RoadRepository
                     }
                     return $query;
                 })
-                ->select(DB::raw('tipo_estoque,desc_tipo_estoque, sum(roads.qtd_recebida) AS qtd_recebida,sum(roads.qtd_avariada) as qtd_avariada,codigo_produto,desc_produto,lote,data_validade,desc_produto,desc_restricao,unidade_medida,serie_nf'))
+                ->select(DB::raw('tipo_estoque,data_geracao,desc_tipo_estoque, sum(roads.qtd_recebida) AS qtd_recebida,sum(roads.qtd_avariada) as qtd_avariada,codigo_produto,desc_produto,lote,data_validade,desc_produto,desc_restricao,unidade_medida,serie_nf'))
                 ->groupBy('codigo_produto')
                 ->groupBy('serie_nf')
                 ->groupBy('data_recebimento')
