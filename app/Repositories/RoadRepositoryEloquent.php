@@ -121,10 +121,7 @@ class RoadRepositoryEloquent extends BaseRepository implements RoadRepository
                     $results = $this->model
                         ->where('depositante', $cnpj)
                         ->where(function ($query) use ($data) {
-                            if ($data) {
-                                return $query->where($data['field'], 'like', '%' . $data['value'] . '%');
-                            }
-                            return $query;
+                            return $query->where($data['field'], 'like', '%' . $data['value'] . '%');
                         })
                         ->select(DB::raw('tipo_estoque,data_geracao,desc_tipo_estoque, sum(roads.qtd_recebida) AS qtd_recebida,sum(roads.qtd_avariada) as qtd_avariada,codigo_produto,desc_produto,lote,data_validade,desc_produto,desc_restricao,unidade_medida,serie_nf'))
                         ->groupBy('codigo_produto')
@@ -164,10 +161,7 @@ class RoadRepositoryEloquent extends BaseRepository implements RoadRepository
                         ->where('tipo_estoque', $lote)
                         ->where('depositante', $cnpj)
                         ->where(function ($query) use ($data) {
-                            if ($data) {
-                                return $query->where($data['field'], 'like', '%' . $data['value'] . '%');
-                            }
-                            return $query;
+                            return $query->where($data['field'], 'like', '%' . $data['value'] . '%');
                         })
                         ->select(DB::raw('tipo_estoque,data_geracao,desc_tipo_estoque, sum(roads.qtd_recebida) AS qtd_recebida,sum(roads.qtd_avariada) as qtd_avariada,codigo_produto,desc_produto,lote,data_validade,desc_produto,desc_restricao,unidade_medida,serie_nf'))
                         ->groupBy('codigo_produto')
@@ -204,10 +198,7 @@ class RoadRepositoryEloquent extends BaseRepository implements RoadRepository
                         ->where('depositante', $cnpj)
                         ->where('tipo_estoque', $lote)
                         ->where(function ($query) use ($data) {
-                            if ($data) {
-                                return $query->where($data['field'], 'like', '%' . $data['value'] . '%');
-                            }
-                            return $query;
+                            return $query->where($data['field'], 'like', '%' . $data['value'] . '%');
                         })
                         ->select(DB::raw('tipo_estoque,data_geracao,desc_tipo_estoque, sum(roads.qtd_recebida) AS qtd_recebida,sum(roads.qtd_avariada) as qtd_avariada,codigo_produto,desc_produto,lote,data_validade,desc_produto,desc_restricao,unidade_medida,serie_nf'))
                         ->groupBy('codigo_produto')
