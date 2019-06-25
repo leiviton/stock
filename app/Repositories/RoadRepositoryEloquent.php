@@ -60,161 +60,122 @@ class RoadRepositoryEloquent extends BaseRepository implements RoadRepository
         $order[0] = $order[0] ?? 'data_recebimento';
         $order[1] = $order[1] ?? 'asc';
         if ($lote == '') {
-            if ($user->role == 'user_company') {
-                if ($data['value'] == '') {
-                    $results = $this->model
-                        ->where('depositante', $cnpj)
-                        ->select(DB::raw('tipo_estoque,data_geracao,desc_tipo_estoque, sum(roads.qtd_recebida) AS qtd_recebida,sum(roads.qtd_avariada) as qtd_avariada,codigo_produto,desc_produto,lote,data_validade,desc_produto,desc_restricao,unidade_medida,serie_nf'))
-                        ->groupBy('codigo_produto')
-                        ->groupBy('serie_nf')
-                        ->groupBy('data_recebimento')
-                        ->groupBy('desc_produto')
-                        ->groupBy('tipo_estoque')
-                        ->groupBy('lote')
-                        ->groupBy('data_validade')
-                        ->groupBy('desc_restricao')
-                        ->groupBy('desc_tipo_estoque')
-                        ->groupBy('unidade_medida')
-                        ->orderBy($order[0], $order[1])
-                        ->get();
-                } else {
-                    $results = $this->model
-                        ->where('depositante', $cnpj)
-                        ->where(function ($query) use ($data) {
-                            if ($data) {
-                                return $query->where($data['field'], 'like', '%' . $data['value'] . '%');
-                            }
-                            return $query;
-                        })
-                        ->select(DB::raw('tipo_estoque,data_geracao,desc_tipo_estoque, sum(roads.qtd_recebida) AS qtd_recebida,sum(roads.qtd_avariada) as qtd_avariada,codigo_produto,desc_produto,lote,data_validade,desc_produto,desc_restricao,unidade_medida,serie_nf'))
-                        ->groupBy('codigo_produto')
-                        ->groupBy('serie_nf')
-                        ->groupBy('data_recebimento')
-                        ->groupBy('desc_produto')
-                        ->groupBy('tipo_estoque')
-                        ->groupBy('lote')
-                        ->groupBy('data_validade')
-                        ->groupBy('desc_restricao')
-                        ->groupBy('desc_tipo_estoque')
-                        ->groupBy('unidade_medida')
-                        ->orderBy($order[0], $order[1])
-                        ->paginate();
-                }
+            if ($data['value'] == '') {
+                $results = $this->model
+                    ->where('depositante', $cnpj)
+                    ->select(DB::raw('tipo_estoque,data_geracao,desc_tipo_estoque, sum(roads.qtd_recebida) AS qtd_recebida,sum(roads.qtd_avariada) as qtd_avariada,codigo_produto,desc_produto,lote,data_validade,desc_produto,desc_restricao,unidade_medida,serie_nf'))
+                    ->groupBy('codigo_produto')
+                    ->groupBy('serie_nf')
+                    ->groupBy('data_recebimento')
+                    ->groupBy('desc_produto')
+                    ->groupBy('tipo_estoque')
+                    ->groupBy('lote')
+                    ->groupBy('data_validade')
+                    ->groupBy('desc_restricao')
+                    ->groupBy('desc_tipo_estoque')
+                    ->groupBy('unidade_medida')
+                    ->orderBy($order[0], $order[1])
+                    ->get();
             } else {
-                if ($data['value'] == '') {
-                    $results = $this->model
-                        ->where('depositante', $cnpj)
-                        ->select(DB::raw('tipo_estoque,data_geracao,desc_tipo_estoque, sum(roads.qtd_recebida) AS qtd_recebida,sum(roads.qtd_avariada) as qtd_avariada,codigo_produto,desc_produto,lote,data_validade,desc_produto,desc_restricao,unidade_medida,serie_nf'))
-                        ->groupBy('codigo_produto')
-                        ->groupBy('serie_nf')
-                        ->groupBy('data_recebimento')
-                        ->groupBy('desc_produto')
-                        ->groupBy('tipo_estoque')
-                        ->groupBy('lote')
-                        ->groupBy('data_validade')
-                        ->groupBy('desc_restricao')
-                        ->groupBy('desc_tipo_estoque')
-                        ->groupBy('unidade_medida')
-                        ->orderBy($order[0], $order[1])
-                        ->get();
-                } else {
-                    $results = $this->model
-                        ->where('depositante', $cnpj)
-                        ->where(function ($query) use ($data) {
-                            return $query->where($data['field'], 'like', '%' . $data['value'] . '%');
-                        })
-                        ->select(DB::raw('tipo_estoque,data_geracao,desc_tipo_estoque, sum(roads.qtd_recebida) AS qtd_recebida,sum(roads.qtd_avariada) as qtd_avariada,codigo_produto,desc_produto,lote,data_validade,desc_produto,desc_restricao,unidade_medida,serie_nf'))
-                        ->groupBy('codigo_produto')
-                        ->groupBy('serie_nf')
-                        ->groupBy('data_recebimento')
-                        ->groupBy('desc_produto')
-                        ->groupBy('tipo_estoque')
-                        ->groupBy('lote')
-                        ->groupBy('data_validade')
-                        ->groupBy('desc_restricao')
-                        ->groupBy('desc_tipo_estoque')
-                        ->groupBy('unidade_medida')
-                        ->orderBy($order[0], $order[1])
-                        ->paginate();
-                }
+                $results = $this->model
+                    ->where('depositante', $cnpj)
+                    ->where(function ($query) use ($data) {
+                        return $query->where($data['field'], 'like', '%' . $data['value'] . '%');
+                    })
+                    ->select(DB::raw('tipo_estoque,data_geracao,desc_tipo_estoque, sum(roads.qtd_recebida) AS qtd_recebida,sum(roads.qtd_avariada) as qtd_avariada,codigo_produto,desc_produto,lote,data_validade,desc_produto,desc_restricao,unidade_medida,serie_nf'))
+                    ->groupBy('codigo_produto')
+                    ->groupBy('serie_nf')
+                    ->groupBy('data_recebimento')
+                    ->groupBy('desc_produto')
+                    ->groupBy('tipo_estoque')
+                    ->groupBy('lote')
+                    ->groupBy('data_validade')
+                    ->groupBy('desc_restricao')
+                    ->groupBy('desc_tipo_estoque')
+                    ->groupBy('unidade_medida')
+                    ->orderBy($order[0], $order[1])
+                    ->paginate();
             }
         } else {
-            if ($user->role == 'user_company') {
-                if ($data['value'] == '') {
-                    $results = $this->model
-                        ->where('depositante', $cnpj)->where('tipo_estoque', $lote)
-                        ->select(DB::raw('tipo_estoque,data_geracao,desc_tipo_estoque, sum(roads.qtd_recebida) AS qtd_recebida,sum(roads.qtd_avariada) as qtd_avariada,codigo_produto,desc_produto,lote,data_validade,desc_produto,desc_restricao,unidade_medida,serie_nf'))
-                        ->groupBy('codigo_produto')
-                        ->groupBy('serie_nf')
-                        ->groupBy('data_recebimento')
-                        ->groupBy('desc_produto')
-                        ->groupBy('tipo_estoque')
-                        ->groupBy('lote')
-                        ->groupBy('data_validade')
-                        ->groupBy('desc_restricao')
-                        ->groupBy('desc_tipo_estoque')
-                        ->groupBy('unidade_medida')
-                        ->orderBy($order[0], $order[1])
-                        ->get();
-                } else {
-                    $results = $this->model
-                        ->where('tipo_estoque', $lote)
-                        ->where('depositante', $cnpj)
-                        ->where(function ($query) use ($data) {
-                            return $query->where($data['field'], 'like', '%' . $data['value'] . '%');
-                        })
-                        ->select(DB::raw('tipo_estoque,data_geracao,desc_tipo_estoque, sum(roads.qtd_recebida) AS qtd_recebida,sum(roads.qtd_avariada) as qtd_avariada,codigo_produto,desc_produto,lote,data_validade,desc_produto,desc_restricao,unidade_medida,serie_nf'))
-                        ->groupBy('codigo_produto')
-                        ->groupBy('serie_nf')
-                        ->groupBy('data_recebimento')
-                        ->groupBy('desc_produto')
-                        ->groupBy('tipo_estoque')
-                        ->groupBy('lote')
-                        ->groupBy('data_validade')
-                        ->groupBy('desc_restricao')
-                        ->groupBy('desc_tipo_estoque')
-                        ->groupBy('unidade_medida')
-                        ->orderBy($order[0], $order[1])
-                        ->paginate();
-                }
+            /* if ($user->role == 'user_company') {
+                 if ($data['value'] == '') {
+                     $results = $this->model
+                         ->where('depositante', $cnpj)
+                         ->where('tipo_estoque', $lote)
+                         ->select(DB::raw('tipo_estoque,data_geracao,desc_tipo_estoque, sum(roads.qtd_recebida) AS qtd_recebida,sum(roads.qtd_avariada) as qtd_avariada,codigo_produto,desc_produto,lote,data_validade,desc_produto,desc_restricao,unidade_medida,serie_nf'))
+                         ->groupBy('codigo_produto')
+                         ->groupBy('serie_nf')
+                         ->groupBy('data_recebimento')
+                         ->groupBy('desc_produto')
+                         ->groupBy('tipo_estoque')
+                         ->groupBy('lote')
+                         ->groupBy('data_validade')
+                         ->groupBy('desc_restricao')
+                         ->groupBy('desc_tipo_estoque')
+                         ->groupBy('unidade_medida')
+                         ->orderBy($order[0], $order[1])
+                         ->get();
+                 } else {
+                     $results = $this->model
+                         ->where('tipo_estoque', $lote)
+                         ->where('depositante', $cnpj)
+                         ->where(function ($query) use ($data) {
+                             return $query->where($data['field'], 'like', '%' . $data['value'] . '%');
+                         })
+                         ->select(DB::raw('tipo_estoque,data_geracao,desc_tipo_estoque, sum(roads.qtd_recebida) AS qtd_recebida,sum(roads.qtd_avariada) as qtd_avariada,codigo_produto,desc_produto,lote,data_validade,desc_produto,desc_restricao,unidade_medida,serie_nf'))
+                         ->groupBy('codigo_produto')
+                         ->groupBy('serie_nf')
+                         ->groupBy('data_recebimento')
+                         ->groupBy('desc_produto')
+                         ->groupBy('tipo_estoque')
+                         ->groupBy('lote')
+                         ->groupBy('data_validade')
+                         ->groupBy('desc_restricao')
+                         ->groupBy('desc_tipo_estoque')
+                         ->groupBy('unidade_medida')
+                         ->orderBy($order[0], $order[1])
+                         ->paginate();
+                 }
+             } else {*/
+            if ($data['value'] == '') {
+                $results = $this->model
+                    ->where('depositante', $cnpj)
+                    ->where('tipo_estoque', $lote)
+                    ->select(DB::raw('tipo_estoque,data_geracao,desc_tipo_estoque, sum(roads.qtd_recebida) AS qtd_recebida,sum(roads.qtd_avariada) as qtd_avariada,codigo_produto,desc_produto,lote,data_validade,desc_produto,desc_restricao,unidade_medida,serie_nf'))
+                    ->groupBy('codigo_produto')
+                    ->groupBy('serie_nf')
+                    ->groupBy('data_recebimento')
+                    ->groupBy('desc_produto')
+                    ->groupBy('tipo_estoque')
+                    ->groupBy('lote')
+                    ->groupBy('data_validade')
+                    ->groupBy('desc_restricao')
+                    ->groupBy('desc_tipo_estoque')
+                    ->groupBy('unidade_medida')
+                    ->orderBy($order[0], $order[1])
+                    ->get();
             } else {
-                if ($data['value'] == '') {
-                    $results = $this->model->where('depositante', $cnpj)->where('tipo_estoque', $lote)
-                        ->select(DB::raw('tipo_estoque,data_geracao,desc_tipo_estoque, sum(roads.qtd_recebida) AS qtd_recebida,sum(roads.qtd_avariada) as qtd_avariada,codigo_produto,desc_produto,lote,data_validade,desc_produto,desc_restricao,unidade_medida,serie_nf'))
-                        ->groupBy('codigo_produto')
-                        ->groupBy('serie_nf')
-                        ->groupBy('data_recebimento')
-                        ->groupBy('desc_produto')
-                        ->groupBy('tipo_estoque')
-                        ->groupBy('lote')
-                        ->groupBy('data_validade')
-                        ->groupBy('desc_restricao')
-                        ->groupBy('desc_tipo_estoque')
-                        ->groupBy('unidade_medida')
-                        ->orderBy($order[0], $order[1])
-                        ->get();
-                } else {
-                    $results = $this->model
-                        ->where('depositante', $cnpj)
-                        ->where('tipo_estoque', $lote)
-                        ->where(function ($query) use ($data) {
-                            return $query->where($data['field'], 'like', '%' . $data['value'] . '%');
-                        })
-                        ->select(DB::raw('tipo_estoque,data_geracao,desc_tipo_estoque, sum(roads.qtd_recebida) AS qtd_recebida,sum(roads.qtd_avariada) as qtd_avariada,codigo_produto,desc_produto,lote,data_validade,desc_produto,desc_restricao,unidade_medida,serie_nf'))
-                        ->groupBy('codigo_produto')
-                        ->groupBy('serie_nf')
-                        ->groupBy('data_recebimento')
-                        ->groupBy('desc_produto')
-                        ->groupBy('tipo_estoque')
-                        ->groupBy('lote')
-                        ->groupBy('data_validade')
-                        ->groupBy('desc_restricao')
-                        ->groupBy('desc_tipo_estoque')
-                        ->groupBy('unidade_medida')
-                        ->orderBy($order[0], $order[1])
-                        ->paginate();
-                }
+                $results = $this->model
+                    ->where('depositante', $cnpj)
+                    ->where('tipo_estoque', $lote)
+                    ->where(function ($query) use ($data) {
+                        return $query->where($data['field'], 'like', '%' . $data['value'] . '%');
+                    })
+                    ->select(DB::raw('tipo_estoque,data_geracao,desc_tipo_estoque, sum(roads.qtd_recebida) AS qtd_recebida,sum(roads.qtd_avariada) as qtd_avariada,codigo_produto,desc_produto,lote,data_validade,desc_produto,desc_restricao,unidade_medida,serie_nf'))
+                    ->groupBy('codigo_produto')
+                    ->groupBy('serie_nf')
+                    ->groupBy('data_recebimento')
+                    ->groupBy('desc_produto')
+                    ->groupBy('tipo_estoque')
+                    ->groupBy('lote')
+                    ->groupBy('data_validade')
+                    ->groupBy('desc_restricao')
+                    ->groupBy('desc_tipo_estoque')
+                    ->groupBy('unidade_medida')
+                    ->orderBy($order[0], $order[1])
+                    ->paginate();
             }
+            //}
         }
 
         if ($results) {
@@ -238,7 +199,7 @@ class RoadRepositoryEloquent extends BaseRepository implements RoadRepository
         $order[1] = $order[1] ?? 'asc';
         //dd($user->role);
         if ($lote != '') {
-            if ($user->role == 'user_company') {
+            /*if ($user->role == 'user_company') {
                 $results = $this->model
                     ->where('depositante', $cnpj)
                     ->where('tipo_estoque', $lote)
@@ -259,28 +220,28 @@ class RoadRepositoryEloquent extends BaseRepository implements RoadRepository
                     ->groupBy('data_geracao')
                     ->orderBy($order[0], $order[1])
                     ->paginate();
-            } else {
-                $results = $this->model
-                    ->where('tipo_estoque', $lote)
-                    ->where('depositante', $cnpj)
-                    ->where(function ($query) use ($dataEnd) {
-                        return $query->whereRaw('data_recebimento BETWEEN ? AND ?', [(new Carbon())->subMonth(6), $dataEnd]);
-                    })
-                    ->select(DB::raw('tipo_estoque,data_recebimento,data_geracao,desc_tipo_estoque, sum(roads.qtd_recebida) AS qtd_recebida,sum(roads.qtd_avariada) as qtd_avariada,codigo_produto,desc_produto,lote,data_validade,desc_produto,desc_restricao,unidade_medida,serie_nf'))
-                    ->groupBy('codigo_produto')
-                    ->groupBy('serie_nf')
-                    ->groupBy('data_recebimento')
-                    ->groupBy('desc_produto')
-                    ->groupBy('tipo_estoque')
-                    ->groupBy('lote')
-                    ->groupBy('data_validade')
-                    ->groupBy('desc_restricao')
-                    ->groupBy('desc_tipo_estoque')
-                    ->groupBy('unidade_medida')
-                    ->groupBy('data_geracao')
-                    ->orderBy($order[0], $order[1])
-                    ->paginate();
-            }
+            } else {*/
+            $results = $this->model
+                ->where('tipo_estoque', $lote)
+                ->where('depositante', $cnpj)
+                ->where(function ($query) use ($dataEnd) {
+                    return $query->whereRaw('data_recebimento BETWEEN ? AND ?', [(new Carbon())->subMonth(6), $dataEnd]);
+                })
+                ->select(DB::raw('tipo_estoque,data_recebimento,data_geracao,desc_tipo_estoque, sum(roads.qtd_recebida) AS qtd_recebida,sum(roads.qtd_avariada) as qtd_avariada,codigo_produto,desc_produto,lote,data_validade,desc_produto,desc_restricao,unidade_medida,serie_nf'))
+                ->groupBy('codigo_produto')
+                ->groupBy('serie_nf')
+                ->groupBy('data_recebimento')
+                ->groupBy('desc_produto')
+                ->groupBy('tipo_estoque')
+                ->groupBy('lote')
+                ->groupBy('data_validade')
+                ->groupBy('desc_restricao')
+                ->groupBy('desc_tipo_estoque')
+                ->groupBy('unidade_medida')
+                ->groupBy('data_geracao')
+                ->orderBy($order[0], $order[1])
+                ->paginate();
+            //}
         } else {
 
             $results = $this->model
@@ -304,6 +265,7 @@ class RoadRepositoryEloquent extends BaseRepository implements RoadRepository
                 ->paginate();
 
         }
+
         if ($results) {
             return $this->parserResult($results);
         }
