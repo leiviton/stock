@@ -20,6 +20,7 @@ use Stock\Validators\RoadValidator;
 class RoadRepositoryEloquent extends BaseRepository implements RoadRepository
 {
     protected $skipPresenter = true;
+
     /**
      * Specify Model class name
      *
@@ -30,7 +31,6 @@ class RoadRepositoryEloquent extends BaseRepository implements RoadRepository
         return Road::class;
     }
 
-    
 
     /**
      * Boot up the repository, pushing criteria
@@ -252,10 +252,7 @@ class RoadRepositoryEloquent extends BaseRepository implements RoadRepository
                     ->where('depositante', $cnpj)
                     ->where('tipo_estoque', $lote)
                     ->where(function ($query) use ($dataEnd) {
-                        if ($dataEnd) {
-                            return $query->whereRaw('data_recebimento BETWEEN ? AND ?', [(new Carbon())->subMonth(6), $dataEnd]);
-                        }
-                        return $query;
+                        return $query->whereRaw('data_recebimento BETWEEN ? AND ?', [(new Carbon())->subMonth(6), $dataEnd]);
                     })
                     ->select(DB::raw('tipo_estoque,data_geracao,desc_tipo_estoque, sum(roads.qtd_recebida) AS qtd_recebida,sum(roads.qtd_avariada) as qtd_avariada,codigo_produto,desc_produto,lote,data_validade,desc_produto,desc_restricao,unidade_medida,serie_nf'))
                     ->groupBy('codigo_produto')
@@ -276,10 +273,7 @@ class RoadRepositoryEloquent extends BaseRepository implements RoadRepository
                     ->where('tipo_estoque', $lote)
                     ->where('depositante', $cnpj)
                     ->where(function ($query) use ($dataEnd) {
-                        if ($dataEnd) {
-                            return $query->whereRaw('data_recebimento BETWEEN ? AND ?', [(new Carbon())->subMonth(6), $dataEnd]);
-                        }
-                        return $query;
+                        return $query->whereRaw('data_recebimento BETWEEN ? AND ?', [(new Carbon())->subMonth(6), $dataEnd]);
                     })
                     ->select(DB::raw('tipo_estoque,data_geracao,desc_tipo_estoque, sum(roads.qtd_recebida) AS qtd_recebida,sum(roads.qtd_avariada) as qtd_avariada,codigo_produto,desc_produto,lote,data_validade,desc_produto,desc_restricao,unidade_medida,serie_nf'))
                     ->groupBy('codigo_produto')
@@ -301,10 +295,7 @@ class RoadRepositoryEloquent extends BaseRepository implements RoadRepository
             $results = $this->model
                 ->where('depositante', $cnpj)
                 ->where(function ($query) use ($dataEnd) {
-                    if ($dataEnd) {
-                        return $query->whereRaw('data_recebimento BETWEEN ? AND ?', [(new Carbon())->subMonth(6), $dataEnd])->groupBy(['lote','data_recebimento']);
-                    }
-                    return $query;
+                    return $query->whereRaw('data_recebimento BETWEEN ? AND ?', [(new Carbon())->subMonth(6), $dataEnd]);
                 })
                 ->select(DB::raw('tipo_estoque,data_geracao,desc_tipo_estoque, sum(roads.qtd_recebida) AS qtd_recebida,sum(roads.qtd_avariada) as qtd_avariada,codigo_produto,desc_produto,lote,data_validade,desc_produto,desc_restricao,unidade_medida,serie_nf'))
                 ->groupBy('codigo_produto')
@@ -333,15 +324,16 @@ class RoadRepositoryEloquent extends BaseRepository implements RoadRepository
      * @param $chave
      * @return mixed
      */
-    public function findByLogix($chave) {
+    public function findByLogix($chave)
+    {
 
-        $result = $this->model->where('chave_logix','=', $chave)->get()->first();
+        $result = $this->model->where('chave_logix', '=', $chave)->get()->first();
 
         if (!$result) {
             //dd('aqui 1');
             Log::info('Registro entradas vazio: ' . $chave);
             return '';
-        }else {
+        } else {
             //dd('aqui 2');
             Log::info('Registro entradas: ' . $chave);
 
