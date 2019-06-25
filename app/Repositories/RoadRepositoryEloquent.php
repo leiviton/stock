@@ -63,7 +63,7 @@ class RoadRepositoryEloquent extends BaseRepository implements RoadRepository
             if ($data['value'] == '') {
                 $results = $this->model
                     ->where('depositante', $cnpj)
-                    ->select(DB::raw('tipo_estoque,data_geracao,desc_tipo_estoque, sum(roads.qtd_recebida) AS qtd_recebida,sum(roads.qtd_avariada) as qtd_avariada,codigo_produto,desc_produto,lote,data_validade,desc_produto,desc_restricao,unidade_medida,serie_nf'))
+                    ->select(DB::raw('tipo_estoque,data_recebimento,desc_tipo_estoque, sum(roads.qtd_recebida) AS qtd_recebida,sum(roads.qtd_avariada) as qtd_avariada,codigo_produto,desc_produto,lote,data_validade,desc_produto,desc_restricao,unidade_medida,serie_nf'))
                     ->groupBy('codigo_produto')
                     ->groupBy('serie_nf')
                     ->groupBy('data_recebimento')
@@ -82,7 +82,7 @@ class RoadRepositoryEloquent extends BaseRepository implements RoadRepository
                     ->where(function ($query) use ($data) {
                         return $query->where($data['field'], 'like', '%' . $data['value'] . '%');
                     })
-                    ->select(DB::raw('tipo_estoque,data_geracao,desc_tipo_estoque, sum(roads.qtd_recebida) AS qtd_recebida,sum(roads.qtd_avariada) as qtd_avariada,codigo_produto,desc_produto,lote,data_validade,desc_produto,desc_restricao,unidade_medida,serie_nf'))
+                    ->select(DB::raw('tipo_estoque,data_recebimento,desc_tipo_estoque, sum(roads.qtd_recebida) AS qtd_recebida,sum(roads.qtd_avariada) as qtd_avariada,codigo_produto,desc_produto,lote,data_validade,desc_produto,desc_restricao,unidade_medida,serie_nf'))
                     ->groupBy('codigo_produto')
                     ->groupBy('serie_nf')
                     ->groupBy('data_recebimento')
@@ -141,7 +141,7 @@ class RoadRepositoryEloquent extends BaseRepository implements RoadRepository
                 $results = $this->model
                     ->where('depositante', $cnpj)
                     ->where('tipo_estoque', $lote)
-                    ->select(DB::raw('tipo_estoque,data_geracao,desc_tipo_estoque, sum(roads.qtd_recebida) AS qtd_recebida,sum(roads.qtd_avariada) as qtd_avariada,codigo_produto,desc_produto,lote,data_validade,desc_produto,desc_restricao,unidade_medida,serie_nf'))
+                    ->select(DB::raw('tipo_estoque,data_recebimento,desc_tipo_estoque, sum(roads.qtd_recebida) AS qtd_recebida,sum(roads.qtd_avariada) as qtd_avariada,codigo_produto,desc_produto,lote,data_validade,desc_produto,desc_restricao,unidade_medida,serie_nf'))
                     ->groupBy('codigo_produto')
                     ->groupBy('serie_nf')
                     ->groupBy('data_recebimento')
@@ -161,7 +161,7 @@ class RoadRepositoryEloquent extends BaseRepository implements RoadRepository
                     ->where(function ($query) use ($data) {
                         return $query->where($data['field'], 'like', '%' . $data['value'] . '%');
                     })
-                    ->select(DB::raw('tipo_estoque,data_geracao,desc_tipo_estoque, sum(roads.qtd_recebida) AS qtd_recebida,sum(roads.qtd_avariada) as qtd_avariada,codigo_produto,desc_produto,lote,data_validade,desc_produto,desc_restricao,unidade_medida,serie_nf'))
+                    ->select(DB::raw('tipo_estoque,data_recebimento,desc_tipo_estoque, sum(roads.qtd_recebida) AS qtd_recebida,sum(roads.qtd_avariada) as qtd_avariada,codigo_produto,desc_produto,lote,data_validade,desc_produto,desc_restricao,unidade_medida,serie_nf'))
                     ->groupBy('codigo_produto')
                     ->groupBy('serie_nf')
                     ->groupBy('data_recebimento')
@@ -227,7 +227,7 @@ class RoadRepositoryEloquent extends BaseRepository implements RoadRepository
                 ->where(function ($query) use ($dataEnd) {
                     return $query->whereRaw('data_recebimento BETWEEN ? AND ?', [(new Carbon())->subMonth(6), $dataEnd]);
                 })
-                ->select(DB::raw('tipo_estoque,data_recebimento,data_geracao,desc_tipo_estoque, sum(roads.qtd_recebida) AS qtd_recebida,sum(roads.qtd_avariada) as qtd_avariada,codigo_produto,desc_produto,lote,data_validade,desc_produto,desc_restricao,unidade_medida,serie_nf'))
+                ->select(DB::raw('tipo_estoque,data_recebimento,desc_tipo_estoque, sum(roads.qtd_recebida) AS qtd_recebida,sum(roads.qtd_avariada) as qtd_avariada,codigo_produto,desc_produto,lote,data_validade,desc_produto,desc_restricao,unidade_medida,serie_nf'))
                 ->groupBy('codigo_produto')
                 ->groupBy('serie_nf')
                 ->groupBy('data_recebimento')
@@ -238,7 +238,6 @@ class RoadRepositoryEloquent extends BaseRepository implements RoadRepository
                 ->groupBy('desc_restricao')
                 ->groupBy('desc_tipo_estoque')
                 ->groupBy('unidade_medida')
-                ->groupBy('data_geracao')
                 ->orderBy($order[0], $order[1])
                 ->paginate();
             //}
@@ -249,7 +248,7 @@ class RoadRepositoryEloquent extends BaseRepository implements RoadRepository
                 ->where(function ($query) use ($dataEnd) {
                     return $query->whereRaw('data_recebimento BETWEEN ? AND ?', [(new Carbon())->subMonth(6), $dataEnd]);
                 })
-                ->select(DB::raw('tipo_estoque,data_recebimento,data_geracao,desc_tipo_estoque, sum(roads.qtd_recebida) AS qtd_recebida,sum(roads.qtd_avariada) as qtd_avariada,codigo_produto,desc_produto,lote,data_validade,desc_produto,desc_restricao,unidade_medida,serie_nf'))
+                ->select(DB::raw('tipo_estoque,data_recebimento,desc_tipo_estoque, sum(roads.qtd_recebida) AS qtd_recebida,sum(roads.qtd_avariada) as qtd_avariada,codigo_produto,desc_produto,lote,data_validade,desc_produto,desc_restricao,unidade_medida,serie_nf'))
                 ->groupBy('codigo_produto')
                 ->groupBy('serie_nf')
                 ->groupBy('data_recebimento')
@@ -260,7 +259,6 @@ class RoadRepositoryEloquent extends BaseRepository implements RoadRepository
                 ->groupBy('desc_restricao')
                 ->groupBy('desc_tipo_estoque')
                 ->groupBy('unidade_medida')
-                ->groupBy('data_geracao')
                 ->orderBy($order[0], $order[1])
                 ->paginate();
 
