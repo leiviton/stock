@@ -212,13 +212,15 @@ class OutRepositoryEloquent extends BaseRepository implements OutRepository
                     }
                     return $query;
                 })
-                ->select(DB::raw('tipo_estoque,data_envio,desc_tipo_estoque, sum(outs.qtd_enviada) AS qtd_enviada,codigo_produto,desc_produto,lote,data_validade,desc_produto,unidade_medida,serie_nf'))
+                ->select(DB::raw('tipo_estoque,data_envio,desc_tipo_estoque,centro,nome_destino_final,sum(outs.qtd_enviada) AS qtd_enviada,codigo_produto,desc_produto,lote,data_validade,desc_produto,unidade_medida,serie_nf'))
                 ->groupBy('codigo_produto')
                 ->groupBy('serie_nf')
                 ->groupBy('data_envio')
                 ->groupBy('desc_produto')
                 ->groupBy('tipo_estoque')
                 ->groupBy('lote')
+                ->groupBy('nome_destino_final')
+                ->groupBy('centro')
                 ->groupBy('data_validade')
                 ->groupBy('desc_tipo_estoque')
                 ->groupBy('unidade_medida')
