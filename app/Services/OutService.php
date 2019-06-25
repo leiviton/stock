@@ -106,7 +106,7 @@ class OutService
         if ($user->role == 'admin') {
             $query = $this->repository->scopeQuery(function ($query) use ($data) {
                 return $query->whereRaw('data_envio BETWEEN ? AND ?',
-                    [$data['start'], $data['end']])->where('depositante',$data['cnpj']);
+                    [$data['start'], $data['end']])->where('depositante',$this->limpaCPF_CNPJ($data['cnpj']));
             })->orderBy('data_envio','asc')->all(['tipo_estoque', 'desc_tipo_estoque', 'codigo_produto', 'desc_produto', 'unidade_medida', 'lote',
                 'data_validade', 'data_envio', 'serie_nf', 'nome_destino_final', 'centro', 'numero_ordem',
                 'qtd_enviada', 'serie', 'peca']);
