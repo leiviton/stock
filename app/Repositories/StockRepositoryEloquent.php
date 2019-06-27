@@ -286,7 +286,7 @@ class StockRepositoryEloquent extends BaseRepository implements StockRepository
         if (!$result) {
             //dd('aqui 1');
             Log::info('Registro estoque vazio: ' . $result);
-            return 'vazio';
+            return '';
         } else {
             //dd('aqui 2');
             Log::info('Registro estoque: ' . $result);
