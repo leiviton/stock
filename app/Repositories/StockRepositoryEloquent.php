@@ -281,17 +281,14 @@ class StockRepositoryEloquent extends BaseRepository implements StockRepository
     public function findByLogix($chave)
     {
 
-        $result = $this->model->where('chave_logix', $chave)->get()->first();
+        $result = $this->model->where('chave_logix', $chave)->first();
 
-        if (!$result) {
-            //dd('aqui 1');
-            Log::info('Registro estoque vazio: ' . $result);
-            return '';
-        } else {
-            //dd('aqui 2');
+        if ($result) {
             Log::info('Registro estoque: ' . $result);
-
-            return $result;
+            return $this->parserResult($result);
+        } else {
+            Log::info('Registro estoque vazio: ' . $result);
+            return (int) 0;
         }
     }
 
