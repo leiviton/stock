@@ -149,7 +149,7 @@ class StockCron extends Command
                                         'serie' => trim($stock[$i]->serie)
                                     ];
 
-                                    $this->stockRepository->firstOrCreate($dataStock);
+                                    $this->stockRepository->create($dataStock);
                                 } else {
                                     Log::info('Registro estoque encontrado chave: ' . $stock[$i]->id);
                                 }
@@ -191,7 +191,7 @@ class StockCron extends Command
                                 Log::info('Registro estoque nao encontrado: ' . $stock[$i]->id);
                             }
 
-                            if ($verifyOuts != 0) {
+                            if ($verifyOuts == 0) {
                                 $dataStock = [
                                     'chave_logix' => trim($stock[$i]->id),
                                     'company_id' => $companies[$k]->id,
@@ -217,7 +217,7 @@ class StockCron extends Command
                                     'serie' => trim($stock[$i]->serie)
                                 ];
 
-                                $this->stockRepository->firstOrCreate($dataStock);
+                                $this->stockRepository->create($dataStock);
                             } else {
                                 Log::info('Registro estoque encontrado chave: ' . $stock[$i]->id);
                             }
