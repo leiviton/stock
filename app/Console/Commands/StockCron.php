@@ -113,6 +113,7 @@ class StockCron extends Command
                         DB::beginTransaction();
                         try {
                             for ($i = 0; $i < count($stock); $i++) {
+
                                 $verifyOuts = $this->stockRepository->findByLogix(trim($stock[$i]->id));
 
                                 if ($verifyOuts != 0) {
@@ -121,7 +122,7 @@ class StockCron extends Command
                                     Log::info('Registro estoque nao encontrado: ' . $stock[$i]->id);
                                 }
 
-                                if ($verifyOuts != 0) {
+                                if ($verifyOuts == 0) {
                                     //dd($stock[$i]);
                                     $dataStock = [
                                         'chave_logix' => trim($stock[$i]->id),
