@@ -51,6 +51,9 @@ class StocksController extends Controller
         return $this->service->getAll($id,$lote);
     }
 
+    public function getChave(Request $request) {
+        return $this->service->getChave($request->get('chave'));
+    }
     public function groupStocks() {
         return $this->service->groupStock();
     }

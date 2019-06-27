@@ -168,4 +168,9 @@ class StockService
     {
         return $this->stockRepository->groupStock();
     }
+
+    public function getChave($chave)
+    {
+        return $this->stockRepository->findByLogix($chave);
+    }
 }
