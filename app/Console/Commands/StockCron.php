@@ -76,7 +76,7 @@ class StockCron extends Command
 
             $client = new Client();
 
-            $responseCount = $client->get("http://10.0.0.18:4490/logixrest/kbtr00001/countEstoquePorDepositante/01/082277955000155/S/0", [
+            $responseCount = $client->get("http://10.0.0.18:4490/logixrest/kbtr00001/countEstoquePorDepositante/01/$cnpj/S/0", [
                 'auth' => [
                     'admlog',
                     'Totvs330'
@@ -100,7 +100,7 @@ class StockCron extends Command
 
                         Log::info("Inicio Consulta estoque $j de $limit | inicio - $start e fim - $end: " . $companies[$k]->nome . " | http://10.0.0.18:4490/logixrest/kbtr00001/estoquePorDepositante/01/$cnpj/$start/$end/S/S/0");
 
-                        $response = $client->get("http://10.0.0.18:4490/logixrest/kbtr00001/estoquePorDepositante/01/082277955000155/$start/$end/S/S/0", [
+                        $response = $client->get("http://10.0.0.18:4490/logixrest/kbtr00001/estoquePorDepositante/01/$cnpj/$start/$end/S/S/0", [
                             'auth' => [
                                 'admlog',
                                 'Totvs330'
@@ -163,7 +163,7 @@ class StockCron extends Command
 
                     $end = $countStock;
 
-                    $response = $client->get("http://10.0.0.18:4490/logixrest/kbtr00001/estoquePorDepositante/01/082277955000155/$start/$end/S/S/0", [
+                    $response = $client->get("http://10.0.0.18:4490/logixrest/kbtr00001/estoquePorDepositante/01/$cnpj/$start/$end/S/S/0", [
                         'auth' => [
                             'admlog',
                             'Totvs330'
