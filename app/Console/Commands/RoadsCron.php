@@ -153,7 +153,7 @@ class RoadsCron extends Command
                                         'qtd_fiscal' => (int)$entradas[$i]->qtd_declarada_nf,
                                     ];
                                     //dd($data1["qtd_fiscal"]);
-                                    $this->roadRepository->updateOrCreate(["chave_logix" => $data1["chave_logix"]], $data1);
+                                    $this->roadRepository->firstOrCreate($data1);
                                     //dd($itemEnd);
                                 } else {
                                     Log::info('Registro encontrado chave: ' . $verifyRoads);
