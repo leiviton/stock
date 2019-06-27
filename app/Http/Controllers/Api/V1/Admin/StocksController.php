@@ -52,7 +52,7 @@ class StocksController extends Controller
     }
 
     public function getChave(Request $request) {
-        dd($request);
+        //dd($request);
         return $this->service->getChave($request->get('chave'));
     }
     public function groupStocks() {
