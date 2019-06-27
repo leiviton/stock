@@ -41,6 +41,14 @@ class StockRepositoryEloquent extends BaseRepository implements StockRepository
     }
 
     /**
+     * @return string|null
+     */
+    public function validator()
+    {
+        return StockValidator::class;
+    }
+
+    /**
      * @return string
      */
     public function presenter()

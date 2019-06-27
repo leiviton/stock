@@ -148,17 +148,13 @@ class StockCron extends Command
                                     ];
 
                                     $this->stockRepository->create($dataStock);
-                                } else {
-                                    Log::info('Registro estoque encontrado chave: ' . $stock[$i]->id);
                                 }
                             }
                             DB::commit();
-
                         } catch (\Exception $e) {
                             DB::rollBack();
                             Log::error($e->getMessage());
                         }
-
 
                         $start = $end + 1;
                         $end = $end + 5000;
@@ -216,8 +212,6 @@ class StockCron extends Command
                                 ];
 
                                 $this->stockRepository->create($dataStock);
-                            } else {
-                                Log::info('Registro estoque encontrado chave: ' . $stock[$i]->id);
                             }
                         }
                         DB::commit();
