@@ -115,14 +115,13 @@ class StockCron extends Command
                             for ($i = 0; $i < count($stock); $i++) {
                                 $verifyOuts = $this->stockRepository->findByLogix(trim($stock[$i]->id));
 
-                                if ($verifyOuts != '') {
-                                    Log::info('Registro estoque chave: ' . $verifyOuts->chave_logix);
+                                if ($verifyOuts != 0) {
+                                    Log::info('Registro estoque chave: ' . $verifyOuts);
                                 } else {
                                     Log::info('Registro estoque nao encontrado: ' . $stock[$i]->id);
                                 }
 
-                                if ($verifyOuts == '') {
-
+                                if ($verifyOuts != 0) {
                                     //dd($stock[$i]);
                                     $dataStock = [
                                         'chave_logix' => trim($stock[$i]->id),
@@ -185,13 +184,13 @@ class StockCron extends Command
                             //dd($stock[$i]);
                             $verifyOuts = $this->stockRepository->findByLogix($stock[$i]->id);
 
-                            if ($verifyOuts != '') {
+                            if ($verifyOuts != 0) {
                                 Log::info('Registro estoque chave: ' . $verifyOuts);
                             } else {
                                 Log::info('Registro estoque nao encontrado: ' . $stock[$i]->id);
                             }
 
-                            if ($verifyOuts == '') {
+                            if ($verifyOuts != 0) {
                                 $dataStock = [
                                     'chave_logix' => trim($stock[$i]->id),
                                     'company_id' => $companies[$k]->id,
