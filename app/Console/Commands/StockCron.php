@@ -76,7 +76,7 @@ class StockCron extends Command
 
             $client = new Client();
 
-            $responseCount = $client->get("http://10.0.0.18:4490/logixrest/kbtr00001/countEstoquePorDepositante/01/$cnpj/S/0", [
+            $responseCount = $client->get("http://10.0.0.18:4490/logixrest/kbtr00001/countEstoquePorDepositante/01/082277955000155/S/0", [
                 'auth' => [
                     'admlog',
                     'Totvs330'
@@ -90,17 +90,17 @@ class StockCron extends Command
 
                 $start = 1;
 
-                if ($countStock > 10000) {
+                if ($countStock > 5000) {
 
-                    $limit = ceil((float)$countStock / 10000);
+                    $limit = ceil((float)$countStock / 5000);
 
-                    $end = 10000;
+                    $end = 5000;
 
                     for ($j = 0; $j < $limit; $j++) {
 
                         Log::info("Inicio Consulta estoque $j de $limit | inicio - $start e fim - $end: " . $companies[$k]->nome . " | http://10.0.0.18:4490/logixrest/kbtr00001/estoquePorDepositante/01/$cnpj/$start/$end/S/S/0");
 
-                        $response = $client->get("http://10.0.0.18:4490/logixrest/kbtr00001/estoquePorDepositante/01/$cnpj/$start/$end/S/S/0", [
+                        $response = $client->get("http://10.0.0.18:4490/logixrest/kbtr00001/estoquePorDepositante/01/082277955000155/$start/$end/S/S/0", [
                             'auth' => [
                                 'admlog',
                                 'Totvs330'
@@ -118,8 +118,6 @@ class StockCron extends Command
 
                                 if ($verifyOuts != 0) {
                                     Log::info('Registro estoque chave: ' . $verifyOuts);
-                                } else {
-                                    Log::info('Registro estoque nao encontrado: ' . $stock[$i]->id);
                                 }
 
                                 if ($verifyOuts == 0) {
@@ -169,7 +167,7 @@ class StockCron extends Command
 
                     $end = $countStock;
 
-                    $response = $client->get("http://10.0.0.18:4490/logixrest/kbtr00001/estoquePorDepositante/01/$cnpj/$start/$end/S/S/0", [
+                    $response = $client->get("http://10.0.0.18:4490/logixrest/kbtr00001/estoquePorDepositante/01/082277955000155/$start/$end/S/S/0", [
                         'auth' => [
                             'admlog',
                             'Totvs330'

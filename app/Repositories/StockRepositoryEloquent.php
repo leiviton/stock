@@ -288,7 +288,7 @@ class StockRepositoryEloquent extends BaseRepository implements StockRepository
             return $this->parserResult($result);
         } else {
             Log::info('Registro estoque vazio: ' . $result);
-            return (int) 0;
+            return 0;
         }
     }
 
