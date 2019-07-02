@@ -75,11 +75,13 @@ class RoadsCron extends Command
 
             $dataNow = new Carbon();
 
-            //$dataNowReverse = $dataNow->subDay(1)->format('d-m-Y');
+            $dataNowReverse = $dataNow->subDay(1)->format('d-m-Y');
 
-            $dataNowReverse = '03-01-2019';
+            //$dataStartReverse = $dataNow->subDay(1)->format('d-m-Y');
 
-            $responseCount = $client->get("http://10.0.0.18:4490/logixrest/kbtr00002/countEntradaporDepositanteData/01/$cnpj/$dataNowReverse/$dataNowReverse/0", [
+            $dataStartReverse = '01-01-2019';
+
+            $responseCount = $client->get("http://10.0.0.18:4490/logixrest/kbtr00002/countEntradaporDepositanteData/01/$cnpj/$dataStartReverse/$dataNowReverse/0", [
                 'auth' => [
                     'admlog',
                     'Totvs330'
@@ -91,7 +93,7 @@ class RoadsCron extends Command
 
             Log::info("Iniciou empresa: $k " . $companies[$k]->nome);
 
-            Log::info("Contador de entradas: $k " . $companies[$k]->nome . " | quantidade: $count | http://10.0.0.18:4490/logixrest/kbtr00002/countEntradaporDepositanteData/01/$cnpj/$dataNowReverse/$dataNowReverse/0");
+            Log::info("Contador de entradas: $k " . $companies[$k]->nome . " | quantidade: $count | http://10.0.0.18:4490/logixrest/kbtr00002/countEntradaporDepositanteData/01/$cnpj/$dataStartReverse/$dataNowReverse/0");
 
             if ($countRoads > 0) {
 
@@ -103,9 +105,9 @@ class RoadsCron extends Command
                     $end = 10000;
 
                     for ($j = 0; $j < $limit; $j++) {
-                        Log::info("Inicio Consulta Entradas $j de $limit | inicio - $start e fim - $end: " . $companies[$k]->nome . "http://10.0.0.18:4490/logixrest/kbtr00002/entradaporDepositanteData/01/$cnpj/$start/$end/$dataNowReverse/$dataNowReverse/S/0");
+                        Log::info("Inicio Consulta Entradas $j de $limit | inicio - $start e fim - $end: " . $companies[$k]->nome . "http://10.0.0.18:4490/logixrest/kbtr00002/entradaporDepositanteData/01/$cnpj/$start/$end/$dataStartReverse/$dataNowReverse/S/0");
 
-                        $response = $client->get("http://10.0.0.18:4490/logixrest/kbtr00002/entradaporDepositanteData/01/$cnpj/$start/$end/$dataNowReverse/$dataNowReverse/S/0", [
+                        $response = $client->get("http://10.0.0.18:4490/logixrest/kbtr00002/entradaporDepositanteData/01/$cnpj/$start/$end/$dataStartReverse/$dataNowReverse/S/0", [
                             'auth' => [
                                 'admlog', 'Totvs330'
                             ]]);
@@ -177,9 +179,9 @@ class RoadsCron extends Command
 
                     $end = $countRoads;
 
-                    Log::info("Inicio Consulta: " . $companies[$k]->nome . "http://10.0.0.18:4490/logixrest/kbtr00002/entradaporDepositanteData/01/$cnpj/$start/$end/$dataNowReverse/$dataNowReverse/S/0");
+                    Log::info("Inicio Consulta: " . $companies[$k]->nome . "http://10.0.0.18:4490/logixrest/kbtr00002/entradaporDepositanteData/01/$cnpj/$start/$end/$dataStartReverse/$dataNowReverse/S/0");
 
-                    $response = $client->get("http://10.0.0.18:4490/logixrest/kbtr00002/entradaporDepositanteData/01/$cnpj/$start/$end/$dataNowReverse/$dataNowReverse/S/0", [
+                    $response = $client->get("http://10.0.0.18:4490/logixrest/kbtr00002/entradaporDepositanteData/01/$cnpj/$start/$end/$dataStartReverse/$dataNowReverse/S/0", [
                         'auth' => [
                             'admlog', 'Totvs330'
                         ]]);
