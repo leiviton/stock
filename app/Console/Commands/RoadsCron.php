@@ -69,7 +69,7 @@ class RoadsCron extends Command
 
             //for ($k = 0; $k < count($companies); $k = $k + 1) {
 
-            $cnpj = '056994502000130';//$this->limpaCPF_CNPJ($companies[$k]->cnpj);
+            $cnpj = $this->limpaCPF_CNPJ($companies[$k]->cnpj);
 
             $client = new Client();
 
@@ -77,9 +77,9 @@ class RoadsCron extends Command
 
             $dataNowReverse = $dataNow->subDay(1)->format('d-m-Y');
 
-            //$dataStartReverse = $dataNow->subDay(1)->format('d-m-Y');
+            $dataStartReverse = $dataNow->subDay(1)->format('d-m-Y');
 
-            $dataStartReverse = '01-01-2019';
+            //$dataStartReverse = '01-01-2019';
 
             $responseCount = $client->get("http://10.0.0.18:4490/logixrest/kbtr00002/countEntradaporDepositanteData/01/$cnpj/$dataStartReverse/$dataNowReverse/0", [
                 'auth' => [
