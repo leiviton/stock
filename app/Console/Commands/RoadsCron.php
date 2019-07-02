@@ -69,7 +69,7 @@ class RoadsCron extends Command
 
             //for ($k = 0; $k < count($companies); $k = $k + 1) {
 
-            $cnpj = '060318797000100';//$this->limpaCPF_CNPJ($companies[$k]->cnpj);
+            $cnpj = '082277955000155';//$this->limpaCPF_CNPJ($companies[$k]->cnpj);
 
             $client = new Client();
 
