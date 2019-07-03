@@ -7,6 +7,7 @@ use GuzzleHttp\Client;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Stock\Mail\IntegrationLogix;
 use Stock\Repositories\CompanyRepository;
 use Stock\Repositories\OutRepository;
 
@@ -61,9 +62,15 @@ class OutsCron extends Command
     {
         $companies = $this->companyRepository->orderBy('id', 'asc')->all();
 
+        $erro = [
+            "error" => "",
+            "count" => 0,
+            "cahve_logix" => ""
+        ];
+
         foreach ($companies as $company) {
             //for ($k = 0; $k < count($companies); $k++) {
-            $cnpj = '082277955000155';//$this->limpaCPF_CNPJ($companies[$k]->cnpj);
+            $cnpj = $this->limpaCPF_CNPJ($companies->cnpj);
 
             $client = new Client();
 
@@ -71,9 +78,9 @@ class OutsCron extends Command
 
             $dataNowReverse = $dataNow->subDay(1)->format('d-m-Y');
 
-            //$dataStartReverse = $dataNow->subDay(1)->format('d-m-Y');
+            $dataStartReverse = $dataNow->subDay(1)->format('d-m-Y');
 
-            $dataStartReverse = '01-01-2019';
+            //$dataStartReverse = '01-01-2019';
 
             $responseCount = $client->get("http://10.0.0.18:4490/logixrest/kbtr00003/countsaidasporDepositanteData/01/$cnpj/$dataStartReverse/$dataNowReverse/0", [
                 'auth' => [
@@ -116,6 +123,7 @@ class OutsCron extends Command
                         Log::info("Finalizou registros saidas: $start a $end");
                         //dd($saida[$i]);
                         DB::beginTransaction();
+
                         try {
                             for ($i = 0; $i < count($saida); $i++) {
 
@@ -125,6 +133,8 @@ class OutsCron extends Command
                                     Log::info('Registro chave não encontrado');
                                 } else {
                                     Log::info('Registro chave: ' . $verifyOuts);
+                                    $erro["chave_logix"] = $saida[$i]->id;
+                                    \Mail::to(['leiviton.silva@drsgroup.com.br','leiviton.silva@drsgroup.com.br'])->send(new IntegrationLogix('leiviton.silva@drsgroup.com.br', $erro));
                                 }
 
                                 if ($verifyOuts == '') {
@@ -160,7 +170,6 @@ class OutsCron extends Command
                             }
 
                             DB::commit();
-
                         } catch (\Exception $e) {
                             DB::rollBack();
                             Log::error("Erro saida: $i |" . $e->getMessage());
@@ -197,6 +206,8 @@ class OutsCron extends Command
                                 Log::info('Registro chave não encontrado');
                             } else {
                                 Log::info('Registro chave: ' . $verifyOuts);
+                                $erro["chave_logix"] = $saida[$i]->id;
+                                \Mail::to(['leiviton.silva@drsgroup.com.br','leiviton.silva@drsgroup.com.br'])->send(new IntegrationLogix('leiviton.silva@drsgroup.com.br', $erro));
                             }
 
                             if ($verifyOuts == '') {
@@ -229,7 +240,6 @@ class OutsCron extends Command
                             }
                         }
                         DB::commit();
-
                     } catch (\Exception $e) {
                         DB::rollBack();
                         Log::error("Erro saida: $i |" . $e->getMessage());
@@ -237,8 +247,13 @@ class OutsCron extends Command
                 }
 
                 Log::info("Finalizou integraçao saidas: $dataNowReverse, quantidade $countRoads");
+                $erro["chave_logix"] = '';
+                $erro['error'] = 'Finalizado integraçao saidas: '.$cnpj;
+                \Mail::to(['leiviton.silva@drsgroup.com.br','leiviton.silva@drsgroup.com.br'])->send(new IntegrationLogix('leiviton.silva@drsgroup.com.br', $erro));
             } else {
-
+                $erro["chave_logix"] = '';
+                $erro['error'] = 'Finalizado integraçao saidas: '.$cnpj.' Sem movimento';
+                \Mail::to(['leiviton.silva@drsgroup.com.br','leiviton.silva@drsgroup.com.br'])->send(new IntegrationLogix('leiviton.silva@drsgroup.com.br', $erro));
                 Log::info("Sem movimento: $dataNowReverse, quantidade $countRoads");
             }
         }

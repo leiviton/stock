@@ -6,6 +6,7 @@ use GuzzleHttp\Client;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Stock\Mail\IntegrationLogix;
 use Stock\Repositories\CompanyRepository;
 use Stock\Repositories\StockRepository;
 
@@ -223,6 +224,10 @@ class StockCron extends Command
                 }
 
                 Log::info('Finalizou integraçao estoque:' . $countStock);
+
+                $erro["chave_logix"] = '';
+                $erro['error'] = 'Finalizado integraçao saidas: '.$cnpj.' Sem movimento';
+                \Mail::to(['leiviton.silva@drsgroup.com.br','leiviton.silva@drsgroup.com.br'])->send(new IntegrationLogix('leiviton.silva@drsgroup.com.br', $erro));
             } else {
 
                 Log::info('Sem movimento no estoque:' . $countStock);
