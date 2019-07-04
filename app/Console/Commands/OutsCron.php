@@ -69,7 +69,7 @@ class OutsCron extends Command
 
         foreach ($companies as $company) {
             //for ($k = 0; $k < count($companies); $k++) {
-            $cnpj = $this->limpaCPF_CNPJ($companies->cnpj);
+            $cnpj = $this->limpaCPF_CNPJ($company->cnpj);
 
             $client = new Client();
 
@@ -77,7 +77,7 @@ class OutsCron extends Command
 
             $dataNowReverse = $dataNow->subDay(1)->format('d-m-Y');
 
-            $dataStartReverse = $dataNow->subDay(1)->format('d-m-Y');
+            $dataStartReverse = $dataNowReverse;
 
             //$dataStartReverse = '01-01-2019';
 
