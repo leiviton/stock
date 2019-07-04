@@ -1,7 +1,14 @@
-body {
+// body {
+//   background-image: url(./../../assets/img/common/bg-drs-warehouse.jpg);
+//   background-repeat: no-repeat;
+//   background-size: cover;
+// }
+
+.internal-bg {
   background-image: url(./../../assets/img/common/bg-drs-warehouse.jpg);
   background-repeat: no-repeat;
   background-size: cover;
+  height: 100vh;
 }
 
 .stocks,
