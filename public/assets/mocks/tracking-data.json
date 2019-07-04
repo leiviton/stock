@@ -1,0 +1,510 @@
+[
+  {
+    "exportacao": [
+      {
+        "title": "Exportação"
+      },
+      {
+        "shipmentInformation": [
+          {
+            "status" : "Concluido",
+            "codigoRastreio" : "PXBIO10525",
+            "bolNumber" : "BR18097",
+            "refInterna" : "CL2-201086-002 81796",
+            "numeroCaixas" : "1 caixa",
+            "ultimaAtualizacao" : "03/07/2019",
+            "tipoServico" : "STAT RUSH PRIORITY ",
+            "emTransito" : "N/A",
+            "invoiceNumber" : "19204808",
+            "kg" : "2"
+          }
+        ],
+
+        "coleta": [
+          {
+            "dataColeta" : "Jun-19-2019 15:00"
+          }
+        ],
+
+        "entrega": [
+          {
+            "dataEntrega" : "Jun-21-2019 12:00"
+          }
+        ],
+
+        "instrucaoEmbalagem": [
+          {
+            "isDangerous" : "Não",
+            "dgItems" : "Não",
+            "dgInfo" : "N/A",
+            "packagingGroup" : "N/A"
+          }
+        ],
+
+        "temperaturaControlada": [
+          {
+            "marcaCaixa" : "DRS Standard",
+            "litros" : "0",
+            "caixaAmbiente" : "X",
+            "caixaCongelado" : "N/A",
+            "monitor" : "N/A",
+            "quantidade" : "1"
+          }
+        ],
+
+        "informacaoTemperatura": [
+          {
+            "temperatura" : "Ambiente",
+            "geloSeco" : "KG",
+            "gelo" : "N/A",
+            "reposicaoGelo" : "N/A"
+          }
+        ],
+
+        "deliveryInformation": [
+          {
+            "horaColeta" : "Jun-19-2019 14:20",
+            "horaEntrega" : "Jun-21-2019 12:19",
+            "recebidoPor" : "JESSICA RODRIGUEZ"
+          }
+        ],
+
+        "historicoEventos": [
+          {
+            "datetimeEvento" : "Jun-21-2019 12:19 - JFK",
+            "evento" : "Processo Concluído"
+          },
+
+          {
+            "datetimeEvento" : "Jun-21-2019 12:19 - JFK",
+            "evento" : "Entrega"
+          },
+
+          {
+            "datetimeEvento" : "Jun-21-2019 10:42 - JFK",
+            "evento" : "Entregue para o portador realizar entrega"
+          },
+
+          {
+            "datetimeEvento" : "Jun-21-2019 10:00 - JFK",
+            "evento" : "Prior Notice conferida"
+          },
+          {
+            "datetimeEvento" : "Jun-21-2019 10:00 - JFK",
+            "evento" : "Pronta para retirada"
+          },
+          {
+            "datetimeEvento" : "Jun-21-2019 10:00 - JFK",
+            "evento" : "Liberada nos Processos aduaneiros"
+          },
+          {
+            "datetimeEvento" : "Jun-21-2019 05:58",
+            "evento" : "Chegada do voo"
+          },
+
+          {
+            "datetimeEvento" : "Jun-20-2019 22:00 - GRU",
+            "evento" : "Saída do voo"
+          },
+          {
+            "datetimeEvento" : "Jun-20-2019 22:00 - GRU",
+            "evento" : "Amostra confirmada a bordo"
+          },
+          {
+            "datetimeEvento" : "Jun-20-2019 17:00 - GRU",
+            "evento" : "Informações"
+          },
+          {
+            "datetimeEvento" : "Jun-19-2019 14:20 - GFK",
+            "evento" : "Informação do horário de voô disponível"
+          },
+
+          {
+            "datetimeEvento" : "Jun-19-2019 14:20 - PFB",
+            "evento" : "Coleta realizada"
+          },
+          {
+            "datetimeEvento" : "Jun-10-2019 09:11 - JFK",
+            "evento" : "Envio das caixas para realização da coleta"
+          },
+          {
+            "datetimeEvento" : "Jun-06-2019 10:15 - JFK",
+            "evento" : "Alerta de Coleta Enviado"
+          },
+          {
+            "datetimeEvento" : "Jun-06-2019 10:15 - JFK",
+            "evento" : "Revisado pelo time de Customer Service"
+          },
+          {
+            "datetimeEvento" : "Jun-06-2019 09:25 -3",
+            "evento" : "Novo Embarque"
+          }
+
+        ]
+      }
+    ],
+
+
+    "importacao": [
+      {
+        "title": "Importação"
+      },
+      {
+        "shipmentInformation": [
+          {
+            "status" : "Concluido",
+            "codigoRastreio" : "PXBIO10471",
+            "bolNumber" : "P10419",
+            "refInterna" : "M16-29881796",
+            "numeroCaixas" : "1 caixa",
+            "ultimaAtualizacao" : "Jun-28-2019",
+            "tipoServico" : "STAT RUSH PRIORITY ",
+            "emTransito" : "N/A",
+            "invoiceNumber" : "19204790",
+            "kg" : "11"
+          }
+        ],
+        "coleta": [
+          {
+            "dataColeta" : "Jun-19-2019 15:00"
+          }
+        ],
+
+        "entrega": [
+          {
+            "dataEntrega" : "Jun-21-2019 12:00"
+          }
+        ],
+
+        "instrucaoEmbalagem": [
+          {
+            "isDangerous" : "Não",
+            "dgItems" : "Não",
+            "dgInfo" : "N/A",
+            "packagingGroup" : "N/A"
+          }
+        ],
+        "temperaturaControlada": [
+          {
+            "marcaCaixa" : "DRS MEDICAL BOX",
+            "litros" : "21",
+            "caixaAmbiente" : "N/A",
+            "caixaCongelado" : "X",
+            "monitor" : "N/A",
+            "quantidade" : "1"
+          }
+        ],
+
+        "informacaoTemperatura": [
+          {
+            "temperatura" : "Ambiente",
+            "geloSeco" : "KG 10",
+            "gelo" : "N/A",
+            "reposicaoGelo" : "GRU"
+          }
+        ],
+
+        "deliveryInformation": [
+          {
+            "horaColeta" : "Jun-19-2019 14:20",
+            "horaEntrega" : "Jun-21-2019 12:19",
+            "recebidoPor" : "Edward Zepeda"
+          }
+        ],
+        "historicoEventos": [
+          {
+            "datetimeEvento" : "Jun-21-2019 12:19 - GRU",
+            "evento" : "Processo Concluído"
+          },
+
+          {
+            "datetimeEvento" : "Jun-21-2019 12:19 - GRU",
+            "evento" : "Entrega"
+          },
+
+          {
+            "datetimeEvento" : "Jun-21-2019 10:42 - GRU",
+            "evento" : "Entregue para o portador realizar entrega"
+          },
+
+          {
+            "datetimeEvento" : "Jun-21-2019 10:00 - GRU",
+            "evento" : "Remessa Desembaraçada"
+          },
+          {
+            "datetimeEvento" : "Jun-21-2019 10:00 - GRU",
+            "evento" : "Pronta para retirada"
+          },
+          {
+            "datetimeEvento" : "Jun-21-2019 10:00 - GRU",
+            "evento" : "Liberada nos Processos aduaneiros"
+          },
+          {
+            "datetimeEvento" : "Jun-21-2019 05:58 - GRU",
+            "evento" : "Chegada do voo"
+          },
+
+          {
+            "datetimeEvento" : "Jun-20-2019 22:00 - JFK",
+            "evento" : "Saída do voo"
+          },
+          {
+            "datetimeEvento" : "Jun-20-2019 22:00 - JFK",
+            "evento" : "Amostra confirmada a bordo"
+          },
+          {
+            "datetimeEvento" : "Jun-20-2019 17:00 - GRU",
+            "evento" : "Envio de notificação para os Destinatários"
+          },
+          {
+            "datetimeEvento" : "Jun-19-2019 14:20",
+            "evento" : "Informação do horário de voô disponível"
+          },
+
+          {
+            "datetimeEvento" : "Jun-19-2019 14:20",
+            "evento" : "Coleta realizada"
+          },
+          {
+            "datetimeEvento" : "Jun-10-2019 09:11",
+            "evento" : "Envio das caixas para realização da coleta"
+          },
+          {
+            "datetimeEvento" : "Jun-06-2019 10:15",
+            "evento" : "Alerta de Coleta Enviado"
+          },
+          {
+            "datetimeEvento" : "Jun-06-2019 10:15",
+            "evento" : "Revisado pelo time de Customer Service"
+          },
+          {
+            "datetimeEvento" : "Jun-06-2019 09:25",
+            "evento" : "Novo Embarque"
+          }
+
+        ]
+      }
+    ],
+
+    "exportacaoInProgress": [
+      {
+        "title": "Exportação em andamento"
+      },
+      {
+        "shipmentInformation": [
+          {
+            "status" : "Concluido",
+            "codigoRastreio" : "PXBIO1456",
+            "bolNumber" : "BR18097",
+            "refInterna" : "CL2-201086-002 81796",
+            "numeroCaixas" : "1 caixa",
+            "ultimaAtualizacao" : "03/07/2019",
+            "tipoServico" : "STAT RUSH PRIORITY ",
+            "emTransito" : "N/A",
+            "invoiceNumber" : "19204808",
+            "kg" : "2"
+          }
+        ],
+
+        "coleta": [
+          {
+            "dataColeta" : "Jun-03-2019 14:20"
+          }
+        ],
+
+        "entrega": [
+          {
+            "dataEntrega" : "N/A"
+          }
+        ],
+
+        "instrucaoEmbalagem": [
+          {
+            "isDangerous" : "Não",
+            "dgItems" : "Não",
+            "dgInfo" : "N/A",
+            "packagingGroup" : "N/A"
+          }
+        ],
+
+        "temperaturaControlada": [
+          {
+            "marcaCaixa" : "DRS MEDICAL BOX",
+            "litros" : "N/A",
+            "caixaAmbiente" : "X",
+            "caixaCongelado" : "N/A",
+            "monitor" : "N/A",
+            "quantidade" : "1"
+          }
+        ],
+
+        "informacaoTemperatura": [
+          {
+            "temperatura" : "Ambiente",
+            "geloSeco" : "KG",
+            "gelo" : "N/A",
+            "reposicaoGelo" : "N/A"
+          }
+        ],
+
+        "deliveryInformation": [
+          {
+            "horaColeta" : "Jun-03-2019 14:20",
+            "horaEntrega" : "N/A",
+            "recebidoPor" : "N/A"
+          }
+        ],
+
+        "historicoEventos": [
+          {
+            "datetimeEvento" : "Jun-4-2019 22:00 - GRU",
+            "evento" : "Amostra confirmada a bordo"
+          },
+
+          {
+            "datetimeEvento" : "Jun-4-2019 17:00 - GRU",
+            "evento" : "Informações"
+          },
+
+          {
+            "datetimeEvento" : "Jun-4-2019 14:20 - JFK",
+            "evento" : "Informação do horário de voô disponível"
+          },
+
+          {
+            "datetimeEvento" : "Jun-3-2019 14:20 - PFB",
+            "evento" : "Coleta realizada"
+          },
+          {
+            "datetimeEvento" : "Jun-2-2019 09:11 - JFK",
+            "evento" : "Envio das caixas para realização da coleta"
+          },
+          {
+            "datetimeEvento" : "Jun 2-2019 10:15 - JFK",
+            "evento" : "Alerta de Coleta Enviado"
+          },
+          {
+            "datetimeEvento" : "May 29-2019 10:15 - JFK",
+            "evento" : "Revisado pelo time de Customer Service"
+          },
+
+          {
+            "datetimeEvento" : "May 29-2019 09:25",
+            "evento" : "Novo Embarque "
+          }
+        ]
+      }
+    ],
+
+    "exportacaoWaiting": [
+      {
+        "title": "Exportação aguardando liberação"
+      },
+      {
+        "shipmentInformation": [
+          {
+            "status" : "Em andamento",
+            "codigoRastreio" : "PXBIO10910",
+            "bolNumber" : "BR18097",
+            "refInterna" : "CL2-201086-002 81796",
+            "numeroCaixas" : "1 caixa",
+            "ultimaAtualizacao" : "03/07/2019",
+            "tipoServico" : "STAT RUSH PRIORITY ",
+            "emTransito" : "N/A",
+            "invoiceNumber" : "19204808",
+            "kg" : "2"
+          }
+        ],
+
+        "coleta": [
+          {
+            "dataColeta" : "Jun-19-2019 15:00"
+          }
+        ],
+
+        "entrega": [
+          {
+            "dataEntrega" : "N/A"
+          }
+        ],
+
+        "instrucaoEmbalagem": [
+          {
+            "isDangerous" : "Não",
+            "dgItems" : "Não",
+            "dgInfo" : "N/A",
+            "packagingGroup" : "N/A"
+          }
+        ],
+
+        "temperaturaControlada": [
+          {
+            "marcaCaixa" : "SHIPPERS OWN PACKAGING",
+            "litros" : "N/A",
+            "caixaAmbiente" : "X",
+            "caixaCongelado" : "N/A",
+            "monitor" : "N/A",
+            "quantidade" : "1"
+          }
+        ],
+
+        "informacaoTemperatura": [
+          {
+            "temperatura" : "Ambiente",
+            "geloSeco" : "KG",
+            "gelo" : "N/A",
+            "reposicaoGelo" : "N/A"
+          }
+        ],
+
+        "deliveryInformation": [
+          {
+            "horaColeta" : "N/A",
+            "horaEntrega" : "Jun-21-2019 12:19",
+            "recebidoPor" : "N/A"
+          }
+        ],
+
+        "historicoEventos": [
+          {
+            "datetimeEvento" : "Mar 12-2019 22:00 - GRU",
+            "evento" : "Amostra aguardando desembaraço"
+          },
+
+          {
+            "datetimeEvento" : "Mar-12-2019 17:00 - GRU",
+            "evento" : "Informações"
+          },
+
+          {
+            "datetimeEvento" : "Mar 11-2019 14:20 - JFK",
+            "evento" : "Informação do horário de voô disponível"
+          },
+
+          {
+            "datetimeEvento" : "Mar 11-2019 14:20 - PFB",
+            "evento" : "Coleta realizada"
+          },
+          {
+            "datetimeEvento" : "Mar 11 2019 09:11 - JFK",
+            "evento" : "Envio das caixas para realização da coleta"
+          },
+          {
+            "datetimeEvento" : "Mar 9-2019 10:15 - JFK",
+            "evento" : "Alerta de Coleta Enviado"
+          },
+          {
+            "datetimeEvento" : "Mar 9-2019 10:15 - JFK",
+            "evento" : "Revisado pelo time de Customer Service"
+          },
+
+          {
+            "datetimeEvento" : "Mar 9-2019 09:25",
+            "evento" : "Novo Embarque"
+          }
+        ]
+      }
+    ]
+  }
+]
+

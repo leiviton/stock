@@ -1,12 +1,12 @@
 <!doctype html>
-<html lang="{{ app()->getLocale() }}">
+<html lang="en">
 <head>
     <meta charset="utf-8">
     <base href="/">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="Start your development with a Dashboard for Bootstrap 4.">
     <meta name="author" content="Creative Tim">
-    <title>Portal Estoque</title>
+    <title>Portal DRS</title>
     <!-- Favicon -->
     <link href="./assets/img/brand/logo.png" rel="icon" type="image/png">
     <!-- Fonts -->
@@ -19,9 +19,9 @@
 </head>
 <body>
 <app-root></app-root>
-<script type="text/javascript" src="runtime.b8cdf9c6f92d8f495ec9.js"></script>
-<script type="text/javascript" src="polyfills.8754121e1108d81841a1.js"></script>
+<script type="text/javascript" src="runtime.186f82655196732cd891.js"></script>
+<script type="text/javascript" src="polyfills.aca04ef57459e933ca5d.js"></script>
 <script type="text/javascript" src="scripts.2db4cbc668a10a0c2a68.js"></script>
-<script type="text/javascript" src="main.28691343aa4d6a08e556.js"></script>
+<script type="text/javascript" src="main.2ca35b73518fe3ec7b20.js"></script>
 </body>
 </html>
