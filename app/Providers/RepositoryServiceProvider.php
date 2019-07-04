@@ -55,5 +55,9 @@ class RepositoryServiceProvider extends ServiceProvider
             'Stock\Repositories\ConfigurationFiscalRepository',
             'Stock\Repositories\ConfigurationFiscalRepositoryEloquent'
         );
+        $this->app->bind(
+            'Stock\Repositories\NotaFiscalRepository',
+            'Stock\Repositories\NotaFiscalRepositoryEloquent'
+        );
     }
 }

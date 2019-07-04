@@ -227,7 +227,7 @@ class StockCron extends Command
 
                 $erro["chave_logix"] = '';
                 $erro['error'] = 'Finalizado integraçao saidas: '.$cnpj.' Sem movimento';
-                \Mail::to(['leiviton.silva@drsgroup.com.br','leiviton.silva@drsgroup.com.br'])->send(new IntegrationLogix('leiviton.silva@drsgroup.com.br', $erro));
+                //\Mail::to(['leiviton.silva@drsgroup.com.br','leiviton.silva@drsgroup.com.br'])->send(new IntegrationLogix('leiviton.silva@drsgroup.com.br', $erro));
             } else {
 
                 Log::info('Sem movimento no estoque:' . $countStock);

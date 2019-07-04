@@ -136,7 +136,7 @@ class RoadsCron extends Command
                                 } else {
                                     Log::info('Registro chave: ' . $verifyRoads);
                                     $erro["chave_logix"] = $entradas[$i]->id;
-                                    \Mail::to(['leiviton.silva@drsgroup.com.br','leiviton.silva@drsgroup.com.br'])->send(new IntegrationLogix('leiviton.silva@drsgroup.com.br', $erro));
+                                    //\Mail::to(['leiviton.silva@drsgroup.com.br','leiviton.silva@drsgroup.com.br'])->send(new IntegrationLogix('leiviton.silva@drsgroup.com.br', $erro));
                                 }
 
                                 if ($verifyRoads == '') {
@@ -177,7 +177,7 @@ class RoadsCron extends Command
 
                             $erro["chave_logix"] = '';
                             $erro['error'] = 'Finalizado integraçao entradas';
-                            \Mail::to(['leiviton.silva@drsgroup.com.br','leiviton.silva@drsgroup.com.br'])->send(new IntegrationLogix('leiviton.silva@drsgroup.com.br', $erro));
+                            //\Mail::to(['leiviton.silva@drsgroup.com.br','leiviton.silva@drsgroup.com.br'])->send(new IntegrationLogix('leiviton.silva@drsgroup.com.br', $erro));
 
                         } catch (\Exception $e) {
                             DB::rollBack();
@@ -218,7 +218,7 @@ class RoadsCron extends Command
                             } else {
                                 //Log::info('Registro chave: ' . $verifyRoads);
                                 $erro["chave_logix"] = $entradas[$i]->id;
-                                \Mail::to(['leiviton.silva@drsgroup.com.br','leiviton.silva@drsgroup.com.br'])->send(new IntegrationLogix('leiviton.silva@drsgroup.com.br', $erro));
+                                //\Mail::to(['leiviton.silva@drsgroup.com.br','leiviton.silva@drsgroup.com.br'])->send(new IntegrationLogix('leiviton.silva@drsgroup.com.br', $erro));
                             }
 
                             if ($verifyRoads == '') {
@@ -257,7 +257,7 @@ class RoadsCron extends Command
 
                         $erro["chave_logix"] = '';
                         $erro['error'] = 'Finalizado integraçao entradas';
-                        \Mail::to(['leiviton.silva@drsgroup.com.br','leiviton.silva@drsgroup.com.br'])->send(new IntegrationLogix('leiviton.silva@drsgroup.com.br', $erro));
+                        //\Mail::to(['leiviton.silva@drsgroup.com.br','leiviton.silva@drsgroup.com.br'])->send(new IntegrationLogix('leiviton.silva@drsgroup.com.br', $erro));
                     } catch (\Exception $e) {
                         DB::rollBack();
                         Log::error("Erro entrada: $i |" . $e->getMessage());
@@ -267,12 +267,12 @@ class RoadsCron extends Command
                 }
                 $erro["chave_logix"] = '';
                 $erro['error'] = 'Finalizado integraçao entradas: '.$cnpj;
-                \Mail::to(['leiviton.silva@drsgroup.com.br','leiviton.silva@drsgroup.com.br'])->send(new IntegrationLogix('leiviton.silva@drsgroup.com.br', $erro));
+                //\Mail::to(['leiviton.silva@drsgroup.com.br','leiviton.silva@drsgroup.com.br'])->send(new IntegrationLogix('leiviton.silva@drsgroup.com.br', $erro));
             } else {
                 Log::info("Sem movimentos: $dataNowReverse, quantidade $countRoads, empresas: $count");
                 $erro["chave_logix"] = '';
                 $erro['error'] = 'Finalizado integraçao saidas: '.$cnpj.' Sem movimento';
-                \Mail::to(['leiviton.silva@drsgroup.com.br','leiviton.silva@drsgroup.com.br'])->send(new IntegrationLogix('leiviton.silva@drsgroup.com.br', $erro));
+                //\Mail::to(['leiviton.silva@drsgroup.com.br','leiviton.silva@drsgroup.com.br'])->send(new IntegrationLogix('leiviton.silva@drsgroup.com.br', $erro));
             }
 
             $k++;
