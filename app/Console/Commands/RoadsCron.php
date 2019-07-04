@@ -7,9 +7,6 @@ use GuzzleHttp\Client;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Monolog\Handler\StreamHandler;
-use Monolog\Logger;
-use Stock\Mail\IntegrationLogix;
 use Stock\Repositories\CompanyRepository;
 use Stock\Repositories\RoadRepository;
 
@@ -64,10 +61,6 @@ class RoadsCron extends Command
     {
         $companies = $this->companyRepository->all();
 
-        $log = new Logger('roads');
-
-        $log->pushHandler(new StreamHandler(storage_path().'/logs/logix.log'));
-
         $k = 0;
 
         $count = count($companies);
@@ -106,9 +99,9 @@ class RoadsCron extends Command
 
             $erro["count"] = $countRoads;
 
-            $log::info("Iniciou empresa: $k " . $companies[$k]->nome);
+            Log::info("Iniciou empresa: $k " . $companies[$k]->nome);
 
-            $log::info("Contador de entradas: $k " . $companies[$k]->nome . " | quantidade: $count | http://10.0.0.18:4490/logixrest/kbtr00002/countEntradaporDepositanteData/01/$cnpj/$dataStartReverse/$dataNowReverse/0");
+            Log::info("Contador de entradas: $k " . $companies[$k]->nome . " | quantidade: $count | http://10.0.0.18:4490/logixrest/kbtr00002/countEntradaporDepositanteData/01/$cnpj/$dataStartReverse/$dataNowReverse/0");
 
             if ($countRoads > 0) {
 
@@ -120,7 +113,7 @@ class RoadsCron extends Command
                     $end = 10000;
 
                     for ($j = 0; $j < $limit; $j++) {
-                        $log::info("Inicio Consulta Entradas $j de $limit | inicio - $start e fim - $end: " . $companies[$k]->nome . "http://10.0.0.18:4490/logixrest/kbtr00002/entradaporDepositanteData/01/$cnpj/$start/$end/$dataStartReverse/$dataNowReverse/S/0");
+                        Log::info("Inicio Consulta Entradas $j de $limit | inicio - $start e fim - $end: " . $companies[$k]->nome . "http://10.0.0.18:4490/logixrest/kbtr00002/entradaporDepositanteData/01/$cnpj/$start/$end/$dataStartReverse/$dataNowReverse/S/0");
 
                         $response = $client->get("http://10.0.0.18:4490/logixrest/kbtr00002/entradaporDepositanteData/01/$cnpj/$start/$end/$dataStartReverse/$dataNowReverse/S/0", [
                             'auth' => [
@@ -138,15 +131,15 @@ class RoadsCron extends Command
                                 $verifyRoads = $this->roadRepository->findByLogix($entradas[$i]->id);
 
                                 if ($verifyRoads == '') {
-                                    $log::info('Registro chave não encontrado');
+                                    Log::info('Registro chave não encontrado');
                                 } else {
-                                    $log::info('Registro chave: ' . $verifyRoads);
+                                    Log::info('Registro chave: ' . $verifyRoads);
                                     $erro["chave_logix"] = $entradas[$i]->id;
                                     //\Mail::to(['leiviton.silva@drsgroup.com.br','leiviton.silva@drsgroup.com.br'])->send(new IntegrationLogix('leiviton.silva@drsgroup.com.br', $erro));
                                 }
 
                                 if ($verifyRoads == '') {
-                                    $log::info('Registro entrada novo: ' . $entradas[$i]->id);
+                                    Log::info('Registro entrada novo: ' . $entradas[$i]->id);
                                     $data1 = [
                                         'chave_logix' => $entradas[$i]->id,
                                         'company_id' => $companies[$k]->id,
@@ -175,7 +168,7 @@ class RoadsCron extends Command
                                     $this->roadRepository->firstOrCreate($data1);
                                     //dd($itemEnd);
                                 } else {
-                                    $log::info('Registro encontrado chave: ' . $verifyRoads);
+                                    Log::info('Registro encontrado chave: ' . $verifyRoads);
                                 }
                             }
 
@@ -187,21 +180,21 @@ class RoadsCron extends Command
 
                         } catch (\Exception $e) {
                             DB::rollBack();
-                            $log::error("Erro entrada: $i |" . $e->getMessage());
+                            Log::error("Erro entrada: $i |" . $e->getMessage());
                         }
 
-                        $log::info('Finalizou registros entradas: ' . $start . ' a ' . $end);
+                        Log::info('Finalizou registros entradas: ' . $start . ' a ' . $end);
 
                         $start = $end + 1;
                         $end = $end + 10000;
                     }
 
-                    $log::info("Finalizou integraçao saidas: $dataNowReverse, quantidade $countRoads");
+                    Log::info("Finalizou integraçao saidas: $dataNowReverse, quantidade $countRoads");
                 } else {
 
                     $end = $countRoads;
 
-                    $log::info("Inicio Consulta: " . $companies[$k]->nome . "http://10.0.0.18:4490/logixrest/kbtr00002/entradaporDepositanteData/01/$cnpj/$start/$end/$dataStartReverse/$dataNowReverse/S/0");
+                    Log::info("Inicio Consulta: " . $companies[$k]->nome . "http://10.0.0.18:4490/logixrest/kbtr00002/entradaporDepositanteData/01/$cnpj/$start/$end/$dataStartReverse/$dataNowReverse/S/0");
 
                     $response = $client->get("http://10.0.0.18:4490/logixrest/kbtr00002/entradaporDepositanteData/01/$cnpj/$start/$end/$dataStartReverse/$dataNowReverse/S/0", [
                         'auth' => [
@@ -220,7 +213,7 @@ class RoadsCron extends Command
                             $verifyRoads = $this->roadRepository->findByLogix($entradas[$i]->id);
 
                             if ($verifyRoads == '') {
-                                $log::info('Registro chave não encontrado');
+                                Log::info('Registro chave não encontrado');
                             } else {
                                 //Log::info('Registro chave: ' . $verifyRoads);
                                 $erro["chave_logix"] = $entradas[$i]->id;
@@ -256,7 +249,7 @@ class RoadsCron extends Command
                                 $this->roadRepository->firstOrCreate($data1);
                                 //dd($itemEnd);
                             } else {
-                                $log::info('Registro encontrado chave: ' . $verifyRoads);
+                                Log::info('Registro encontrado chave: ' . $verifyRoads);
                             }
                         }
                         DB::commit();
@@ -266,23 +259,23 @@ class RoadsCron extends Command
                         //\Mail::to(['leiviton.silva@drsgroup.com.br','leiviton.silva@drsgroup.com.br'])->send(new IntegrationLogix('leiviton.silva@drsgroup.com.br', $erro));
                     } catch (\Exception $e) {
                         DB::rollBack();
-                        $log::error("Erro entrada: $i |" . $e->getMessage());
+                        Log::error("Erro entrada: $i |" . $e->getMessage());
                     }
 
-                    $log::info('Finalizou registros entradas: ' . $start . ' a ' . $end);
+                    Log::info('Finalizou registros entradas: ' . $start . ' a ' . $end);
                 }
                 $erro["chave_logix"] = '';
                 $erro['error'] = 'Finalizado integraçao entradas: '.$cnpj;
                 //\Mail::to(['leiviton.silva@drsgroup.com.br','leiviton.silva@drsgroup.com.br'])->send(new IntegrationLogix('leiviton.silva@drsgroup.com.br', $erro));
             } else {
-                $log::info("Sem movimentos: $dataNowReverse, quantidade $countRoads, empresas: $count");
+                Log::info("Sem movimentos: $dataNowReverse, quantidade $countRoads, empresas: $count");
                 $erro["chave_logix"] = '';
                 $erro['error'] = 'Finalizado integraçao saidas: '.$cnpj.' Sem movimento';
                 //\Mail::to(['leiviton.silva@drsgroup.com.br','leiviton.silva@drsgroup.com.br'])->send(new IntegrationLogix('leiviton.silva@drsgroup.com.br', $erro));
             }
 
             $k++;
-            $log::info("Indice array emrpesas: $k");
+            Log::info("Indice array emrpesas: $k");
         } while ($k < $count);
     }
 
