@@ -7,6 +7,8 @@ use GuzzleHttp\Client;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
 use Stock\Mail\IntegrationLogix;
 use Stock\Repositories\CompanyRepository;
 use Stock\Repositories\OutRepository;
@@ -62,6 +64,10 @@ class OutsCron extends Command
     {
         $companies = $this->companyRepository->orderBy('id', 'asc')->all();
 
+        $log = new Logger('outs');
+
+        $log->pushHandler(new StreamHandler(storage_path().'/logs/logix.log'));
+
         $erro = [
             "error" => "",
             "count" => 0,
@@ -94,9 +100,9 @@ class OutsCron extends Command
 
             $start = 1;
 
-            Log::info('Iniciou empresa: ' . $company->nome);
+            $log::info('Iniciou empresa: ' . $company->nome);
 
-            Log::info("Contador de saidas: " . $company->nome . " | http://10.0.0.18:4490/logixrest/kbtr00003/countsaidasporDepositanteData/01/$cnpj/$dataStartReverse/$dataNowReverse/0");
+            $log::info("Contador de saidas: " . $company->nome . " | http://10.0.0.18:4490/logixrest/kbtr00003/countsaidasporDepositanteData/01/$cnpj/$dataStartReverse/$dataNowReverse/0");
 
             if ($countRoads > 0) {
 
@@ -108,7 +114,7 @@ class OutsCron extends Command
 
                     for ($j = 0; $j < $limit; $j++) {
 
-                        Log::info("Inicio Consulta Saidas $j de $limit | inicio - $start e fim - $end: " . $company->nome . " | http://10.0.0.18:4490/logixrest/kbtr00003/saidasporDepositanteData/01/$cnpj/$start/$end/$dataStartReverse/$dataNowReverse/S/0");
+                        $log::info("Inicio Consulta Saidas $j de $limit | inicio - $start e fim - $end: " . $company->nome . " | http://10.0.0.18:4490/logixrest/kbtr00003/saidasporDepositanteData/01/$cnpj/$start/$end/$dataStartReverse/$dataNowReverse/S/0");
 
                         $responseSaida = $client->get("http://10.0.0.18:4490/logixrest/kbtr00003/saidasporDepositanteData/01/$cnpj/$start/$end/$dataStartReverse/$dataNowReverse/S/0", [
                             'auth' => [
@@ -120,7 +126,7 @@ class OutsCron extends Command
 
                         $saida = $saidas->data;
 
-                        Log::info("Finalizou registros saidas: $start a $end");
+                        $log::info("Finalizou registros saidas: $start a $end");
                         //dd($saida[$i]);
                         DB::beginTransaction();
 
@@ -130,9 +136,9 @@ class OutsCron extends Command
                                 $verifyOuts = $this->outRepository->findByLogix($saida[$i]->id);
 
                                 if ($verifyOuts == '') {
-                                    Log::info('Registro chave não encontrado');
+                                    $log::info('Registro chave não encontrado');
                                 } else {
-                                    Log::info('Registro chave: ' . $verifyOuts);
+                                    $log::info('Registro chave: ' . $verifyOuts);
                                     $erro["chave_logix"] = $saida[$i]->id;
                                     //\Mail::to(['leiviton.silva@drsgroup.com.br','leiviton.silva@drsgroup.com.br'])->send(new IntegrationLogix('leiviton.silva@drsgroup.com.br', $erro));
                                 }
@@ -165,14 +171,14 @@ class OutsCron extends Command
 
                                     $this->outRepository->firstOrCreate($dataSaida);
                                 }else {
-                                    Log::info('Registro saida encontrado chave: ' . $saida[$i]->id);
+                                    $log::info('Registro saida encontrado chave: ' . $saida[$i]->id);
                                 }
                             }
 
                             DB::commit();
                         } catch (\Exception $e) {
                             DB::rollBack();
-                            Log::error("Erro saida: $i |" . $e->getMessage());
+                            $log::error("Erro saida: $i |" . $e->getMessage());
                         }
 
                         $start = $end + 1;
@@ -181,7 +187,7 @@ class OutsCron extends Command
                 } else {
                     $end = $countRoads;
 
-                    Log::info("Inicio Consulta saidas 1 de 1: " . $company->nome . " | http://10.0.0.18:4490/logixrest/kbtr00003/saidasporDepositanteData/01/$cnpj/$start/$end/$dataStartReverse/$dataNowReverse/S/0");
+                    $log::info("Inicio Consulta saidas 1 de 1: " . $company->nome . " | http://10.0.0.18:4490/logixrest/kbtr00003/saidasporDepositanteData/01/$cnpj/$start/$end/$dataStartReverse/$dataNowReverse/S/0");
 
 
                     $responseSaida = $client->get("http://10.0.0.18:4490/logixrest/kbtr00003/saidasporDepositanteData/01/$cnpj/$start/$end/$dataStartReverse/$dataNowReverse/S/0", [
@@ -194,7 +200,7 @@ class OutsCron extends Command
 
                     $saida = $saidas->data;
 
-                    Log::info("Iniciou registros saidas: $start a $end");
+                    $log::info("Iniciou registros saidas: $start a $end");
 
                     //dd($saida[$i]);
                     DB::beginTransaction();
@@ -203,9 +209,9 @@ class OutsCron extends Command
                             $verifyOuts = $this->outRepository->findByLogix($saida[$i]->id);
 
                             if ($verifyOuts == '') {
-                                Log::info('Registro chave não encontrado');
+                                $log::info('Registro chave não encontrado');
                             } else {
-                                Log::info('Registro chave: ' . $verifyOuts);
+                                $log::info('Registro chave: ' . $verifyOuts);
                                 $erro["chave_logix"] = $saida[$i]->id;
                                 //\Mail::to(['leiviton.silva@drsgroup.com.br','leiviton.silva@drsgroup.com.br'])->send(new IntegrationLogix('leiviton.silva@drsgroup.com.br', $erro));
                             }
@@ -242,11 +248,11 @@ class OutsCron extends Command
                         DB::commit();
                     } catch (\Exception $e) {
                         DB::rollBack();
-                        Log::error("Erro saida: $i |" . $e->getMessage());
+                        $log::error("Erro saida: $i |" . $e->getMessage());
                     }
                 }
 
-                Log::info("Finalizou integraçao saidas: $dataNowReverse, quantidade $countRoads");
+                $log::info("Finalizou integraçao saidas: $dataNowReverse, quantidade $countRoads");
                 $erro["chave_logix"] = '';
                 $erro['error'] = 'Finalizado integraçao saidas: '.$cnpj;
                 //\Mail::to(['leiviton.silva@drsgroup.com.br','leiviton.silva@drsgroup.com.br'])->send(new IntegrationLogix('leiviton.silva@drsgroup.com.br', $erro));
@@ -254,7 +260,7 @@ class OutsCron extends Command
                 $erro["chave_logix"] = '';
                 $erro['error'] = 'Finalizado integraçao saidas: '.$cnpj.' Sem movimento';
                 //\Mail::to(['leiviton.silva@drsgroup.com.br','leiviton.silva@drsgroup.com.br'])->send(new IntegrationLogix('leiviton.silva@drsgroup.com.br', $erro));
-                Log::info("Sem movimento: $dataNowReverse, quantidade $countRoads");
+                $log::info("Sem movimento: $dataNowReverse, quantidade $countRoads");
             }
         }
     }
