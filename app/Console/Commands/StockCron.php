@@ -6,9 +6,6 @@ use GuzzleHttp\Client;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Monolog\Handler\StreamHandler;
-use Monolog\Logger;
-use Stock\Mail\IntegrationLogix;
 use Stock\Repositories\CompanyRepository;
 use Stock\Repositories\StockRepository;
 
@@ -60,10 +57,6 @@ class StockCron extends Command
      */
     public function handle()
     {
-        $log = new Logger('stock');
-
-        $log->pushHandler(new StreamHandler(storage_path().'/logs/logix.log'));
-
         DB::beginTransaction();
         try {
             DB::table('stocks')->truncate();
@@ -77,7 +70,7 @@ class StockCron extends Command
 
         for ($k = 0; $k < count($companies); $k++) {
 
-            $log::info('Iniciou estoque empresa: ' . $companies[$k]->nome);
+            Log::info('Iniciou estoque empresa: ' . $companies[$k]->nome);
 
             $cnpj = $this->limpaCPF_CNPJ($companies[$k]->cnpj);
 
@@ -105,7 +98,7 @@ class StockCron extends Command
 
                     for ($j = 0; $j < $limit; $j++) {
 
-                        $log::info("Inicio Consulta estoque $j de $limit | inicio - $start e fim - $end: " . $companies[$k]->nome . " | http://10.0.0.18:4490/logixrest/kbtr00001/estoquePorDepositante/01/$cnpj/$start/$end/S/S/0");
+                        Log::info("Inicio Consulta estoque $j de $limit | inicio - $start e fim - $end: " . $companies[$k]->nome . " | http://10.0.0.18:4490/logixrest/kbtr00001/estoquePorDepositante/01/$cnpj/$start/$end/S/S/0");
 
                         $response = $client->get("http://10.0.0.18:4490/logixrest/kbtr00001/estoquePorDepositante/01/$cnpj/$start/$end/S/S/0", [
                             'auth' => [
@@ -124,7 +117,7 @@ class StockCron extends Command
                                 $verifyOuts = $this->stockRepository->findByLogix(trim($stock[$i]->id));
 
                                 if ($verifyOuts != 0) {
-                                    $log::info('Registro estoque chave: ' . $verifyOuts);
+                                    Log::info('Registro estoque chave: ' . $verifyOuts);
                                 }
 
                                 if ($verifyOuts == 0) {
@@ -160,7 +153,7 @@ class StockCron extends Command
                             DB::commit();
                         } catch (\Exception $e) {
                             DB::rollBack();
-                            $log::error($e->getMessage());
+                            Log::error($e->getMessage());
                         }
 
                         $start = $end + 1;
@@ -187,9 +180,9 @@ class StockCron extends Command
                             $verifyOuts = $this->stockRepository->findByLogix($stock[$i]->id);
 
                             if ($verifyOuts != 0) {
-                                $log::info('Registro estoque chave: ' . $verifyOuts);
+                                Log::info('Registro estoque chave: ' . $verifyOuts);
                             } else {
-                                $log::info('Registro estoque nao encontrado: ' . $stock[$i]->id);
+                                Log::info('Registro estoque nao encontrado: ' . $stock[$i]->id);
                             }
 
                             if ($verifyOuts == 0) {
@@ -225,7 +218,7 @@ class StockCron extends Command
 
                     } catch (\Exception $e) {
                         DB::rollBack();
-                        $log::error($e->getMessage());
+                        Log::error($e->getMessage());
                     }
                 }
 
@@ -236,7 +229,7 @@ class StockCron extends Command
                 //\Mail::to(['leiviton.silva@drsgroup.com.br','leiviton.silva@drsgroup.com.br'])->send(new IntegrationLogix('leiviton.silva@drsgroup.com.br', $erro));
             } else {
 
-                $log::info('Sem movimento no estoque:' . $countStock);
+                Log::info('Sem movimento no estoque:' . $countStock);
             }
         }
     }
