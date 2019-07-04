@@ -83,7 +83,7 @@ class RoadsCron extends Command
 
             $dataNowReverse = $dataNow->subDay(1)->format('d-m-Y');
 
-            $dataStartReverse = $dataNow->subDay(1)->format('d-m-Y');
+            $dataStartReverse = $dataNowReverse;
 
             //$dataStartReverse = '01-01-2019';
 
