@@ -5,9 +5,7 @@ namespace Stock\Repositories;
 use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Stock\Presenters\NotaFiscalPresenter;
-use Stock\Repositories\NotaFiscalRepository;
 use Stock\Models\NotaFiscal;
-use Stock\Validators\NotaFiscalValidator;
 
 /**
  * Class NotaFiscalRepositoryEloquent.
@@ -26,16 +24,19 @@ class NotaFiscalRepositoryEloquent extends BaseRepository implements NotaFiscalR
         return NotaFiscal::class;
     }
 
-    
 
     /**
      * Boot up the repository, pushing criteria
+     * @throws \Prettus\Repository\Exceptions\RepositoryException
      */
     public function boot()
     {
         $this->pushCriteria(app(RequestCriteria::class));
     }
 
+    /**
+     * @return string
+     */
     public function presenter()
     {
         return NotaFiscalPresenter::class;

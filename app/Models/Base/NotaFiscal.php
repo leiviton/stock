@@ -2,7 +2,7 @@
 
 /**
  * Created by Reliese Model.
- * Date: Wed, 03 Jul 2019 17:33:15 -0300.
+ * Date: Fri, 05 Jul 2019 12:08:34 -0300.
  */
 
 namespace Stock\Models\Base;
@@ -54,10 +54,12 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property float $vOutro
  * @property float $vNF
  * @property float $vTotTrib
+ * @property string $status
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
  * 
  * @property \Stock\Models\Company $company
+ * @property \Illuminate\Database\Eloquent\Collection $nota_fiscal_items
  *
  * @package Stock\Models\Base
  */
@@ -89,5 +91,10 @@ class NotaFiscal extends Eloquent
 	public function company()
 	{
 		return $this->belongsTo(\Stock\Models\Company::class);
+	}
+
+	public function nota_fiscal_items()
+	{
+		return $this->hasMany(\Stock\Models\NotaFiscalItem::class, 'nota_id');
 	}
 }

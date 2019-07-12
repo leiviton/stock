@@ -12,6 +12,7 @@ use Stock\Models\NotaFiscal;
  */
 class NotaFiscalTransformer extends TransformerAbstract
 {
+    protected $defaultIncludes = ['items'];
     /**
      * Transform the NotaFiscal entity.
      *
@@ -37,7 +38,7 @@ class NotaFiscalTransformer extends TransformerAbstract
             'xNome' => $model->xNome,
             'indIEDest' => $model->indIEDest,
             'IE' => $model->IE,
-            'CNPJ' => $model->CNPJ,
+            'doc_type' => $model->CNPJ,
             'xLgr' => $model->xLgr,
             'nro' => $model->nro,
             'xBairro' => $model->xBairro,
@@ -63,10 +64,16 @@ class NotaFiscalTransformer extends TransformerAbstract
             'vOutro' => $model->vOutro,
             'vNF' => $model->vNF,
             'vTotTrib' => $model->vTotTrib,
+            'status' => $model->status,
             /* place your other model properties here */
 
             'created_at' => $model->created_at,
             'updated_at' => $model->updated_at
         ];
+    }
+
+    public function includeItems(NotaFiscal $model)
+    {
+        return $this->collection($model->nota_fiscal_items, new NotaFiscalItemTransformer()) ?? null;
     }
 }

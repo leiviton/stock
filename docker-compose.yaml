@@ -1,0 +1,60 @@
+version: '3'
+services:
+    api-stock:
+      build: .
+      container_name: api-stock
+      entrypoint: dockerize -template ./.docker/app/.env:.env -wait tcp://db-stock:3306 -timeout 40s ./.docker/entrypoint.sh
+      environment:
+        - DB_HOST=db-stock
+        - DB_DATABASE=api_stock
+        - DB_USERNAME=root
+        - DB_PASSWORD=root
+      volumes:
+        - .:/var/www
+      networks:
+        - stock-network
+      depends_on:
+        - db-stock
+        - redis-stock
+
+    nginx:
+      build: .docker/nginx
+      container_name: nginx
+      restart: always
+      tty: true
+      ports:
+        - "8000:80"
+      volumes:
+        - .:/var/www
+      networks:
+        - stock-network
+      depends_on:
+        - api-stock
+    db-stock:
+      image: mysql:5.7
+      command: --innodb-use-native-aio=0
+      container_name: db-stock
+      restart: always
+      tty: true
+      ports:
+        - "3306:3306"
+      volumes:
+        - ./.docker/dbdata:/var/lib/mysql
+      environment:
+        - MYSQL_DATABASE=api_stock
+        - MYSQL_ROOT_PASSWORD=root
+        - MYSQL_USER=root
+      networks:
+        - stock-network
+
+    redis-stock:
+      image: redis:alpine
+      container_name: redis
+      expose:
+        - 6379
+      networks:
+        - stock-network
+
+networks:
+  stock-network:
+    driver: bridge

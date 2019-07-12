@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Log;
 use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Stock\Presenters\StockPresenter;
-use Stock\Repositories\StockRepository;
 use Stock\Models\Stock;
 use Stock\Validators\StockValidator;
 
@@ -34,6 +33,7 @@ class StockRepositoryEloquent extends BaseRepository implements StockRepository
 
     /**
      * Boot up the repository, pushing criteria
+     * @throws \Prettus\Repository\Exceptions\RepositoryException
      */
     public function boot()
     {
