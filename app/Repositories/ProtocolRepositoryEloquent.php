@@ -7,7 +7,6 @@ use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Stock\Models\Protocol;
 use Stock\Presenters\ProtocolPresenter;
-use Stock\Validators\ProtocolValidator;
 
 /**
  * Class ProtocolRepositoryEloquent.
@@ -31,6 +30,7 @@ class ProtocolRepositoryEloquent extends BaseRepository implements ProtocolRepos
 
     /**
      * Boot up the repository, pushing criteria
+     * @throws \Prettus\Repository\Exceptions\RepositoryException
      */
     public function boot()
     {
@@ -52,6 +52,9 @@ class ProtocolRepositoryEloquent extends BaseRepository implements ProtocolRepos
         throw (new ModelNotFoundException())->setModel($this->model());
     }
 
+    /**
+     * @return string
+     */
     public function presenter()
     {
         return ProtocolPresenter::class;

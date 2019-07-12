@@ -8,9 +8,7 @@ use Illuminate\Support\Facades\Log;
 use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Stock\Presenters\RoadPresenter;
-use Stock\Repositories\RoadRepository;
 use Stock\Models\Road;
-use Stock\Validators\RoadValidator;
 
 /**
  * Class RoadRepositoryEloquent.
@@ -34,6 +32,7 @@ class RoadRepositoryEloquent extends BaseRepository implements RoadRepository
 
     /**
      * Boot up the repository, pushing criteria
+     * @throws \Prettus\Repository\Exceptions\RepositoryException
      */
     public function boot()
     {

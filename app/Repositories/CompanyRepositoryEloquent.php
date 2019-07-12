@@ -5,9 +5,7 @@ namespace Stock\Repositories;
 use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Stock\Presenters\CompanyPresenter;
-use Stock\Repositories\CompanyRepository;
 use Stock\Models\Company;
-use Stock\Validators\CompanyValidator;
 
 /**
  * Class CompanyRepositoryEloquent.
@@ -31,6 +29,7 @@ class CompanyRepositoryEloquent extends BaseRepository implements CompanyReposit
 
     /**
      * Boot up the repository, pushing criteria
+     * @throws \Prettus\Repository\Exceptions\RepositoryException
      */
     public function boot()
     {
