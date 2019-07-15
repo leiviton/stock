@@ -1,8 +1,8 @@
 #!/bin/bash
-
 composer install
 
 php artisan cache:clear
+
 chmod -R 775 storage
 chmod -R 775 bootstrap
 
