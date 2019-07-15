@@ -20,6 +20,9 @@ Route::group(['prefix' => 'v1/', 'middleware' => 'auth:api'], function () {
         Route::get('consulta/{recibo}', 'UtilController@consultaProtocolo');
         Route::get('danfe', 'UtilController@emitirDanfe');
 
+        /*Notas fiscais*/
+        Route::get('notas','NotaFiscalController@index');
+
         /*Users*/
         Route::post('user', 'UserController@store');
         Route::post('user/upload', 'UserController@upload');

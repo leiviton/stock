@@ -4,15 +4,15 @@ namespace Stock\Repositories;
 
 use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
-use Stock\Presenters\ConfigurationFiscalPresenter;
-use Stock\Models\ConfigurationFiscal;
+use Stock\Presenters\NotaFiscalItemPresenter;
+use Stock\Models\NotaFiscalItem;
 
 /**
- * Class ConfigurationFiscalRepositoryEloquent.
+ * Class NotaFiscalItemRepositoryEloquent.
  *
  * @package namespace Stock\Repositories;
  */
-class ConfigurationFiscalRepositoryEloquent extends BaseRepository implements ConfigurationFiscalRepository
+class NotaFiscalItemRepositoryEloquent extends BaseRepository implements NotaFiscalItemRepository
 {
     /**
      * Specify Model class name
@@ -21,13 +21,13 @@ class ConfigurationFiscalRepositoryEloquent extends BaseRepository implements Co
      */
     public function model()
     {
-        return ConfigurationFiscal::class;
+        return NotaFiscalItem::class;
     }
 
-    
 
     /**
      * Boot up the repository, pushing criteria
+     *
      * @throws \Prettus\Repository\Exceptions\RepositoryException
      */
     public function boot()
@@ -40,7 +40,6 @@ class ConfigurationFiscalRepositoryEloquent extends BaseRepository implements Co
      */
     public function presenter()
     {
-        return ConfigurationFiscalPresenter::class;
+        return NotaFiscalItemPresenter::class;
     }
-
 }

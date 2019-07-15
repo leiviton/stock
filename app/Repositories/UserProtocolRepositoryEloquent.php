@@ -4,9 +4,8 @@ namespace Stock\Repositories;
 
 use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
-use Stock\Repositories\UserProtocolRepository;
+use Stock\Presenters\UserProtocolPresenter;
 use Stock\Models\UserProtocol;
-use Stock\Validators\UserProtocolValidator;
 
 /**
  * Class UserProtocolRepositoryEloquent.
@@ -29,10 +28,18 @@ class UserProtocolRepositoryEloquent extends BaseRepository implements UserProto
 
     /**
      * Boot up the repository, pushing criteria
+     * @throws \Prettus\Repository\Exceptions\RepositoryException
      */
     public function boot()
     {
         $this->pushCriteria(app(RequestCriteria::class));
     }
-    
+
+    /**
+     * @return string
+     */
+    public function presenter()
+    {
+        return UserProtocolPresenter::class;
+    }
 }

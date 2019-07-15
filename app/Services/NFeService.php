@@ -17,10 +17,24 @@ use NFePHP\NFe\Make;
 use NFePHP\NFe\Tools;
 use NFePHP\DA\NFe\Danfe;
 use NFePHP\DA\Legacy\FilesFolders;
+use Stock\Repositories\NotaFiscalRepository;
 
 
 class NFeService
 {
+    /**
+     * @var NotaFiscalRepository
+     */
+    private $repository;
+
+    /**
+     * NFeService constructor.
+     * @param NotaFiscalRepository $repository
+     */
+    public function __construct(NotaFiscalRepository $repository)
+    {
+        $this->repository = $repository;
+    }
 
     /**
      *
@@ -382,5 +396,18 @@ class NFeService
         } catch (InvalidArgumentException $e) {
             return "Ocorreu um erro durante o processamento :" . $e->getMessage();
         }
+    }
+
+    /**
+     * @param $status
+     * @return mixed
+     */
+    public function listNfe($status)
+    {
+        return $this->repository
+            ->skipPresenter(false)
+            ->scopeQuery(function ($query)use($status){
+                return $query->where('status',$status);
+            })->paginate(20);
     }
 }

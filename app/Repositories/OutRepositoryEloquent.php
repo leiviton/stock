@@ -9,7 +9,6 @@ use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Stock\Presenters\OutPresenter;
 use Stock\Models\Out;
-use Stock\Validators\OutValidator;
 
 /**
  * Class OutRepositoryEloquent.
@@ -33,6 +32,7 @@ class OutRepositoryEloquent extends BaseRepository implements OutRepository
 
     /**
      * Boot up the repository, pushing criteria
+     * @throws \Prettus\Repository\Exceptions\RepositoryException
      */
     public function boot()
     {
