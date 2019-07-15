@@ -77,9 +77,9 @@ class OutsCron extends Command
 
             $dataNowReverse = $dataNow->subDay(1)->format('d-m-Y');
 
-            $dataStartReverse = $dataNowReverse;
+            //$dataStartReverse = $dataNowReverse;
 
-            //$dataStartReverse = '01-01-2019';
+            $dataStartReverse = '09-07-2019';
 
             $responseCount = $client->get("http://10.0.0.18:4490/logixrest/kbtr00003/countsaidasporDepositanteData/01/$cnpj/$dataStartReverse/$dataNowReverse/0", [
                 'auth' => [
