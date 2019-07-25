@@ -19,4 +19,5 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 #RUN composer install
 
 EXPOSE 9000
+
 ENTRYPOINT ["php-fpm"]
