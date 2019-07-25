@@ -44,6 +44,24 @@ class RoadController extends Controller
      * @param $id
      * @param Request $request
      * @return mixed
+     * @throws \Exception
+     */
+    public function filterData($id, Request $request)
+    {
+        if($this->service->diffDays($request->get('start'),$request->get('end')) > 31) {
+            return response()->json([ 'title' => 'Erro','status' => 'error', 'message' => 'Intervalo de datas não pode ser maior que 31 dias'],406);
+        }else if($this->service->diffDays($request->get('start'),$request->get('end')) < 0) {
+            return response()->json([ 'title' => 'Erro','status' => 'error', 'message' => 'Data final maior que data inicial'],406);
+
+        }
+        $lote = $request->get('protocolo') ? $request->get('protocolo') : '';
+        return $this->service->getRoadssData($request->all(),$id,$lote);
+    }
+
+    /**
+     * @param $id
+     * @param Request $request
+     * @return mixed
      */
     public function getAll($id,Request $request)
     {

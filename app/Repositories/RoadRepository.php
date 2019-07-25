@@ -33,4 +33,12 @@ interface RoadRepository extends RepositoryInterface
      * @return mixed
      */
     public function findByLogix($chave);
+
+    /**
+     * @param $data
+     * @param $cnpj
+     * @param string $lote
+     * @return mixed
+     */
+    public function orderFilterData($data, $cnpj, $lote = '');
 }

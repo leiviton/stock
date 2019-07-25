@@ -45,6 +45,21 @@ class RoadService
 
     /**
      * @param $data
+     * @param $id
+     * @param string $lote
+     * @return mixed
+     * @throws \Exception
+     */
+    public function getRoadssData($data, $id, $lote = '')
+    {
+        $cnpj = $this->limpaCPF_CNPJ($this->companyRepository->find($id)->cnpj);
+        $data['end'] = $this->invertDate($data['end']);
+        $data['start'] = $this->invertDate($data['start']);
+        return $this->repository->skipPresenter(false)->orderFilterData($data,$cnpj,$lote);
+    }
+
+    /**
+     * @param $data
      * @return mixed
      * @throws \Exception
      */
@@ -161,6 +176,22 @@ class RoadService
         $valor = str_replace("-", "", $valor);
         $valor = str_replace("/", "", $valor);
         return $valor;
+    }
+
+    /**
+     * @param $start
+     * @param $end
+     * @return bool|\DateInterval|int
+     * @throws \Exception
+     */
+    public function diffDays($start, $end) {
+        $start = new \DateTime($this->invertDate($start));
+        $end = new \DateTime($this->invertDate($end));
+        if ($start > $end) {
+            return -1;
+        } else {
+            return $start->diff($end)->days;
+        }
     }
 
     public function findChave($get)
