@@ -29,3 +29,7 @@ Acessa bash da aplicação
 Para desligar os containers:
 
 - docker-compose down (opção é passar parâmetro desligar apenas o container que se quer)
+
+Verificar logs dos cointaners:
+
+- docker logs (nome do container)
