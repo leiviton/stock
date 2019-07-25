@@ -55,6 +55,21 @@ class OutService
 
     /**
      * @param $data
+     * @param $id
+     * @param string $lote
+     * @return mixed
+     * @throws \Exception
+     */
+    public function getOutsData($data, $id, $lote = '')
+    {
+        $cnpj = $this->limpaCPF_CNPJ($this->companyRepository->find($id)->cnpj);
+        $data['end'] = $this->invertDate($data['end']);
+        $data['start'] = $this->invertDate($data['start']);
+        return $this->repository->skipPresenter(false)->orderFilterData($data,$cnpj,$lote);
+    }
+
+    /**
+     * @param $data
      * @return mixed
      */
     public function getAll($id,$lote)

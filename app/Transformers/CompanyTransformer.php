@@ -12,7 +12,8 @@ use Stock\Models\Company;
  */
 class CompanyTransformer extends TransformerAbstract
 {
-    protected $defaultIncludes = ['protocols'];
+    protected $defaultIncludes = ['configuration'];
+
     /**
      * Transform the Company entity.
      *
@@ -23,10 +24,10 @@ class CompanyTransformer extends TransformerAbstract
     public function transform(Company $model)
     {
         return [
-            'id'         => (int) $model->id,
+            'id' => (int)$model->id,
             'cnpj' => $model->cnpj,
             'nome' => $model->nome,
-            'logo' => env('APP_URL').'/storage/companies/'.$model->logo,
+            'logo' => env('APP_URL') . '/storage/companies/' . $model->logo,
             /* place your other model properties here */
 
             'created_at' => $model->created_at,
@@ -34,12 +35,13 @@ class CompanyTransformer extends TransformerAbstract
         ];
     }
 
+
     /**
      * @param Company $company
-     * @return \League\Fractal\Resource\Collection|null
+     * @return \League\Fractal\Resource\Item
      */
-    public function includeProtocols(Company $company)
+    public function includeConfiguration(Company $company)
     {
-        return $company->protocols ? $this->collection($company->protocols, new ProtocolTransformer()) : null;
+        return $company->configuration_fiscal ? $this->item($company->configuration_fiscal, new ConfigurationFiscalTransformer()) : null;
     }
 }

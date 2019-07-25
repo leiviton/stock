@@ -38,4 +38,12 @@ class NotaFiscalController extends Controller
 
         return $this->service->listNfe($status);
     }
+
+    /**
+     * @param $id
+     * @throws \Exception
+     */
+    public function emitterNFe($id) {
+        $result = $this->service->gerarNfe($id);
+    }
 }

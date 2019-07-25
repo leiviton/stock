@@ -68,7 +68,7 @@ class CreateNotaFiscalTable extends Migration
             $table->float('vOutro',20,2);
             $table->float('vNF',20,2);
             $table->float('vTotTrib',20,2);
-            $table->enum('status',['autorizada','processando','cancelada','inutilizada'])->default('processando');
+            $table->enum('status',['autorizada','processando','processada','cancelada','inutilizada','gerada'])->default('gerada');
             $table->timestamps();
         });
 

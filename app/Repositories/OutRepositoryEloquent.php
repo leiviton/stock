@@ -164,6 +164,125 @@ class OutRepositoryEloquent extends BaseRepository implements OutRepository
     }
 
     /**
+     * @param $data
+     * @param $cnpj
+     * @param string $lote
+     * @return mixed
+     */
+    public function orderFilterData($data, $cnpj, $lote = '')
+    {
+        $order[0] = $order[0] ?? 'data_envio';
+        $order[1] = $order[1] ?? 'asc';
+        //dd($lote);
+        if ($lote == '') {
+            if ($data['value'] == '') {
+                $results = $this->model
+                    ->where('depositante', $cnpj)
+                    ->where('tipo_estoque', $lote)
+                    ->whereBetween("data_envio",[$data['start'],$data['end']])
+                    ->select(DB::raw('tipo_estoque,data_envio,desc_tipo_estoque,centro,nome_destino_final,numero_ordem,sum(outs.qtd_enviada) AS qtd_enviada,codigo_produto,desc_produto,lote,data_validade,desc_produto,unidade_medida,serie_nf,centro'))
+                    ->groupBy('codigo_produto')
+                    ->groupBy('serie_nf')
+                    ->groupBy('data_envio')
+                    ->groupBy('desc_produto')
+                    ->groupBy('tipo_estoque')
+                    ->groupBy('lote')
+                    ->groupBy('nome_destino_final')
+                    ->groupBy('centro')
+                    ->groupBy('data_validade')
+                    ->groupBy('desc_tipo_estoque')
+                    ->groupBy('unidade_medida')
+                    ->groupBy('numero_ordem')
+                    ->orderBy($order[0], $order[1])
+                    ->get();
+            } else {
+                $results = $this->model
+                    ->where('tipo_estoque', $lote)
+                    ->where('depositante', $cnpj)
+                    ->whereBetween("data_envio",[$data['start'],$data['end']])
+                    ->where(function ($query) use ($data) {
+                        if ($data['field'] == 'data_envio') {
+                            return $query->where($data['field'], $data['value']);
+                        } else if ($data) {
+                            return $query->where($data['field'], 'like', '%' . $data['value'] . '%');
+                        }
+                        return $query;
+                    })
+                    ->select(DB::raw('tipo_estoque,data_envio,desc_tipo_estoque,centro,nome_destino_final,numero_ordem,sum(outs.qtd_enviada) AS qtd_enviada,codigo_produto,desc_produto,lote,data_validade,desc_produto,unidade_medida,serie_nf,centro'))
+                    ->groupBy('codigo_produto')
+                    ->groupBy('serie_nf')
+                    ->groupBy('data_envio')
+                    ->groupBy('desc_produto')
+                    ->groupBy('tipo_estoque')
+                    ->groupBy('lote')
+                    ->groupBy('nome_destino_final')
+                    ->groupBy('centro')
+                    ->groupBy('data_validade')
+                    ->groupBy('desc_tipo_estoque')
+                    ->groupBy('unidade_medida')
+                    ->groupBy('numero_ordem')
+                    ->orderBy($order[0], $order[1])
+                    ->paginate();
+            }
+        } else {
+            if ($data['value'] == '') {
+                $results = $this->model
+                    ->where('depositante', $cnpj)
+                    ->where('tipo_estoque', $lote)
+                    ->whereBetween("data_envio",[$data['start'],$data['end']])
+                    ->select(DB::raw('tipo_estoque,data_envio,desc_tipo_estoque,centro,nome_destino_final,numero_ordem,sum(outs.qtd_enviada) AS qtd_enviada,codigo_produto,desc_produto,lote,data_validade,desc_produto,unidade_medida,serie_nf,centro'))
+                    ->groupBy('codigo_produto')
+                    ->groupBy('serie_nf')
+                    ->groupBy('data_envio')
+                    ->groupBy('desc_produto')
+                    ->groupBy('tipo_estoque')
+                    ->groupBy('lote')
+                    ->groupBy('nome_destino_final')
+                    ->groupBy('centro')
+                    ->groupBy('data_validade')
+                    ->groupBy('desc_tipo_estoque')
+                    ->groupBy('unidade_medida')
+                    ->groupBy('numero_ordem')
+                    ->orderBy($order[0], $order[1])
+                    ->get();
+            } else {
+                $results = $this->model
+                    ->where('tipo_estoque', $lote)
+                    ->where('depositante', $cnpj)
+                    ->whereBetween("data_envio",[$data['start'],$data['end']])
+                    ->where(function ($query) use ($data) {
+                        if ($data) {
+                            return $query->where($data['field'], 'like', '%' . $data['value'] . '%');
+                        }
+                        return $query;
+                    })
+                    ->select(DB::raw('tipo_estoque,data_envio,desc_tipo_estoque,centro,nome_destino_final,numero_ordem,sum(outs.qtd_enviada) AS qtd_enviada,codigo_produto,desc_produto,lote,data_validade,desc_produto,unidade_medida,serie_nf,centro'))
+                    ->groupBy('codigo_produto')
+                    ->groupBy('serie_nf')
+                    ->groupBy('data_envio')
+                    ->groupBy('desc_produto')
+                    ->groupBy('tipo_estoque')
+                    ->groupBy('lote')
+                    ->groupBy('nome_destino_final')
+                    ->groupBy('centro')
+                    ->groupBy('data_validade')
+                    ->groupBy('desc_tipo_estoque')
+                    ->groupBy('unidade_medida')
+                    ->groupBy('numero_ordem')
+                    ->orderBy($order[0], $order[1])
+                    ->paginate();
+            }
+        }
+
+        if ($results) {
+            return $this->parserResult($results);
+        }
+
+        return $results;
+    }
+
+
+    /**
      * @param $user
      * @param $cnpj
      * @param string $lote
