@@ -202,10 +202,8 @@ class StockRepositoryEloquent extends BaseRepository implements StockRepository
         $dataEnd = new \DateTime();
         $order[0] = $order[0] ?? 'data_atual';
         $order[1] = $order[1] ?? 'asc';
-        //dd($user->role);
         if ($lote != '') {
             if ($user->role == 'user_company') {
-                //dd($lote);
                 $results = $this->model
                     ->where('depositante', $cnpj)
                     ->where('tipo_estoque', $lote)
@@ -298,31 +296,5 @@ class StockRepositoryEloquent extends BaseRepository implements StockRepository
             Log::info('Registro estoque vazio: ' . $result);
             return 0;
         }
-    }
-
-    /**
-     * @return array
-     */
-    public function groupStock()
-    {
-        //$result = $this->model->
-        //$result = DB::select("SELECT stocks.tipo_estoque AS tipo_estoque,stocks.desc_tipo_estoque AS desc_tipo_estoque, sum(stocks.qtd_produto) AS qtd, stocks.codigo_produto AS codigo_produto, stocks.desc_produto AS desc_produto, stocks.lote AS lote,  stocks.data_validade AS data_validade, stocks.desc_restricao AS desc_restricao FROM stocks GROUP BY stocks.codigo_produto,stocks.desc_produto, stocks.tipo_estoque, stocks.lote, stocks.data_validade, stocks.desc_restricao, stocks.desc_tipo_estoque ORDER BY qtd ASC;");
-        $results = $this->model
-            //->sum('qtd_produto')
-            ->select(DB::raw('tipo_estoque,desc_tipo_estoque, sum(stocks.qtd_produto) AS qtd_produto,codigo_produto,desc_produto,lote,data_validade,desc_restricao'))
-            ->groupBy('codigo_produto')
-            ->groupBy('desc_produto')
-            ->groupBy('tipo_estoque')
-            ->groupBy('lote')
-            ->groupBy('data_validade')
-            ->groupBy('desc_restricao')
-            ->groupBy('desc_tipo_estoque')
-            ->paginate();
-
-        if ($results) {
-            return $this->parserResult($results);
-        }
-
-        return $results;
     }
 }

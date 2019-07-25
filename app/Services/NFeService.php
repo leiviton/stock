@@ -17,7 +17,9 @@ use NFePHP\NFe\Make;
 use NFePHP\NFe\Tools;
 use NFePHP\DA\NFe\Danfe;
 use NFePHP\DA\Legacy\FilesFolders;
+use Stock\Repositories\CompanyRepository;
 use Stock\Repositories\NotaFiscalRepository;
+use Symfony\Component\Console\Output\NullOutput;
 
 
 class NFeService
@@ -26,14 +28,20 @@ class NFeService
      * @var NotaFiscalRepository
      */
     private $repository;
+    /**
+     * @var CompanyRepository
+     */
+    private $companyRepository;
 
     /**
      * NFeService constructor.
      * @param NotaFiscalRepository $repository
+     * @param CompanyRepository $companyRepository
      */
-    public function __construct(NotaFiscalRepository $repository)
+    public function __construct(NotaFiscalRepository $repository, CompanyRepository $companyRepository)
     {
         $this->repository = $repository;
+        $this->companyRepository = $companyRepository;
     }
 
     /**
@@ -344,13 +352,10 @@ class NFeService
         if ($std->cStat == '103') { //lote enviado
             //Lote ainda não foi precessado pela SEFAZ;
             return "lote ainda nao processou";
-        }
-        if ($std->cStat == '105') { //lote em processamento
+        } else if ($std->cStat == '105') { //lote em processamento
             //tente novamente mais tarde
             return "lote ainda em processo";
-        }
-
-        if ($std->cStat == '104') { //lote processado (tudo ok)
+        } else if ($std->cStat == '104') { //lote processado (tudo ok)
             if ($std->protNFe->infProt->cStat == '100') { //Autorizado o uso da NF-e
                 $xmlOriginal = file_get_contents('storage\companies\xml_gerados\40.xml');
                 $xml = Complements::toAuthorize($xmlOriginal, $xmlRetorno);
@@ -358,7 +363,7 @@ class NFeService
                 return response()->json(["situacao" => "autorizada",
                     "numeroProtocolo" => $std->protNFe->infProt->nProt,
                     "xmlProtocolo" => $xmlRetorno]);
-            } elseif (in_array($std->protNFe->infProt->cStat, ["302"])) { //DENEGADAS
+            } else if (in_array($std->protNFe->infProt->cStat, ["302"])) { //DENEGADAS
                 return response()->json(["situacao" => "denegada",
                     "numeroProtocolo" => $std->protNFe->infProt->nProt,
                     "motivo" => $std->protNFe->infProt->xMotivo,
@@ -376,23 +381,22 @@ class NFeService
         }
     }
 
-    public function geraDanfe()
+    public function geraDanfe($nf)
     {
-        $xml = 'storage/companies/xml_autorizados/40.xml';
+        $xml = "storage/companies/xml_autorizados/$nf.xml";
         $docxml = FilesFolders::readFile($xml);
         $logo = 'data://text/plain;base64,' . base64_encode(file_get_contents('storage/companies/suportemed/logo.jpg'));
         try {
             $danfe = new Danfe($docxml, 'P', 'A4', $logo, 'I', 'storage/companies/pdf_danfe');
             $id = $danfe->montaDANFE();
             $pdf = $danfe->render();
-            FilesFolders::saveFile('storage\companies\pdf_danfe', 'danfe40.pdf', $pdf);
+            FilesFolders::saveFile("storage\companies\pdf_danfe", "$nf.pdf", $pdf);
             //o pdf porde ser exibido como view no browser
             //salvo em arquivo
             //ou setado para download forçado no browser
             //ou ainda gravado na base de dados
             //file_put_contents('storage\companies\pdf_danfe\danfe1.pdf',$pdf);
-            header('Content-Type: application/pdf');
-            return $pdf;
+            return env('APP_URL')."storage/companies/pdf_danfe/$nf.pdf";
         } catch (InvalidArgumentException $e) {
             return "Ocorreu um erro durante o processamento :" . $e->getMessage();
         }
@@ -409,5 +413,374 @@ class NFeService
             ->scopeQuery(function ($query)use($status){
                 return $query->where('status',$status);
             })->paginate(20);
+    }
+
+    /**
+     * @param $idEmitente
+     * @param $idNota
+     * @return bool
+     * @throws \Exception
+     */
+    public function gerarNfe($idNota): bool {
+
+        $nota = $this->repository->find($idNota);
+
+        $emitente = $this->companyRepository->find($nota->company_id);
+
+        $items = $nota->nota_fiscal_items();
+        /*variavies totalizadores*/
+        $vBC = 0.0;
+        $vICMS = 0.00;
+        $vICMSDeson = 0.00;
+        $vBCST = 0.00;
+        $vST = 0.00;
+        $vProd = 0.00;
+        $vFrete = 0.00;
+        $vSeg = 0.00;
+        $vDesc = 0.00;
+        $vII = 0.00;
+        $vIPI = 0.00;
+        $vPIS = 0.00;
+        $vCOFINS = 0.00;
+        $vOutro = 0.00;
+        $vTotTrib = 0.00;
+
+        $nfe = new Make();
+        $std = new \stdClass();
+        $std->versao = '4.00';
+        $std->Id = null;
+        $std->pk_nItem = '';
+        $nfe->taginfNFe($std);
+
+        $nf = $emitente->configuration_fiscal()->ultima_nota + 1;
+
+        $std = new \stdClass();
+        $std->cUF = $this->state($emitente->configuration_fiscal()->estado); //coloque um código real e válido
+        $std->cNF = random_int(1,9);
+        $std->natOp = 'VENDA';
+        $std->mod = 55;
+        $std->serie = $emitente->configuration_fiscal()->serie_nf;
+        $std->nNF = $nf;
+        $std->dhEmi = date("Y-m-d\TH:i:sP");
+        $std->dhSaiEnt = date("Y-m-d\TH:i:sP");
+        $std->tpNF = 1;
+        $std->idDest = 2;
+        $std->cMunFG = $emitente->configuration_fiscal()->codigo_cidade; //Código de município precisa ser válido
+        $std->tpImp = 1;
+        $std->tpEmis = 1;
+        $std->cDV = random_int(1,9);
+        $std->tpAmb = 2; // Se deixar o tpAmb como 2 você emitirá a nota em ambiente de homologação(teste) e as notas fiscais aqui não tem valor fiscal
+        $std->finNFe = 1;
+        $std->indFinal = 0;
+        $std->indPres = 9;
+        $std->procEmi = '0';
+        $std->verProc = 1;
+        $nfe->tagide($std);
+
+        $std = new \stdClass();
+        $std->xNome = $emitente->nome;
+        $std->IE = '675189081113';
+        $std->CRT = 3;
+        $std->CNPJ = '11957717000142';
+        $nfe->tagemit($std);
+
+        $std = new \stdClass();
+        $std->xLgr = $emitente->configuration_fiscal()->logradouro;
+        $std->nro = $emitente->configuration_fiscal()->numero;
+        $std->xBairro = $emitente->configuration_fiscal()->bairro;
+        $std->cMun = $emitente->configuration_fiscal()->codigo_cidade; //Código de município precisa ser válido e igual o  cMunFG
+        $std->xMun = $emitente->configuration_fiscal()->cidade;
+        $std->UF = $emitente->configuration_fiscal()->estado;
+        $std->CEP = $emitente->configuration_fiscal()->cep;
+        $std->cPais = '1058';
+        $std->xPais = 'BRASIL';
+        $nfe->tagenderEmit($std);
+
+        $std = new \stdClass();
+        $std->xNome = $nota->xNome;
+        $std->indIEDest = $nota->indIEDest;
+        if($nota->type_person == 'PJ') {
+            $std->IE = $nota->IE;
+            $std->CNPJ = $nota->CNPJ;
+        }else if($nota->type_person == 'PF') {
+            $std->CPF = $nota->CNPJ;
+        }
+
+        $nfe->tagdest($std);
+
+        $std = new \stdClass();
+        $std->xLgr = $nota->xLgr;
+        $std->nro = $nota->nro;
+        $std->xBairro = $nota->xBairro;
+        $std->cMun = $nota->cMun;
+        $std->xMun = $nota->xMun;
+        $std->UF = $nota->UF;
+        $std->CEP = $nota->CEP;
+        $std->cPais = '1058';
+        $std->xPais = 'BRASIL';
+        $nfe->tagenderDest($std);
+        $total = 0.00;
+
+        //for ($i = 1; $i < 60; $i++) {
+        foreach ($items as $item) {
+            $std = new \stdClass();
+            $std->item = $item->id;
+            $std->cEAN = $item->cEan;
+            $std->cEANTrib = $item->cEANTrib;
+            $std->cProd = $item->cProd;
+            $std->xProd = $item->xProd;
+            $std->NCM = $item->NCM;
+            $std->CFOP = $item->CFOP;
+            $std->uCom = $item->uCom;
+            $std->qCom = $item->qCom;
+            $std->vUnCom = $item->vUnCom;
+            $std->vProd = $item->vProd;
+            $std->uTrib = $item->uTrib;
+            $std->qTrib = $item->qTrib;
+            $std->vUnTrib = $item->vUnTrib;
+            $std->indTot = 1;
+            $total += (float) ($item->vUnTrib * $item->qTrib);
+            $nfe->tagprod($std);
+
+            $std = new \stdClass();
+            $std->item = $item->id;
+            $std->vTotTrib = (float) ($item->vUnTrib * $item->qTrib);
+            $nfe->tagimposto($std);
+
+            /*ICMS*/
+            $std = new \stdClass();
+            $std->item = $item->id;
+            $std->orig = $item->orig;
+            $std->CST = $item->CST;
+            $std->modBC = $item->modBC;
+            $std->vBC = $item->vBC;
+            $std->pICMS = $item->pICMS;
+            $std->vICMS = $item->vICMS;
+            $nfe->tagICMS($std);
+
+            /*IPI*/
+            $std = new \stdClass();
+            $std->item = $item->id;
+            $std->cEnq = $item->cEnq;
+            $std->CST = $item->CSTIPI;
+            $std->vIPI = $item->vIPI;
+            $std->vBC = $item->vBCIPI;
+            $std->pIPI = $item->pIPI;
+            $nfe->tagIPI($std);
+
+            /*PIS*/
+            $std = new \stdClass();
+            $std->item = $item->id;
+            $std->CST = $item->CST;
+            $std->vBC = $item->vBCPIS;
+            $std->pPIS = $item->pPIS;
+            $std->vPIS = $item->vPIS;
+            $nfe->tagPIS($std);
+
+            /*COFINS*/
+            $std = new \stdClass();
+            $std->item = $item->id;
+            $std->vCOFINS = $item->vCOFINS;
+            $std->vBC = $item->vBCCIFINS;
+            $std->pCOFINS = $item->pCOFINS;
+            $nfe->tagCOFINSST($std);
+
+            /*COFINS*/
+            $std = new \stdClass();
+            $std->item = $item->id;
+            $std->CST = $item->CSTCOFINS;
+            $std->vBC = $item->vBCCOFINS;
+            $std->pCOFINS = $item->pCOFINS;
+            $std->vCOFINS = $item->vCOFINS;
+            $nfe->tagCOFINS($std);
+
+            $vBC += $item->vBC;
+            $vICMS += $item->vICMS;
+            $vICMSDeson += $item->vICMSDeson;
+            $vBCST += $item->vBCST;
+            $vST += $item->vST;
+            $vProd += $item->vProd;
+            $vFrete += $item->vFrete;
+            $vSeg += $item->vSeg;
+            $vDesc += $item->vDesc;
+            $vII += $item->vII;
+            $vIPI += $item->vIPI;
+            $vPIS += $item->PIS;
+            $vCOFINS += $item->vCOFINS;
+            $vOutro += $item->vOutro;
+            $vTotTrib += $item->vTotTrib;
+        }
+
+        $std = new \stdClass();
+        $std->vBC = $vBC;
+        $std->vICMS = $vICMS;
+        $std->vICMSDeson = $vICMSDeson;
+        $std->vBCST = $vBCST;
+        $std->vST = $vST;
+        $std->vProd = $vProd;
+        $std->vFrete = $vFrete;
+        $std->vSeg = $vSeg;
+        $std->vDesc = $vDesc;
+        $std->vII = $vII;
+        $std->vIPI = $vIPI;
+        $std->vPIS = $vPIS;
+        $std->vCOFINS = $vCOFINS;
+        $std->vOutro = $vOutro;
+        $std->vNF = $vProd;
+        $std->vTotTrib = $vTotTrib;
+        $nfe->tagICMSTot($std);
+
+
+        $std = new \stdClass();
+        $std->modFrete = 9;
+        $nfe->tagtransp($std);
+
+        $std = new \stdClass();
+        $std->tPag = 90;
+        $std->vPag = 0.00;
+        $nfe->tagdetPag($std);
+
+        $xml = $nfe->getXML(); // O conteúdo do XML fica armazenado na variável $xml
+
+        $config = [
+            "atualizacao" => date('Y-m-d h:i:s'),
+            "tpAmb" => 2,
+            "razaosocial" => $emitente->nome,
+            "cnpj" => $emitente->cnpj, // PRECISA SER VÁLIDO
+            "ie" => '675189081113', // PRECISA SER VÁLIDO
+            "siglaUF" => $emitente->configuration_fiscal->estado,
+            "schemes" => "PL_009_V4",
+            "versao" => '4.00',
+            "tokenIBPT" => "AAAAAAA",
+            "CSC" => "",
+            "CSCid" => "",
+            "aProxyConf" => [
+                "proxyIp" => "",
+                "proxyPort" => "",
+                "proxyUser" => "",
+                "proxyPass" => ""
+            ]
+        ];
+
+
+        $configJson = json_encode($config);
+
+        $certificadoDigital = file_get_contents($emitente->configuration_fiscal->certificado);
+
+        $tools = new Tools($configJson, Certificate::readPfx($certificadoDigital, $emitente->configuration_fiscal->senha_certificado));
+        try {
+            $xmlAssinado = $tools->signNFe($xml); // O conteúdo do XML assinado fica armazenado na variável $xmlAssinado
+            $idLote = $nf;
+            $resp = $tools->sefazEnviaLote([$xmlAssinado], $idLote);
+
+            $st = new Standardize();
+            $std = $st->toStd($resp);
+            if ($std->cStat != 103) {
+                exit("[$std->cStat] $std->xMotivo");
+            }
+
+            $recibo = $std->infRec->nRec; // Vamos usar a variável $recibo para consultar o status da nota
+
+            file_put_contents("storage/companies/xml_gerados/$nf.xml", $xmlAssinado);
+
+            $nota->recibo_sefaz = $recibo;
+            $nota->save();
+
+            $this->consultaProtocolo($recibo);
+
+            return 'NFE enviada';
+            //return $protocolo;
+        } catch (\Exception $e) {
+            //aqui você trata possíveis exceptions da assinatura
+            exit($e->getMessage());
+        }
+    }
+
+    public function state($uf) {
+        switch ($uf) {
+            case 'RO':
+                return 11;
+                break;
+            case 'AC':
+                return 12;
+                break;
+            case 'AM':
+                return 13;
+                break;
+            case 'RR':
+                return 14;
+                break;
+            case 'PA':
+                return 15;
+                break;
+            case 'AP':
+                return 16;
+                break;
+            case 'TO':
+                return 17;
+                break;
+            case 'MA':
+                return 21;
+                break;
+            case 'PI':
+                return 22;
+                break;
+            case 'CE':
+                return 23;
+                break;
+            case 'RN':
+                return 24;
+                break;
+            case 'PB':
+                return 25;
+                break;
+            case 'PE':
+                return 26;
+                break;
+            case 'AL':
+                return 27;
+                break;
+            case 'SE':
+                return 28;
+                break;
+            case 'BA':
+                return 29;
+                break;
+            case 'MG':
+                return 31;
+                break;
+            case 'ES':
+                return 32;
+                break;
+            case 'RJ':
+                return 33;
+                break;
+            case 'SP':
+                return 35;
+                break;
+            case 'PR':
+                return 41;
+                break;
+            case 'SC':
+                return 42;
+                break;
+            case 'RS':
+                return 43;
+                break;
+            case 'MS':
+                return 50;
+                break;
+            case 'MT':
+                return 51;
+                break;
+            case 'GO':
+                return 52;
+                break;
+            case 'DF':
+                return 53;
+                break;
+            default:
+                return false;
+        }
     }
 }
