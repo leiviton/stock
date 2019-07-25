@@ -177,8 +177,8 @@ class OutRepositoryEloquent extends BaseRepository implements OutRepository
         if ($lote == '') {
                 $results = $this->model
                     ->where('depositante', $cnpj)
-                    ->where('tipo_estoque', $lote)
-                    ->whereBetween("data_envio",[$data['start'],$data['end']])
+                   // ->where('tipo_estoque', $lote)
+                    ->whereBetween('data_envio',[$data['start'],$data['end']])
                     ->select(DB::raw('tipo_estoque,data_envio,desc_tipo_estoque,centro,nome_destino_final,numero_ordem,sum(outs.qtd_enviada) AS qtd_enviada,codigo_produto,desc_produto,lote,data_validade,desc_produto,unidade_medida,serie_nf,centro'))
                     ->groupBy('codigo_produto')
                     ->groupBy('serie_nf')

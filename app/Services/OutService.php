@@ -168,6 +168,22 @@ class OutService
     }
 
     /**
+     * @param $start
+     * @param $end
+     * @return bool|\DateInterval|int
+     * @throws \Exception
+     */
+    public function diffDays($start, $end) {
+        $start = new \DateTime($this->invertDate($start));
+        $end = new \DateTime($this->invertDate($end));
+        if ($start > $end) {
+            return -1;
+        } else {
+           return $start->diff($end)->days;
+        }
+    }
+
+    /**
      * @param $valor
      * @return mixed|string
      */

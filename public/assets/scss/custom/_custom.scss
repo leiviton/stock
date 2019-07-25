@@ -81,5 +81,20 @@
   }
 }
 
+/* Accordion */
+#testando.accordion-itens {
+  ngb-accordion {
+    .card {
+      .card-header  {
+        padding: 0 !important;
+      }
+    }
+  }
+}
+
+.modal-dialog {
+  max-width: 1200px;
+}
+
 
 

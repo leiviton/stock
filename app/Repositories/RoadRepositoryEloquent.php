@@ -145,6 +145,62 @@ class RoadRepositoryEloquent extends BaseRepository implements RoadRepository
     }
 
     /**
+     * @param $data
+     * @param $cnpj
+     * @param string $lote
+     * @return mixed
+     */
+    public function orderFilterData($data, $cnpj, $lote = '')
+    {
+        $order[0] = $order[0] ?? 'data_recebimento';
+        $order[1] = $order[1] ?? 'asc';
+        //dd($lote);
+        if ($lote == '') {
+               $results = $this->model
+                   ->where('depositante', $cnpj)
+                   ->whereBetween("data_recebimento",[$data['start'],$data['end']])
+                   ->select(DB::raw('tipo_estoque,data_recebimento,desc_tipo_estoque, sum(roads.qtd_recebida) AS qtd_recebida,sum(roads.qtd_avariada) as qtd_avariada,codigo_produto,desc_produto,lote,data_validade,desc_produto,desc_restricao,unidade_medida,serie_nf'))
+                   ->groupBy('codigo_produto')
+                   ->groupBy('serie_nf')
+                   ->groupBy('data_recebimento')
+                   ->groupBy('desc_produto')
+                   ->groupBy('tipo_estoque')
+                   ->groupBy('lote')
+                   ->groupBy('data_validade')
+                   ->groupBy('desc_restricao')
+                   ->groupBy('desc_tipo_estoque')
+                   ->groupBy('unidade_medida')
+                   ->orderBy($order[0], $order[1])
+                   ->get();
+        } else {
+               $results = $this->model
+                   ->where('depositante', $cnpj)
+                   ->where('tipo_estoque', $lote)
+                   ->whereBetween("data_recebimento",[$data['start'],$data['end']])
+                   ->select(DB::raw('tipo_estoque,data_recebimento,desc_tipo_estoque, sum(roads.qtd_recebida) AS qtd_recebida,sum(roads.qtd_avariada) as qtd_avariada,codigo_produto,desc_produto,lote,data_validade,desc_produto,desc_restricao,unidade_medida,serie_nf'))
+                   ->groupBy('codigo_produto')
+                   ->groupBy('serie_nf')
+                   ->groupBy('data_recebimento')
+                   ->groupBy('desc_produto')
+                   ->groupBy('tipo_estoque')
+                   ->groupBy('lote')
+                   ->groupBy('data_validade')
+                   ->groupBy('desc_restricao')
+                   ->groupBy('desc_tipo_estoque')
+                   ->groupBy('unidade_medida')
+                   ->orderBy($order[0], $order[1])
+                   ->get();
+
+        }
+
+        if ($results) {
+            return $this->parserResult($results);
+        }
+
+        return $results;
+    }
+
+    /**
      * @param $user
      * @param $cnpj
      * @param string $lote
