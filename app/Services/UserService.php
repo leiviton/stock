@@ -76,7 +76,7 @@ class UserService
     public function create($data)
     {
         DB::beginTransaction();
-        try{
+        try {
 
             $data['remember_token'] = str_random(10);
 
@@ -86,11 +86,11 @@ class UserService
 
             $result = $this->userRepository->create($data);
 
-            if($result->role == 'user_company') {
+            if ($result->role == 'user_company') {
 
                 $protocols = $data['protocols'];
-                for($i = 0; $i < count($protocols); $i++){
-                //foreach($protocols as $protocol) {
+                for ($i = 0; $i < count($protocols); $i++) {
+                    //foreach($protocols as $protocol) {
                     $data = [
                         "user_id" => $result->id,
                         "protocol_id" => $protocols[$i]["id"]
@@ -102,11 +102,11 @@ class UserService
 
             DB::commit();
 
-            return ['status'=>'success','id'=>$result->id];
+            return ['status' => 'success', 'id' => $result->id];
 
         } catch (\Exception $exception) {
             DB::rollBack();
-            return ['status'=>'error','message'=>$exception->getMessage(),'title' => 'Erro'];
+            return ['status' => 'error', 'message' => $exception->getMessage(), 'title' => 'Erro'];
         }
     }
 
@@ -118,7 +118,7 @@ class UserService
     public function updatePassword($id, $password)
     {
         DB::beginTransaction();
-        try{
+        try {
 
             $user = $this->userRepository->find($id);
 
@@ -126,11 +126,10 @@ class UserService
 
             $user->save();
             DB::commit();
-            return ['status'=>'success','id'=>$user->id];
-
+            return ['status' => 'success', 'id' => $user->id];
         } catch (\Exception $exception) {
             DB::rollBack();
-            return ['status'=>'error','message'=>$exception->getMessage(),'title' => 'Erro'];
+            return ['status' => 'error', 'message' => $exception->getMessage(), 'title' => 'Erro'];
         }
     }
 
@@ -142,25 +141,98 @@ class UserService
     public function updateStatus($id)
     {
         DB::beginTransaction();
-        try{
+        try {
 
             $user = $this->userRepository->find($id);
-            if($user->status == 'ativo')
-            {
+
+            if ($user->status == 'ativo') {
                 $user->status = 'inativo';
-            }else{
+            } else {
                 $user->status = 'ativo';
             }
 
             $user->save();
 
             DB::commit();
-            return ['status'=>'success','id'=>$user->id];
+            return ['status' => 'success', 'id' => $user->id];
 
         } catch (\Exception $exception) {
             DB::rollBack();
-            return ['status'=>'error','message'=>$exception->getMessage(),'title' => 'Erro'];
+            return ['status' => 'error', 'message' => $exception->getMessage(), 'title' => 'Erro'];
         }
     }
 
+    /**
+     * @param $data
+     * @param $id
+     * @return array
+     */
+    public function update($data, $id)
+    {
+        DB::beginTransaction();
+        try {
+            //$user = $this->userRepository->find($id);
+            $this->userRepository->update($data, $id);
+
+            DB::commit();
+
+            return ['status' => 'success'];
+        } catch (\Exception $exception) {
+            DB::rollBack();
+            return ['status' => 'error', 'message' => $exception->getMessage(), 'title' => 'Erro'];
+        }
+    }
+
+    /**
+     * @param $data
+     * @param $id
+     * @return array
+     */
+    public function addProtocol($data, $id)
+    {
+        $protocols = $data;
+        DB::beginTransaction();
+        try {
+            foreach ($protocols as $protocol) {
+                $p = [
+                    "user_id" => $id,
+                    "protocol_id" => $protocol->id
+                ];
+
+                $this->protocolRepository->create($p);
+            }
+
+            DB::commit();
+            return ['status' => 'success'];
+        } catch (\Exception $exception) {
+            DB::rollBack();
+            return ['status' => 'error', 'message' => $exception->getMessage(), 'title' => 'Erro'];
+        }
+    }
+
+    /**
+     * @param $idUser
+     * @param $idProtocol
+     * @return array
+     */
+    public function removeProtocol($idUser, $idProtocol)
+    {
+        DB::beginTransaction();
+        try {
+            $rs = $this->protocolRepository->findWhere(['user_id' => $idUser, 'protocol_id' => $idProtocol])->first();
+
+            if ($rs) {
+                $this->protocolRepository->delete($rs->id);
+                DB::commit();
+                return ['status' => 'success'];
+            } else {
+                DB::commit();
+                return ['status' => 'error', 'message' => 'Nao encontrado'];
+            }
+
+        } catch (\Exception $exception) {
+            DB::rollBack();
+            return ['status' => 'error', 'message' => $exception->getMessage(), 'title' => 'Erro'];
+        }
+    }
 }

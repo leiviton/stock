@@ -57,7 +57,9 @@ class CompanyService
 
             $result = $this->repository->create($data);
 
-            //$result->configuration_fiscal()->create($data['config_fiscal']);
+            if (!empty($data['config_fiscal'])) {
+                $result->configuration_fiscal()->create($data['config_fiscal']);
+            }
 
             DB::commit();
 
@@ -75,5 +77,30 @@ class CompanyService
     public function getCompanies()
     {
         return $this->repository->skipPresenter(false)->paginate();
+    }
+
+    /**
+     * @param $id
+     * @param $data
+     * @return array
+     */
+    public function update($id, $data) {
+        DB::beginTransaction();
+        try {
+
+            $result = $this->repository->update($data,$id);
+
+            if (!empty($data['config_fiscal'])) {
+                $result->configuration_fiscal()->updateOrCreate($data['config_fiscal']);
+            }
+
+            DB::commit();
+
+            return ['status' => 'success', 'id' => $id];
+
+        } catch (\Exception $exception) {
+            DB::rollBack();
+            return ['status' => 'error', 'message' => $exception->getMessage(), 'title' => 'Erro'];
+        }
     }
 }

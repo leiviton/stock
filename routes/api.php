@@ -54,6 +54,7 @@ Route::group(['prefix' => 'v1/', 'middleware' => 'auth:api'], function () {
         /*Outs*/
         Route::post('out', 'OutsController@store');
         Route::get('out/{id}', 'OutsController@index');
+        Route::get('out/filter/{id}', 'OutsController@filterData');
         Route::get('out/all/{id}', 'OutsController@getAll');
         Route::post('out/export', 'OutsController@export');
         //Route::get('out/{id}', 'OutsController@edit');
