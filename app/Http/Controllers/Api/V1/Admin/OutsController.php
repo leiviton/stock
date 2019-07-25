@@ -41,6 +41,18 @@ class OutsController extends Controller
     }
 
     /**
+     * @param $id
+     * @param Request $request
+     * @return mixed
+     * @throws \Exception
+     */
+    public function filterData($id, Request $request)
+    {
+        $lote = $request->get('protocolo') ? $request->get('protocolo') : '';
+        return $this->service->getOutsData($request->all(),$id,$lote);
+    }
+
+    /**
      * @return mixed
      */
     public function getAll($id,Request $request)
@@ -94,6 +106,7 @@ class OutsController extends Controller
     /**
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
+     * @throws \Exception
      */
     public function store(Request $request)
     {
@@ -103,24 +116,7 @@ class OutsController extends Controller
 
         if ($result['status'] == 'success') {
             return response()->json(['message' => 'Cadastro realizado com sucesso', 'status' => 'success', 'title' => 'Sucesso'], 201);
-        } else if ($result['status'] == 'error') {
-            return response()->json(['message' => $result['message'], 'status' => 'error', 'title' => 'Erro'], 400);
-        }
-    }
-
-    /**
-     * @param $id
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function updateStatus($id, Request $request)
-    {
-
-        $result = $this->service->updateStatus($id);
-
-        if ($result['status'] == 'success') {
-            return response()->json(['message' => 'Status atualizado com sucesso', 'status' => 'success', 'title' => 'Sucesso'], 200);
-        } else if ($result['status'] == 'error') {
+        } else {
             return response()->json(['message' => $result['message'], 'status' => 'error', 'title' => 'Erro'], 400);
         }
     }
