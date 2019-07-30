@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class ClientOauthTableSeeder extends Seeder
 {
@@ -23,7 +24,7 @@ class ClientOauthTableSeeder extends Seeder
                 'id' => 1,
                 'name' => 'B2a Access Client',
                 'secret' => 'ucGfcnkb5aTXMS3fcJEiAZlSp4KGKGahBZIgf2ro',
-                'redirect' => 'http://localhost',
+                'redirect' => env('APP_URL'),
                 'personal_access_client' => 1,
                 'password_client' => 0,
                 'revoked' => 0,
@@ -35,7 +36,7 @@ class ClientOauthTableSeeder extends Seeder
                 'id' => 2,
                 'name' => 'B2a Personal Access Client',
                 'secret' => 'NRCx71HwSJ0VCNCgRkw8wVI73vSmCwyWEIsb0qLG',
-                'redirect' => 'http://localhost',
+                'redirect' => env('APP_URL'),
                 'personal_access_client' => 0,
                 'password_client' => 1,
                 'revoked' => 0,
