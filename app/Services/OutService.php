@@ -118,28 +118,19 @@ class OutService
     public function export($data)
     {
         $user = \Auth::guard()->user();
+
         if ($user->role == 'admin') {
-            $query = $this->repository->scopeQuery(function ($query) use ($data) {
-                return $query->whereRaw('data_envio BETWEEN ? AND ?',
-                    [$data['start'], $data['end']])->where('depositante',$this->limpaCPF_CNPJ($data['cnpj']));
-            })->orderBy('data_envio','asc')->all(['tipo_estoque', 'desc_tipo_estoque', 'codigo_produto', 'desc_produto', 'unidade_medida', 'lote',
-                'data_validade', 'data_envio', 'serie_nf', 'nome_destino_final', 'centro', 'numero_ordem',
-                'qtd_enviada', 'serie', 'peca']);
+            $query = $this->repository->getQueryAdmin($data);
         }else {
-            $query = $this->repository->scopeQuery(function ($query) use ($data) {
-                return $query->whereRaw('data_envio BETWEEN ? AND ?',
-                    [$data['start'], $data['end']])->where('tipo_estoque',$data['protocol']);
-            })->orderBy('data_envio','asc')->all(['tipo_estoque', 'desc_tipo_estoque', 'codigo_produto', 'desc_produto', 'unidade_medida', 'lote',
-                'data_validade', 'data_envio', 'serie_nf', 'nome_destino_final', 'centro', 'numero_ordem',
-                'qtd_enviada', 'serie', 'peca']);
+            $query = $this->repository->getQueryUser($data);
         }
 
         $name = $user->id.'_'.str_replace(' ','',$user->name);
 
         for($i = 0; $i < count($query) ; $i++) {
-            $dataEnvio = (string) $query[$i]['data_envio'];
-            $query[$i]['data_envio'] = $this->invertDate(substr($dataEnvio,0,10));
-            $query[$i]['data_validade'] = $this->invertDate(substr((string)  $query[$i]['data_validade'],0,10));
+            $dataEnvio = (string) $query[$i]['Envio'];
+            $query[$i]['Envio'] = $this->invertDate(substr($dataEnvio,0,10));
+            $query[$i]['Validade'] = $this->invertDate(substr((string)  $query[$i]['Validade'],0,10));
         }
 
         Excel::create($name, function($excel) use($query) {

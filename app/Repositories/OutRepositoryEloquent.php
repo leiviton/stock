@@ -250,7 +250,9 @@ class OutRepositoryEloquent extends BaseRepository implements OutRepository
                     }
                     return $query;
                 })
-                ->select(DB::raw('tipo_estoque,data_envio,desc_tipo_estoque,centro,nome_destino_final,numero_ordem,sum(outs.qtd_enviada) AS qtd_enviada,codigo_produto,desc_produto,lote,data_validade,desc_produto,unidade_medida,serie_nf,centro'))
+                ->select(DB::raw('tipo_estoque,data_envio,desc_tipo_estoque,centro,nome_destino_final,numero_ordem,
+                sum(outs.qtd_enviada) AS qtd_enviada,codigo_produto,desc_produto,lote,data_validade,desc_produto,
+                unidade_medida,serie_nf,centro'))
                 ->groupBy('codigo_produto')
                 ->groupBy('serie_nf')
                 ->groupBy('data_envio')
@@ -276,7 +278,9 @@ class OutRepositoryEloquent extends BaseRepository implements OutRepository
                     }
                     return $query;
                 })
-                ->select(DB::raw('tipo_estoque,data_envio,desc_tipo_estoque,centro,nome_destino_final,numero_ordem,sum(outs.qtd_enviada) AS qtd_enviada,codigo_produto,desc_produto,lote,data_validade,desc_produto,unidade_medida,serie_nf,centro'))
+                ->select(DB::raw('tipo_estoque,data_envio,desc_tipo_estoque,centro,nome_destino_final,numero_ordem,
+                sum(outs.qtd_enviada) AS qtd_enviada,codigo_produto,desc_produto,lote,data_validade,desc_produto,
+                unidade_medida,serie_nf,centro'))
                 ->groupBy('codigo_produto')
                 ->groupBy('serie_nf')
                 ->groupBy('data_envio')
@@ -301,6 +305,71 @@ class OutRepositoryEloquent extends BaseRepository implements OutRepository
     }
 
     /**
+     * @param $data
+     * @return mixed
+     */
+    public function getQueryAdmin($data) {
+        $query = $this->model->where(function ($query) use ($data) {
+            return $query->whereRaw('data_envio BETWEEN ? AND ?',
+                [$data['start'], $data['end']])->where('depositante',$this->limpaCPF_CNPJ($data['cnpj']));
+        })->select(DB::raw('desc_tipo_estoque as Protocolo,codigo_produto as Codigo,desc_produto as Produto,
+        unidade_medida as Unidade_Medida,lote as Lote,data_validade as Validade,data_envio as Envio,serie_nf as NFe,
+        nome_destino_final as Destino,centro as Centro,numero_ordem as Ordem,
+        sum(qtd_enviada) as Qtd,serie as Serie,peca as Peça'))
+            ->groupBy('data_envio')
+            ->groupBy('desc_tipo_estoque')
+            ->groupBy('codigo_produto')
+            ->groupBy('desc_produto')
+            ->groupBy('unidade_medida')
+            ->groupBy('lote')
+            ->groupBy('data_validade')
+            ->groupBy('serie_nf')
+            ->groupBy('qtd_enviada')
+            ->groupBy('nome_destino_final')
+            ->groupBy('centro')
+            ->groupBy('serie')
+            ->groupBy('peca')
+            ->groupBy('numero_ordem')
+            ->orderBy('data_envio','asc')
+            ->get();
+
+        return $query;
+    }
+
+    /**
+     * @param $data
+     * @return mixed
+     */
+    public function getQueryUser($data)
+    {
+        $query = $this->model->where(function ($query) use ($data) {
+            return $query->whereRaw('data_envio BETWEEN ? AND ?',
+                [$data['start'], $data['end']])->where('tipo_estoque',$data['protocol']);
+        })->select(DB::raw('desc_tipo_estoque as Protocolo,codigo_produto as Codigo,desc_produto as Produto,
+        unidade_medida as Unidade_Medida,lote as Lote,data_validade as Validade,data_envio as Envio,serie_nf as NFe,
+        nome_destino_final as Destino,centro as Centro,numero_ordem as Ordem,
+        sum(qtd_enviada) as Qtd,serie as Serie,peca as Peça'))
+            ->groupBy('data_envio')
+            ->groupBy('tipo_estoque')
+            ->groupBy('desc_tipo_estoque')
+            ->groupBy('codigo_produto')
+            ->groupBy('desc_produto')
+            ->groupBy('unidade_medida')
+            ->groupBy('lote')
+            ->groupBy('data_validade')
+            ->groupBy('serie_nf')
+            ->groupBy('qtd_enviada')
+            ->groupBy('nome_destino_final')
+            ->groupBy('centro')
+            ->groupBy('serie')
+            ->groupBy('peca')
+            ->groupBy('numero_ordem')
+            ->orderBy('data_envio','asc')
+            ->get();
+
+        return $query;
+    }
+    /**
      * @param $chave
      * @return mixed
      */
@@ -319,5 +388,19 @@ class OutRepositoryEloquent extends BaseRepository implements OutRepository
 
             return $result;
         }
+    }
+
+    /**
+     * @param $valor
+     * @return mixed|string
+     */
+    public function limpaCPF_CNPJ($valor)
+    {
+        $valor = trim($valor);
+        $valor = str_replace(".", "", $valor);
+        $valor = str_replace(",", "", $valor);
+        $valor = str_replace("-", "", $valor);
+        $valor = str_replace("/", "", $valor);
+        return $valor;
     }
 }
