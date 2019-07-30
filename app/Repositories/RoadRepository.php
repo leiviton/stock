@@ -41,4 +41,24 @@ interface RoadRepository extends RepositoryInterface
      * @return mixed
      */
     public function orderFilterData($data, $cnpj, $lote = '');
+
+
+    /**
+     * @param $data
+     * @return mixed
+     */
+    public function getQueryAdmin($data);
+
+
+    /**
+     * @param $data
+     * @return mixed
+     */
+    public function getQueryUser($data);
+
+    /**
+     * @param $valor
+     * @return mixed|string
+     */
+    public function limpaCPF_CNPJ($valor);
 }

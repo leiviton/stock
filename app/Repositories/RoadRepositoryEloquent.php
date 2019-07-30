@@ -263,6 +263,77 @@ class RoadRepositoryEloquent extends BaseRepository implements RoadRepository
     }
 
     /**
+     * @param $data
+     * @return mixed
+     */
+    public function getQueryAdmin($data) {
+        $query = $this->model->where(function ($query) use ($data) {
+            return $query->whereRaw('data_recebimento BETWEEN ? AND ?',
+                [$data['start'], $data['end']])->where('depositante',$this->limpaCPF_CNPJ($data['cnpj']));
+        })->select(DB::raw('data_recebimento, tipo_estoque,desc_tipo_estoque,cnpj_emissor_nfe,
+                razao_social_fornecedor,codigo_produto,desc_produto,unidade_medida,lote,data_validade,serie_nf,tipo_nf,
+                sum(qtd_recebida),sum(qtd_avariada),desc_restricao,serie,peca,sum(qtd_fiscal)'))
+            ->groupBy('data_recebimento')
+            ->groupBy('tipo_estoque')
+            ->groupBy('desc_tipo_estoque')
+            ->groupBy('cnpj_emissor_nfe')
+            ->groupBy('razao_social_fornecedor')
+            ->groupBy('codigo_produto')
+            ->groupBy('desc_produto')
+            ->groupBy('unidade_medida')
+            ->groupBy('lote')
+            ->groupBy('data_validade')
+            ->groupBy('serie_nf')
+            ->groupBy('tipo_nf')
+            ->groupBy('qtd_recebida')
+            ->groupBy('qtd_avariada')
+            ->groupBy('desc_restricao')
+            ->groupBy('serie')
+            ->groupBy('peca')
+            ->groupBy('qtd_fiscal')
+            ->orderBy('data_recebimento','asc')
+            ->get();
+
+        return $query;
+    }
+
+    /**
+     * @param $data
+     * @return mixed
+     */
+    public function getQueryUser($data)
+    {
+        $query = $this->model->where(function ($query) use ($data) {
+            return $query->whereRaw('data_recebimento BETWEEN ? AND ?',
+                [$data['start'], $data['end']])->where('tipo_estoque',$data['protocol']);
+        })->select(DB::raw('data_recebimento, tipo_estoque,desc_tipo_estoque,cnpj_emissor_nfe,
+                razao_social_fornecedor,codigo_produto,desc_produto,unidade_medida,lote,data_validade,serie_nf,tipo_nf,
+                qtd_recebida,qtd_avariada,desc_restricao,serie,peca,qtd_fiscal'))
+            ->groupBy('data_recebimento')
+            ->groupBy('tipo_estoque')
+            ->groupBy('desc_tipo_estoque')
+            ->groupBy('cnpj_emissor_nfe')
+            ->groupBy('razao_social_fornecedor')
+            ->groupBy('codigo_produto')
+            ->groupBy('desc_produto')
+            ->groupBy('unidade_medida')
+            ->groupBy('lote')
+            ->groupBy('data_validade')
+            ->groupBy('serie_nf')
+            ->groupBy('tipo_nf')
+            ->groupBy('qtd_recebida')
+            ->groupBy('qtd_avariada')
+            ->groupBy('desc_restricao')
+            ->groupBy('serie')
+            ->groupBy('peca')
+            ->groupBy('qtd_fiscal')
+            ->orderBy('data_recebimento','asc')
+            ->get();
+
+        return $query;
+    }
+
+    /**
      * @param $chave
      * @return mixed
      */
@@ -281,5 +352,19 @@ class RoadRepositoryEloquent extends BaseRepository implements RoadRepository
 
             return $result;
         }
+    }
+
+    /**
+     * @param $valor
+     * @return mixed|string
+     */
+    public function limpaCPF_CNPJ($valor)
+    {
+        $valor = trim($valor);
+        $valor = str_replace(".", "", $valor);
+        $valor = str_replace(",", "", $valor);
+        $valor = str_replace("-", "", $valor);
+        $valor = str_replace("/", "", $valor);
+        return $valor;
     }
 }
