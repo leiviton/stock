@@ -41,4 +41,16 @@ interface OutRepository extends RepositoryInterface
      * @return mixed
      */
     public function orderFilterData($data, $cnpj, $lote = '');
+
+    /**
+     * @param $data
+     * @return mixed
+     */
+    public function getQueryUser($data);
+
+    /**
+     * @param $data
+     * @return mixed
+     */
+    public function getQueryAdmin($data);
 }
