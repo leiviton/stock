@@ -219,7 +219,7 @@ class RoadRepositoryEloquent extends BaseRepository implements RoadRepository
                 ->where(function ($query) use ($dataEnd) {
                     return $query->whereRaw('data_recebimento BETWEEN ? AND ?', [(new Carbon())->subMonth(6), $dataEnd]);
                 })
-                ->select(DB::raw('tipo_estoque,data_recebimento,desc_tipo_estoque, sum(roads.qtd_recebida) AS qtd_recebida,sum(roads.qtd_avariada) as qtd_avariada,codigo_produto,desc_produto,lote,data_validade,desc_produto,desc_restricao,unidade_medida,serie_nf'))
+                ->select(DB::raw('tipo_estoque,data_recebimento,desc_tipo_estoque, sum(roads.qtd_recebida) AS qtd_recebida,sum(roads.qtd_avariada) as qtd_avariada,codigo_produto,desc_produto,lote,data_validade,desc_restricao,unidade_medida,serie_nf'))
                 ->groupBy('codigo_produto')
                 ->groupBy('serie_nf')
                 ->groupBy('data_recebimento')
@@ -239,7 +239,7 @@ class RoadRepositoryEloquent extends BaseRepository implements RoadRepository
                 ->where(function ($query) use ($dataEnd) {
                     return $query->whereRaw('data_recebimento BETWEEN ? AND ?', [(new Carbon())->subMonth(6), $dataEnd]);
                 })
-                ->select(DB::raw('tipo_estoque,data_recebimento,desc_tipo_estoque, sum(roads.qtd_recebida) AS qtd_recebida,sum(roads.qtd_avariada) as qtd_avariada,codigo_produto,desc_produto,lote,data_validade,desc_produto,desc_restricao,unidade_medida,serie_nf'))
+                ->select(DB::raw('tipo_estoque,data_recebimento,desc_tipo_estoque, sum(roads.qtd_recebida) AS qtd_recebida,sum(roads.qtd_avariada) as qtd_avariada,codigo_produto,desc_produto,lote,data_validade,desc_restricao,unidade_medida,serie_nf'))
                 ->groupBy('codigo_produto')
                 ->groupBy('serie_nf')
                 ->groupBy('data_recebimento')
@@ -270,9 +270,11 @@ class RoadRepositoryEloquent extends BaseRepository implements RoadRepository
         $query = $this->model->where(function ($query) use ($data) {
             return $query->whereRaw('data_recebimento BETWEEN ? AND ?',
                 [$data['start'], $data['end']])->where('depositante',$this->limpaCPF_CNPJ($data['cnpj']));
-        })->select(DB::raw('data_recebimento, tipo_estoque,desc_tipo_estoque,cnpj_emissor_nfe,
-                razao_social_fornecedor,codigo_produto,desc_produto,unidade_medida,lote,data_validade,serie_nf,tipo_nf,
-                sum(qtd_recebida),sum(qtd_avariada),desc_restricao,serie,peca,sum(qtd_fiscal)'))
+        })->select(DB::raw('data_recebimento as Recebimento,desc_tipo_estoque as Protocolo,cnpj_emissor_nfe as Emitente,
+                razao_social_fornecedor as Fornecedor,codigo_produto as Codigo,desc_produto as Produto,
+                unidade_medida as Unidade_Medida,lote as Lote,data_validade as Validade,serie_nf as NFe,
+                tipo_nf as Tipo_NF,desc_restricao as Restricao,serie as Serie,peca as Peca,sum(qtd_recebida) as Qtd_Recebida,
+                sum(qtd_avariada) as Qtd_Avariada,sum(qtd_fiscal) as Qtd_Fiscal'))
             ->groupBy('data_recebimento')
             ->groupBy('tipo_estoque')
             ->groupBy('desc_tipo_estoque')
@@ -306,9 +308,11 @@ class RoadRepositoryEloquent extends BaseRepository implements RoadRepository
         $query = $this->model->where(function ($query) use ($data) {
             return $query->whereRaw('data_recebimento BETWEEN ? AND ?',
                 [$data['start'], $data['end']])->where('tipo_estoque',$data['protocol']);
-        })->select(DB::raw('data_recebimento, tipo_estoque,desc_tipo_estoque,cnpj_emissor_nfe,
-                razao_social_fornecedor,codigo_produto,desc_produto,unidade_medida,lote,data_validade,serie_nf,tipo_nf,
-                qtd_recebida,qtd_avariada,desc_restricao,serie,peca,qtd_fiscal'))
+        })->select(DB::raw('data_recebimento as Recebimento,desc_tipo_estoque as Protocolo,cnpj_emissor_nfe as Emitente,
+                razao_social_fornecedor as Fornecedor,codigo_produto as Codigo,desc_produto as Produto,
+                unidade_medida as Unidade_Medida,lote as Lote,data_validade as Validade,serie_nf as NFe,
+                tipo_nf as Tipo_NF,desc_restricao as Restricao,serie as Serie,peca as Peca,sum(qtd_recebida) as Qtd_Recebida,
+                sum(qtd_avariada) as Qtd_Avariada,sum(qtd_fiscal) as Qtd_Fiscal'))
             ->groupBy('data_recebimento')
             ->groupBy('tipo_estoque')
             ->groupBy('desc_tipo_estoque')
