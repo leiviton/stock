@@ -334,6 +334,7 @@ class RoadRepositoryEloquent extends BaseRepository implements RoadRepository
             ->orderBy('data_recebimento','asc')
             ->get();
 
+
         return $query;
     }
 
