@@ -63,7 +63,6 @@ class OutRepositoryEloquent extends BaseRepository implements OutRepository
             if ($data['value'] == '') {
                 $results = $this->model
                     ->where('depositante', $cnpj)
-                    ->where('tipo_estoque', $lote)
                     ->groupBy('tipo_estoque')
                     ->select(DB::raw('tipo_estoque,data_envio,desc_tipo_estoque,centro,nome_destino_final,numero_ordem,sum(outs.qtd_enviada) AS qtd_enviada,codigo_produto,desc_produto,lote,data_validade,desc_produto,unidade_medida,serie_nf,centro'))
                     ->groupBy('codigo_produto')
@@ -81,8 +80,8 @@ class OutRepositoryEloquent extends BaseRepository implements OutRepository
                     ->orderBy($order[0], $order[1])
                     ->get();
             } else {
+                //dd('aqui');
                 $results = $this->model
-                    ->where('tipo_estoque', $lote)
                     ->where('depositante', $cnpj)
                     ->where(function ($query) use ($data) {
                         if ($data['field'] == 'data_envio') {
@@ -90,7 +89,6 @@ class OutRepositoryEloquent extends BaseRepository implements OutRepository
                         } else if ($data) {
                             return $query->where($data['field'], 'like', '%' . $data['value'] . '%');
                         }
-                        return $query;
                     })
                     ->select(DB::raw('tipo_estoque,data_envio,desc_tipo_estoque,centro,nome_destino_final,numero_ordem,sum(outs.qtd_enviada) AS qtd_enviada,codigo_produto,desc_produto,lote,data_validade,desc_produto,unidade_medida,serie_nf,centro'))
                     ->groupBy('codigo_produto')
@@ -133,10 +131,11 @@ class OutRepositoryEloquent extends BaseRepository implements OutRepository
                     ->where('tipo_estoque', $lote)
                     ->where('depositante', $cnpj)
                     ->where(function ($query) use ($data) {
-                        if ($data) {
+                        if ($data['field'] == 'data_envio') {
+                            return $query->where($data['field'], $data['value']);
+                        } else if ($data) {
                             return $query->where($data['field'], 'like', '%' . $data['value'] . '%');
                         }
-                        return $query;
                     })
                     ->select(DB::raw('tipo_estoque,data_envio,desc_tipo_estoque,centro,nome_destino_final,numero_ordem,sum(outs.qtd_enviada) AS qtd_enviada,codigo_produto,desc_produto,lote,data_validade,desc_produto,unidade_medida,serie_nf,centro'))
                     ->groupBy('codigo_produto')
