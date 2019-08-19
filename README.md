@@ -3,16 +3,22 @@
 
 Api Rest desenvolvida em laravel
 
-# Ambiente
+## Ambiente
 
+- docker ;
 - Docker-compose;
 
-# Conteiners :
 
-- Ngix, DB(MySql) , Redis , App(api-stock)
+## Conteiners :
+
+- Ngix, DB(MySql) , Redis , App(api-web-sac)
+
+##**OBSERVACAO IMPORTANTE**:
+
+- O container de banco roda na porta 3306 por padrão , observar se mysql server instalado localmente esta rodando na mesma porta.
 
 
-# Como executar o projeto 
+## Como executar o projeto 
 
 Dentro da pasta app (api-stock) 
 
