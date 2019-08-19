@@ -11,7 +11,7 @@ Api Rest desenvolvida em laravel
 
 ## Conteiners :
 
-- Ngix, DB(MySql) , Redis , App(api-web-sac)
+- Ngix, DB(MySql) , Redis , App(api-stock)
 
 ##**OBSERVACAO IMPORTANTE**:
 
