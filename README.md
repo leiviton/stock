@@ -15,7 +15,8 @@ Api Rest desenvolvida em laravel
 
 ##**OBSERVACAO IMPORTANTE**:
 
-- O container de banco roda na porta 3306 por padrão , observar se mysql server instalado localmente esta rodando na mesma porta.
+- O container de banco roda na porta 3306 por padrão , observar se mysql server ou outro SGBD enconstra-se instalado localmente e esta rodando nesta porta.
+- Também é necessário alterar o endereço IP do servidor NGinx para IP da máquina de trabalho.
 
 
 ## Como executar o projeto 
