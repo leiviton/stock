@@ -59,5 +59,13 @@ class RepositoryServiceProvider extends ServiceProvider
             'Stock\Repositories\NotaFiscalRepository',
             'Stock\Repositories\NotaFiscalRepositoryEloquent'
         );
+        $this->app->bind(
+            'Stock\Repositories\TravelRouteRepository',
+            'Stock\Repositories\TravelRouteRepositoryEloquent'
+        );
+        $this->app->bind(
+            'Stock\Repositories\TravelRouteExRepository',
+            'Stock\Repositories\TravelRouteExRepositoryEloquent'
+        );
     }
 }

@@ -19,6 +19,8 @@ Route::group(['prefix' => 'v1/', 'middleware' => 'auth:api'], function () {
         Route::get('emitir', 'UtilController@emitirNfe');
         Route::get('consulta/{recibo}', 'UtilController@consultaProtocolo');
         Route::get('danfe', 'UtilController@emitirDanfe');
+        Route::get('comprovei', 'ComproveiController@index');
+        Route::get('comprovei/agent', 'ComproveiController@getAgents');
 
         /*Notas fiscais*/
         Route::get('notas','NotaFiscalController@index');

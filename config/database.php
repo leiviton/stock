@@ -78,13 +78,13 @@ return [
             'prefix' => '',
         ],
 
-        'sqlsrvNFE' => [
+        'sqlsrvcomprovei' => [
             'driver' => 'sqlsrv',
-            'host'      => env('DB_HOST_NFE'),
-            'port'      => env('DB_PORT_NFE'),
-            'database'  => env('DB_DATABASE_NFE'),
-            'username'  => env('DB_USERNAME_NFE'),
-            'password'  => env('DB_PASSWORD_NFE'),
+            'host'      => env('DB_HOST_C'),
+            'port'      => env('DB_PORT_C'),
+            'database'  => env('DB_DATABASE_C'),
+            'username'  => env('DB_USERNAME_C'),
+            'password'  => env('DB_PASSWORD_C'),
             'charset' => 'utf8',
             'prefix' => '',
         ],
