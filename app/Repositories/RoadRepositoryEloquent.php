@@ -211,13 +211,13 @@ class RoadRepositoryEloquent extends BaseRepository implements RoadRepository
     {
         $dataEnd = new \DateTime();
         $order[0] = $order[0] ?? 'data_recebimento';
-        $order[1] = $order[1] ?? 'asc';
+        $order[1] = $order[1] ?? 'desc';
         if ($lote != '') {
             $results = $this->model
                 ->where('tipo_estoque', $lote)
                 ->where('depositante', $cnpj)
                 ->where(function ($query) use ($dataEnd) {
-                    return $query->whereRaw('data_recebimento BETWEEN ? AND ?', [(new Carbon())->subMonth(6), $dataEnd]);
+                    return $query->whereRaw('data_recebimento BETWEEN ? AND ?', [(new Carbon())->subMonth(3), $dataEnd]);
                 })
                 ->select(DB::raw('tipo_estoque,data_recebimento,desc_tipo_estoque, sum(roads.qtd_recebida) AS qtd_recebida,sum(roads.qtd_avariada) as qtd_avariada,codigo_produto,desc_produto,lote,data_validade,desc_restricao,unidade_medida,serie_nf'))
                 ->groupBy('codigo_produto')
@@ -237,7 +237,7 @@ class RoadRepositoryEloquent extends BaseRepository implements RoadRepository
             $results = $this->model
                 ->where('depositante', $cnpj)
                 ->where(function ($query) use ($dataEnd) {
-                    return $query->whereRaw('data_recebimento BETWEEN ? AND ?', [(new Carbon())->subMonth(6), $dataEnd]);
+                    return $query->whereRaw('data_recebimento BETWEEN ? AND ?', [(new Carbon())->subMonth(3), $dataEnd]);
                 })
                 ->select(DB::raw('tipo_estoque,data_recebimento,desc_tipo_estoque, sum(roads.qtd_recebida) AS qtd_recebida,sum(roads.qtd_avariada) as qtd_avariada,codigo_produto,desc_produto,lote,data_validade,desc_restricao,unidade_medida,serie_nf'))
                 ->groupBy('codigo_produto')
