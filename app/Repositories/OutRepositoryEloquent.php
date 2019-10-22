@@ -234,7 +234,7 @@ class OutRepositoryEloquent extends BaseRepository implements OutRepository
     {
         $dataEnd = new \DateTime();
         $order[0] = $order[0] ?? 'data_envio';
-        $order[1] = $order[1] ?? 'asc';
+        $order[1] = $order[1] ?? 'desc';
         //dd($user->role);
         //dd($lote);
         if ($lote != '') {

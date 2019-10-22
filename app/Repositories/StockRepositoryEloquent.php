@@ -66,7 +66,7 @@ class StockRepositoryEloquent extends BaseRepository implements StockRepository
     public function orderFilter($data, $user, $cnpj, $lote = '')
     {
         $order[0] = $order[0] ?? 'data_atual';
-        $order[1] = $order[1] ?? 'asc';
+        $order[1] = $order[1] ?? 'desc';
         if ($lote == '') {
             if ($user->role == 'user_company') {
                 if ($data['value'] == '') {
@@ -201,7 +201,7 @@ class StockRepositoryEloquent extends BaseRepository implements StockRepository
     {
         $dataEnd = new \DateTime();
         $order[0] = $order[0] ?? 'data_atual';
-        $order[1] = $order[1] ?? 'asc';
+        $order[1] = $order[1] ?? 'desc';
         if ($lote != '') {
             if ($user->role == 'user_company') {
                 $results = $this->model

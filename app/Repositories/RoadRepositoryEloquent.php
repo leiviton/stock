@@ -211,7 +211,7 @@ class RoadRepositoryEloquent extends BaseRepository implements RoadRepository
     {
         $dataEnd = new \DateTime();
         $order[0] = $order[0] ?? 'data_recebimento';
-        $order[1] = $order[1] ?? 'asc';
+        $order[1] = $order[1] ?? 'desc';
         if ($lote != '') {
             $results = $this->model
                 ->where('tipo_estoque', $lote)
