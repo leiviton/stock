@@ -13,12 +13,13 @@
         "laravel/passport": "4.0.*",
         "laravel/tinker": "~1.0",
         "league/fractal": "^0.17.0",
+        "maatwebsite/excel": "2.*",
         "nfephp-org/sped-da": "^0.1.23",
         "nfephp-org/sped-nfe": "^5.0",
         "paragonie/random_compat": "2.*",
-        "maatwebsite/excel": "2.1",
         "prettus/l5-repository": "^2.6",
-        "reliese/laravel": "^0.0.13"
+        "reliese/laravel": "^0.0.13",
+        "zendframework/zend-soap": "^2.8"
     },
     "require-dev": {
         "filp/whoops": "~2.0",

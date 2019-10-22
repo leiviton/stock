@@ -19,6 +19,13 @@ interface TravelRouteExRepository extends RepositoryInterface
     public function getQueryUser($dataStart, $dataEnd);
 
     /**
+     * @param $dataStart
+     * @param $dataEnd
+     * @return mixed
+     */
+    public function getQuerySend($dataStart, $dataEnd);
+
+    /**
      * @param $now
      * @return mixed
      */

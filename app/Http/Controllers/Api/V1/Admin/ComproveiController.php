@@ -3,10 +3,10 @@
 
 namespace Stock\Http\Controllers\Api\V1\Admin;
 
-use DateTime;
+use GuzzleHttp\Client;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use Mockery\Exception;
 use Stock\Http\Controllers\Controller;
 use Stock\Repositories\TravelRouteExRepository;
 use Stock\Repositories\TravelRouteRepository;
@@ -67,7 +67,7 @@ class ComproveiController extends Controller
 
     public function getAgents()
     {
-        $now = $this->clear(date_format(new \DateTime(),'Y-m-d'));
+        $now = $this->clear(date_format(new \DateTime(), 'Y-m-d'));
 
         $query = $this->travelRouteExRepository->getAgent($now);
 
@@ -102,4 +102,38 @@ class ComproveiController extends Controller
         $valor = str_replace("/", "", $valor);
         return $valor;
     }
+
+
+    public function sendComprovei(Request $request)
+    {
+        try{
+            $client = new \SoapClient('https://soap.comprovei.com.br/importQueue/v2/index.php?wsdl');
+
+            $query = $this->travelRouteExRepository->getQuerySend('20190920', '20190920');
+
+            $auth = [
+                "Usuario" => "drsgroup",
+                "Senha"  => "rt2NuOB5sklA7WSvJiIMdQ0oD4EL3Gbp"
+            ];
+            $header = new \SoapHeader('NAMESPACE','Credentials',$auth,false);
+
+            $client->__setSoapHeaders($header);
+
+            //dd($query);
+
+            dd($client->uploadRoute(["Rotas" => ["Rota" => [
+                $query[0], "Paradas" => ["Tipo" => "E","Documento"=>1,"Cliente" => [
+
+                ]]
+            ]]]));
+
+        }catch (Exception $exception) {
+            $exception->getMessage();
+        }
+        /*$response = $client->post('https://soap.comprovei.com.br/importQueue/v2/index.php?wsdl', [
+            'body' => $xml
+        ]);*/
+
+    }
+
 }

@@ -14,7 +14,7 @@ use Stock\Services\UserService;
 
 class UserController extends Controller
 {
-
+    use  UtilTrait;
     /**
      * @var UserService
      */
@@ -76,7 +76,7 @@ class UserController extends Controller
         }
     }
 
-    public function upload(Request $request)
+    /*public function upload(Request $request)
     {
         $nameFile = null;
 
@@ -95,7 +95,9 @@ class UserController extends Controller
         } else {
             return response()->json(['message' => 'Verifique o arquivo enviado 1', 'status' => 'error','title' => 'Erro'], 400);
         }
-    }
+    }*/
+
+
     /**
      * @param $id
      * @param Request $request
@@ -105,11 +107,14 @@ class UserController extends Controller
     {
         $validator = Validator($request->all(),
             [
-                'password' => 'required|min:6'
+                'password' => 'required|min:6',
+                'password_repeat' => 'required|same:password'
             ],
             [
                 'password.required' => 'Senha é obritaoria',
-                'password.length' => 'Tamanho da senha invádio'
+                'password.length' => 'Tamanho da senha invádio',
+                'password_repeat.same' => 'Campo confirmar senha diferente de senha',
+                'password_repeat.required' => 'Campo confirmar senha é obritaorio'
             ]
         );
 
@@ -124,9 +129,11 @@ class UserController extends Controller
         $result = $this->service->updatePassword($id, $request->get('password'));
 
         if ($result['status'] == 'success') {
-            return response()->json(['message' => 'Cadastro realizado com sucesso', 'status' => 'success', 'title' => 'Sucesso'], 201);
+            return response()->json(['message' => 'Alteração de senha realizada com sucesso', 'status' => 'success', 'title' => 'Sucesso'], 200);
         } else if ($result['status'] == 'error') {
             return response()->json(['message' => $result['message'], 'status' => 'error', 'title' => 'Erro'], 400);
+        } else {
+            return response()->json(['message' => 'Erro desconhecido, contate o Good do software', 'status' => 'error', 'title' => 'Erro'], 400);
         }
     }
 
