@@ -14,6 +14,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * 
  * @property int $id
  * @property int $company_id
+ * @property int $first_login
  * @property string $name
  * @property string $role
  * @property string $status
@@ -34,7 +35,8 @@ use Reliese\Database\Eloquent\Model as Eloquent;
 class User extends Eloquent
 {
 	protected $casts = [
-		'company_id' => 'int'
+		'company_id' => 'int',
+		'first_login' => 'int'
 	];
 
 	protected $dates = [

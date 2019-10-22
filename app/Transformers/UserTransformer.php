@@ -32,6 +32,7 @@ class UserTransformer extends TransformerAbstract
             'role' => $model->role,
             'status' => $model->status,
             'img_profile' => env('APP_URL').'/storage/users/'.$model->img_profile,
+            'first_login' => $model->first_login,
             /* place your other model properties here */
 
             'created_at' => $model->created_at,
