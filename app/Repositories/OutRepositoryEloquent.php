@@ -244,7 +244,7 @@ class OutRepositoryEloquent extends BaseRepository implements OutRepository
                 ->where('tipo_estoque', $lote)
                 ->where(function ($query) use ($dataEnd) {
                     if ($dataEnd) {
-                        return $query->whereRaw('data_envio BETWEEN ? AND ?', [(new Carbon())->subMonth(6), $dataEnd]);
+                        return $query->whereRaw('data_envio BETWEEN ? AND ?', [(new Carbon())->subMonth(3), $dataEnd]);
                     }
                     return $query;
                 })
@@ -271,7 +271,7 @@ class OutRepositoryEloquent extends BaseRepository implements OutRepository
             $results = $this->model
                 ->where(function ($query) use ($dataEnd, $cnpj) {
                     if ($dataEnd) {
-                        return $query->whereRaw('data_envio BETWEEN ? AND ?', [(new Carbon())->subMonth(6), $dataEnd])
+                        return $query->whereRaw('data_envio BETWEEN ? AND ?', [(new Carbon())->subMonth(3), $dataEnd])
                             ->where('depositante', $cnpj);
                     }
                     return $query;
