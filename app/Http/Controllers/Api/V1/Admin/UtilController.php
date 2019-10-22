@@ -9,6 +9,7 @@ use Stock\Services\NFeService;
 
 class UtilController extends Controller
 {
+    use UtilTrait;
     /**
      * @var NFeService
      */

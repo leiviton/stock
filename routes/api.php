@@ -21,6 +21,8 @@ Route::group(['prefix' => 'v1/', 'middleware' => 'auth:api'], function () {
         Route::get('danfe', 'UtilController@emitirDanfe');
         Route::get('comprovei', 'ComproveiController@index');
         Route::get('comprovei/agent', 'ComproveiController@getAgents');
+        Route::get('comprovei/send', 'ComproveiController@sendComprovei');
+        Route::delete('file/delete/{image}/{folder}', 'UtilController@deleteFile');
 
         /*Notas fiscais*/
         Route::get('notas','NotaFiscalController@index');
@@ -34,6 +36,7 @@ Route::group(['prefix' => 'v1/', 'middleware' => 'auth:api'], function () {
         Route::put('user/{id}', 'UserController@update');
         Route::delete('user/{id}', 'UserController@delete');
         Route::patch('user/{id}', 'UserController@updateStatus');
+        Route::patch('user/password/{id}', 'UserController@updatePassword');
         Route::get('protocol', 'ProtocolsController@index');
 
         /*Stock*/
