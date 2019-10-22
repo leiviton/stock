@@ -124,6 +124,11 @@ class UserService
 
             $user->password = bcrypt($password);
 
+            if($user->first_login == 0)
+            {
+                $user->first_login = 1;
+            }
+
             $user->save();
             DB::commit();
             return ['status' => 'success', 'id' => $user->id];
