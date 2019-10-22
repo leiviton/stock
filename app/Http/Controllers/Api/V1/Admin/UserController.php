@@ -187,7 +187,7 @@ class UserController extends Controller
             ], 406);
         }
 
-        $result = $this->service->update($id, $request->all());
+        $result = $this->service->update($request->all(), $id);
 
         if ($result['status'] == 'success') {
             return response()->json(['message' => 'Usuario atualizado com sucesso', 'status' => 'success', 'title' => 'Sucesso'], 200);
