@@ -171,8 +171,15 @@ class UserService
     {
         DB::beginTransaction();
         try {
-            //$user = $this->userRepository->find($id);
-            $this->userRepository->update($data, $id);
+            $user = $this->userRepository->find($id);
+
+            $user->name = $data['name'];
+
+            $user->role = $data['role'];
+
+            $user->img_profile = $data['img_profile'];
+
+            $user->save();
 
             DB::commit();
 
