@@ -195,4 +195,13 @@ class UserController extends Controller
             return response()->json(['message' => $result['message'], 'status' => 'error', 'title' => 'Erro'], 400);
         }
     }
+
+    /**
+     * @param $id
+     * @return mixed
+     */
+    public function edit($id)
+    {
+        return $this->service->getId($id);
+    }
 }
