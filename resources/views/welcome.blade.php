@@ -3,10 +3,12 @@
 <head>
     <meta charset="utf-8">
     <base href="/">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#2bbbad">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="Start your development with a Dashboard for Bootstrap 4.">
-    <meta name="author" content="Creative Tim">
-    <title>Portal Estoque</title>
+    <meta name="description" content="Drs Portal WMS Online.">
+    <meta name="author" content="DRS Tecnologia">
+    <title>DRS Portal</title>
     <!-- Favicon -->
     <link href="./assets/img/brand/logo.png" rel="icon" type="image/png">
     <!-- Fonts -->
@@ -21,9 +23,26 @@
 <div class="internal-bg">
     <app-root></app-root>
 </div>
-<script type="text/javascript" src="runtime.a629f3d269d023103f33.js"></script>
+<noscript>
+    <h3 style="color:#3f51b5; font-family: Helvetica; margin: 2rem;">
+        Aplicativo indisponível.
+    </h3>
+</noscript>
+
+<script>
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/service-worker.js')
+            .then(function (registration) {
+                console.log('ServiceWorker registration successful with scope: ', registration.scope);
+            })
+            .catch(function (err) {
+                console.log('SerivceWorker registration failed: ', err);
+            });
+    }
+</script>
+<script type="text/javascript" src="runtime.ed26230f516822b4e589.js"></script>
 <script type="text/javascript" src="polyfills.aca04ef57459e933ca5d.js"></script>
 <script type="text/javascript" src="scripts.2db4cbc668a10a0c2a68.js"></script>
-<script type="text/javascript" src="main.31924a673bc44a0dc0e8.js"></script>
+<script type="text/javascript" src="main.47bf69db230e9d8accca.js"></script>
 </body>
 </html>
