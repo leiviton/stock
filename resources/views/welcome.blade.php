@@ -10,7 +10,6 @@
     <meta name="author" content="DRS Tecnologia">
     <title>DRS Portal</title>
     <!-- Favicon -->
-    <link href="./assets/img/brand/logo.png" rel="icon" type="image/png">
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
     <!-- Icons -->
@@ -43,6 +42,6 @@
 <script type="text/javascript" src="runtime.fc0c0b6e7b7a888cf17c.js"></script>
 <script type="text/javascript" src="polyfills.aca04ef57459e933ca5d.js"></script>
 <script type="text/javascript" src="scripts.2db4cbc668a10a0c2a68.js"></script>
-<script type="text/javascript" src="main.bcc40209dcf10c6567b5.js"></script>
+<script type="text/javascript" src="main.a2923957cbeb72035f4d.js"></script>
 </body>
 </html>
