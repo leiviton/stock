@@ -10,7 +10,7 @@
     <meta name="author" content="DRS Tecnologia">
     <title>DRS Portal</title>
     <!-- Favicon -->
-    <link href="./images/icons/72.png" rel="icon" type="image/png">
+    <link href="./images/icons/144.png" rel="icon" type="image/png">
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
     <!-- Icons -->
