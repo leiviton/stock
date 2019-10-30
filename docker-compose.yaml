@@ -1,5 +1,13 @@
 version: '3'
 services:
+    stock-angular:
+      image: stock-angular
+      container_name: stock-angular
+      build: ../front-stock
+      ports:
+        - 81:80
+      networks:
+        - stock-network
     stock:
       build: .
       container_name: stock

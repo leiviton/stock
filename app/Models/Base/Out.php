@@ -12,10 +12,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
 /**
  * Class Out
  * 
- * @property int $id
- * @property string $chave_logix
- * @property int $company_id
- * @property \Carbon\Carbon $data_geracao
+ * @property string $id
  * @property string $depositante
  * @property string $razao_social
  * @property string $tipo_estoque
@@ -44,16 +41,18 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  */
 class Out extends Eloquent
 {
-	protected $casts = [
-		'company_id' => 'int'
-	];
+    protected $connection = 'sqlsrv';
+
+    protected $keyType = 'string';
+
+    protected $table = 'logix.outs';
 
 	protected $dates = [
 		'data_geracao'
 	];
 
-	public function company()
-	{
-		return $this->belongsTo(\Stock\Models\Company::class);
-	}
+    public function company()
+    {
+        return $this->belongsTo(\Stock\Models\Company::class,'depositante','cnpj');
+    }
 }

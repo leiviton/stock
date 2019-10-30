@@ -8,6 +8,7 @@
 
 namespace Stock\Http\Controllers\Api\V1\Admin;
 
+use Illuminate\Support\Facades\DB;
 use Stock\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Stock\Services\OutService;
@@ -36,6 +37,8 @@ class OutsController extends Controller
      */
     public function index($id,Request $request)
     {
+        $result = DB::connection('sqlsrv')->table('logix.outs')->where('depositante','000251699000162')->get();
+        dd($result[0]);
         $lote = $request->get('protocol') ? $request->get('protocol') : '';
         return $this->service->getOuts($request->all(),$id,$lote);
     }
@@ -63,6 +66,8 @@ class OutsController extends Controller
      */
     public function getAll($id,Request $request)
     {
+        $result = DB::connection('sqlsrv')->table('logix.stocks')->where('depositante','000251699000162')->get();
+        dd($result[0]);
         $lote = $request->get('protocol') ? $request->get('protocol') : '';
         return $this->service->getAll($id,$lote);
     }

@@ -31,7 +31,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property string $serie_nf
  * @property string $tipo_nf
  * @property string $qtd_recebida
- * @property string $qtd_avariada
+ * @property string $qtd_rejeitada
  * @property string $desc_restricao
  * @property string $serie
  * @property string $peca
@@ -45,6 +45,10 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  */
 class Road extends Eloquent
 {
+    protected $connection = 'sqlsrv';
+
+    protected $table = 'logix.entries';
+
 	protected $casts = [
 		'company_id' => 'int'
 	];
@@ -55,6 +59,6 @@ class Road extends Eloquent
 
 	public function company()
 	{
-		return $this->belongsTo(\Stock\Models\Company::class);
+		return $this->belongsTo(\Stock\Models\Company::class,'depositante','cnpj');
 	}
 }

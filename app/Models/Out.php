@@ -43,5 +43,4 @@ class Out extends \Stock\Models\Base\Out implements Transformable
         'pedido_venda',
         'company_id'
     ];
-
 }
