@@ -233,6 +233,7 @@ class OutRepositoryEloquent extends BaseRepository implements OutRepository
     public function orderByOuts($user, $cnpj, $lote = '')
     {
         $dataEnd = new \DateTime();
+        $dateStart = $this->invertDate((new Carbon())->subDay(90));
         $order[0] = $order[0] ?? 'data_envio';
         $order[1] = $order[1] ?? 'desc';
         //dd($user->role);
@@ -242,13 +243,13 @@ class OutRepositoryEloquent extends BaseRepository implements OutRepository
             $results = $this->model
                 ->where('depositante', $cnpj)
                 ->where('tipo_estoque', $lote)
-                ->where(function ($query) use ($dataEnd) {
+                ->where(function ($query) use ($dataEnd,$dateStart) {
                     if ($dataEnd) {
-                        return $query->whereRaw('data_envio BETWEEN ? AND ?', [(new Carbon())->subDay(90), $dataEnd]);
+                        return $query->whereRaw('data_envio BETWEEN ? AND ?', [$dateStart, $dataEnd]);
                     }
                     return $query;
                 })
-                /*->select(DB::raw('depositante,tipo_estoque,data_envio,desc_tipo_estoque,nome_destino_final,numero_ordem,
+                ->select(DB::raw('depositante,tipo_estoque,data_envio,desc_tipo_estoque,nome_destino_final,numero_ordem,
                 sum(qtd_enviada) AS qtd_enviada,codigo_produto,lote,data_validade,desc_produto,
                 unidade_medida,serie_nf,centro'))
                 ->groupBy('codigo_produto')
@@ -263,15 +264,15 @@ class OutRepositoryEloquent extends BaseRepository implements OutRepository
                 ->groupBy('desc_tipo_estoque')
                 ->groupBy('unidade_medida')
                 ->groupBy('numero_ordem')
-                ->groupBy('depositante')*/
+                ->groupBy('depositante')
                 ->orderBy($order[0], $order[1])
                 ->paginate();
 
         } else {
             //dd('a');
-            $results = $this->model->whereBetween("data_envio", [(new Carbon())->subDay(90), $dataEnd])
+            $results = $this->model->whereBetween("data_envio", [$dateStart, $dataEnd])
                 ->where('depositante', $cnpj)
-                /*->select(DB::raw('depositante,tipo_estoque,data_envio,desc_tipo_estoque,nome_destino_final,numero_ordem,
+                ->select(DB::raw('depositante,tipo_estoque,data_envio,desc_tipo_estoque,nome_destino_final,numero_ordem,
                 sum(qtd_enviada) AS qtd_enviada,codigo_produto,desc_produto,lote,data_validade,
                 unidade_medida,serie_nf,centro'))
                 ->groupBy('codigo_produto')
@@ -286,7 +287,7 @@ class OutRepositoryEloquent extends BaseRepository implements OutRepository
                 ->groupBy('desc_tipo_estoque')
                 ->groupBy('unidade_medida')
                 ->groupBy('numero_ordem')
-                ->groupBy('depositante')*/
+                ->groupBy('depositante')
                 ->orderBy($order[0], $order[1])
                 ->paginate(30);
         }
@@ -396,5 +397,21 @@ class OutRepositoryEloquent extends BaseRepository implements OutRepository
         $valor = str_replace("-", "", $valor);
         $valor = str_replace("/", "", $valor);
         return $valor;
+    }
+
+    /**
+     * @param $date
+     * @return string
+     * @throws \Exception
+     */
+    public function invertDate($date)
+    {
+        if (count(explode("/", $date)) > 1) {
+            $result = implode("-", array_reverse(explode("/", $date)));
+            return $result;
+        } else if (count(explode("-", $date)) > 1) {
+            $result = implode("/", array_reverse(explode("-", $date)));
+            return $result;
+        }
     }
 }
