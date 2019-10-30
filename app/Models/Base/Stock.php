@@ -44,6 +44,12 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  */
 class Stock extends Eloquent
 {
+    protected $connection = 'sqlsrv';
+
+    protected $keyType = 'string';
+
+    protected $table = 'logix.stocks';
+
 	protected $casts = [
 		'company_id' => 'int',
 		'qtd_produto' => 'int',

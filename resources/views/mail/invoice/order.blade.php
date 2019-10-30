@@ -12,11 +12,7 @@
 <body>
 <div class="flex-center position-ref full-height">
     <h2 class="title">Integração Portal/Logix: {{ date('d/m/Y H:s:i') }}</h2>
-    <p>Ocorrencia: {{ $erro->error }}</p>
-    @if($erro->chave_logix != '')
-        <p> Chave Logix: {{ $erro->chave_logix }}</p>
-    @endif
-    <p>Total de registros Logix: {{ $erro->count }}</p>
+    <p>Finalizou</p>
     Obrigado,<br>
     {{ config('app.name') }}
 </div>

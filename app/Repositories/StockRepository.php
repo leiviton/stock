@@ -33,4 +33,18 @@ interface StockRepository extends RepositoryInterface
      * @return mixed
      */
     public function findByLogix($chave);
+
+    /**
+     * @param $data
+     * @return mixed
+     */
+    public function getQueryAdmin($data);
+
+
+    /**
+     * @param $data
+     * @return mixed
+     */
+    public function getQueryUser($data);
+
 }

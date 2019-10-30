@@ -104,17 +104,9 @@ class StockService
 
         // $query = \DB::table('outs')->select();
         if ($user->role == 'admin') {
-            $query = $this->stockRepository->scopeQuery(function ($query) use ($data) {
-                return $query->whereRaw('data_geracao BETWEEN ? AND ?',
-                    [$data['start']->format('Y-m-d'), $data['end']->format('Y-m-d')])->where('depositante',$data['cnpj']);
-            })->all(['data_atual', 'hora_atual', 'tipo_estoque', 'desc_tipo_estoque', 'codigo_produto', 'desc_produto', 'unidade_medida', 'lote',
-                'data_validade', 'desc_restricao', 'qtd_regul_reser', 'qtd_produto', 'qtd_avariada', 'peca', 'serie']);
+            $query = $this->stockRepository->getQueryAdmin($data);
         }else {
-            $query = $this->stockRepository->scopeQuery(function ($query) use ($data) {
-                return $query->whereRaw('data_geracao BETWEEN ? AND ?',
-                    [$data['start'],$data['end']])->where('tipo_estoque',$data['protocol']);
-            })->all(['data_atual', 'hora_atual', 'tipo_estoque', 'desc_tipo_estoque', 'codigo_produto', 'desc_produto', 'unidade_medida', 'lote',
-                'data_validade', 'desc_restricao', 'qtd_regul_reser', 'qtd_produto', 'qtd_avariada', 'peca', 'serie']);
+            $query = $this->stockRepository->getQueryUser($data);
         }
 
         $name = $user->id.'_'.str_replace(' ','',$user->name);

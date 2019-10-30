@@ -41,7 +41,8 @@ class Road extends \Stock\Models\Base\Road implements Transformable
         'peca',
         'qtd_recebida',
         'qtd_fiscal',
-        'company_id'
+        'company_id',
+        'qtd_rejeitada'
     ];
 
 }
