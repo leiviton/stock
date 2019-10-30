@@ -17,7 +17,7 @@
     <link href="./assets/vendor/nucleo/css/nucleo.css" rel="stylesheet">
     <link href="./assets/vendor/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
-    <link rel="stylesheet" href="styles.d47d49b7dcfb2c560db9.css">
+    <link rel="stylesheet" href="styles.538bb9e1c86d9ad16ed8.css">
 </head>
 <body>
 <div class="internal-bg">
@@ -40,9 +40,9 @@
             });
     }
 </script>
-<script type="text/javascript" src="runtime.a69949268c78f192a9bf.js"></script>
+<script type="text/javascript" src="runtime.321140a90c7881958424.js"></script>
 <script type="text/javascript" src="polyfills.aca04ef57459e933ca5d.js"></script>
 <script type="text/javascript" src="scripts.2db4cbc668a10a0c2a68.js"></script>
-<script type="text/javascript" src="main.a2923957cbeb72035f4d.js"></script>
+<script type="text/javascript" src="main.23b5101eaf663ccba4d5.js"></script>
 </body>
 </html>
