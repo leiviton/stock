@@ -233,7 +233,7 @@ class OutRepositoryEloquent extends BaseRepository implements OutRepository
     public function orderByOuts($user, $cnpj, $lote = '')
     {
         $dataEnd = new \DateTime();
-        $dateStart = $this->invertDate((new Carbon())->subDay(90));
+        $dateStart = $this->invertDate(date_format((new Carbon())->subDay(90),'d/m/Y'));
         $order[0] = $order[0] ?? 'data_envio';
         $order[1] = $order[1] ?? 'desc';
         //dd($user->role);
