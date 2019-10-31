@@ -213,7 +213,7 @@ class RoadRepositoryEloquent extends BaseRepository implements RoadRepository
     public function orderByRoads($user, $cnpj, $lote = '')
     {
         $dataEnd = new \DateTime();
-        $dataStart = (new Carbon())->subDay(15);
+        $dataStart = (new Carbon())->subDay(90);
         $order[0] = $order[0] ?? 'data_recebimento';
         $order[1] = $order[1] ?? 'desc';
         if ($lote != '') {
