@@ -23,12 +23,10 @@ class RoadTransformer extends TransformerAbstract
     public function transform(Road $model)
     {
         return [
-            'id'         => (int) $model->id,
-            'chave_logix'         => $model->chave_logix,
-            'data_geracao' => $model->data_geracao,
+            'id'         => $model->id,
             'depositante' => $model->depositante,
             'razao_social' => $model->razao_social,
-            'data_recebimento' => $model->data_recebimento,
+            'data_recebimento' => date('d/m/Y', strtotime($model->data_recebimento)),
             'tipo_estoque' => $model->tipo_estoque,
             'desc_tipo_estoque' => $model->desc_tipo_estoque,
             'cnpj_emissor_nfe' => $model->cnpj_emissor_nfe,
