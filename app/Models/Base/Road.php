@@ -32,6 +32,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property string $tipo_nf
  * @property string $qtd_recebida
  * @property string $qtd_rejeitada
+ * @property string $qtd_avariada
  * @property string $desc_restricao
  * @property string $serie
  * @property string $peca
