@@ -57,6 +57,11 @@ class NewsController extends Controller
         }
     }
 
+    public function edit($id)
+    {
+        return $this->service->getId($id);
+    }
+
     public function upload(Request $request)
     {
         $nameFile = null;
