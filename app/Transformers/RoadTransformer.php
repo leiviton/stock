@@ -35,7 +35,7 @@ class RoadTransformer extends TransformerAbstract
             'desc_produto' => $model->desc_produto,
             'unidade_medida' => $model->unidade_medida,
             'lote' => $model->lote,
-            'data_validade' => $model->data_validade,
+            'data_validade' => date('d/m/Y', strtotime($model->data_validade)),
             'serie_nf' => $model->serie_nf,
             'tipo_nf' => $model->tipo_nf,
             'desc_restricao' => $model->desc_restricao,

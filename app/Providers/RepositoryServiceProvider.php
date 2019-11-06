@@ -67,5 +67,9 @@ class RepositoryServiceProvider extends ServiceProvider
             'Stock\Repositories\TravelRouteExRepository',
             'Stock\Repositories\TravelRouteExRepositoryEloquent'
         );
+        $this->app->bind(
+            'Stock\Repositories\NewsRepository',
+            'Stock\Repositories\NewsRepositoryEloquent'
+        );
     }
 }
