@@ -103,7 +103,7 @@ class StockService
         $data['cnpj'] = $this->limpaCPF_CNPJ($data['cnpj']);
 
         // $query = \DB::table('outs')->select();
-        if ($user->role == 'admin') {
+        if ($user->role == 'admin' || $user->role == 'drs-admin') {
             $query = $this->stockRepository->getQueryAdmin($data);
         }else {
             $query = $this->stockRepository->getQueryUser($data);
@@ -112,7 +112,6 @@ class StockService
         $name = $user->id.'_'.str_replace(' ','',$user->name);
 
         for($i = 0; $i < count($query) ; $i++) {
-            $query[$i]['data_atual'] = $this->invertDate($query[$i]['data_atual']);
             $query[$i]['data_validade'] = $this->invertDate($query[$i]['data_validade']);
         }
 
