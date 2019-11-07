@@ -111,9 +111,10 @@ class StockService
 
         $name = $user->id.'_'.str_replace(' ','',$user->name);
 
-        /*for($i = 0; $i < count($query) ; $i++) {
-            $query[$i]['data_validade'] = $this->invertDate($query[$i]['data_validade']);
-        }*/
+        for($i = 0; $i < count($query) ; $i++) {
+            $query[$i]['Data_Validade'] = $this->invertDate($query[$i]['Data_Validade']);
+        }
+        //dd($query);
 
         \Excel::create($name, function($excel) use($query) {
             $excel->sheet('Sheet 1', function($sheet) use($query) {
