@@ -79,5 +79,11 @@ Route::group(['prefix' => 'v1/', 'middleware' => 'auth:api'], function () {
         Route::get('news', 'NewsController@index');
         Route::get('news/{id}', 'NewsController@edit');
         Route::put('news/{id}', 'NewsController@update');
+        /*Extensions*/
+        Route::post('extension', 'ExtensionsController@store');
+        Route::post('extension/upload', 'ExtensionsController@upload');
+        Route::get('extension', 'ExtensionsController@index');
+        Route::get('extension/{id}', 'ExtensionsController@edit');
+        Route::put('extension/{id}', 'ExtensionsController@update');
     });
 });
