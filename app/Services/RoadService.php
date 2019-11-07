@@ -114,7 +114,7 @@ class RoadService
     {
         $user = \Auth::guard()->user();
 
-        if ($user->role == 'admin') {
+        if ($user->role == 'admin' || $user->role == 'drs-admin') {
             $query = $this->repository->getQueryAdmin($data);
         }else {
             $query = $this->repository->getQueryUser($data);
