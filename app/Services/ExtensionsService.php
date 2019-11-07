@@ -64,7 +64,7 @@ class ExtensionsService
      */
     public function getNews()
     {
-        return $this->repository->skipPresenter(false)->paginate();
+        return $this->repository->skipPresenter(false)->paginate(15);
     }
 
     /**
