@@ -331,7 +331,6 @@ class RoadRepositoryEloquent extends BaseRepository implements RoadRepository
             ->groupBy('lote')
             ->groupBy('data_validade')
             ->groupBy('serie_nf')
-            ->groupBy('tipo_nf')
             ->groupBy('qtd_recebida')
             ->groupBy('qtd_rejeitada')
             ->groupBy('desc_restricao')
