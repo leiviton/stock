@@ -23,6 +23,15 @@ class UserTableSeeder extends Seeder
 
         factory(User::class)->create(
             [
+                'name' => 'Vivian',
+                'email' => 'vivan@drsgroup.com.br',
+                'role' => 'drs-admin',
+                'password' => bcrypt(123456),
+                'remember_token' => str_random(10),
+            ]);
+
+        factory(User::class)->create(
+            [
                 'name' => 'Caio Lavos',
                 'email' => 'caio@caio.com',
                 'role' => 'admin',
