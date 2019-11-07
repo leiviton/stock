@@ -26,7 +26,7 @@ class ExtensionTransformer extends TransformerAbstract
             'extension' => $model->extension,
             'department' => $model->department,
             'name' => $model->name,
-            'image' => env('APP_URL').'/'.$model->image,
+            'image' => env('APP_URL').'/storage/extensions/'.$model->image,
             /* place your other model properties here */
 
             'created_at' => $model->created_at,
