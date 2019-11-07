@@ -262,10 +262,10 @@ class StockRepositoryEloquent extends BaseRepository implements StockRepository
     public function getQueryAdmin($data)
     {
         $query = $this->model->where('depositante', $data['cnpj'])
-            ->select(DB::raw('tipo_estoque as Protocolo', 'desc_tipo_estoque as DescProtocolo',
-            'codigo_produto as CodigoProduto', 'desc_produto as DescProduto', 'unidade_medida as UnidadeMedida', 'lote',
-            'data_validade as DataValidade', 'desc_restricao as Restricao', 'qtd_regul_reser as QtdReservada',
-            'qtd_produto as Qtd', 'qtd_avariada as QtdAvariada', 'peca as Peca', 'serie as Serie'))
+            ->select(DB::raw('tipo_estoque as Protocolo,desc_tipo_estoque as DescProtocolo,
+            codigo_produto as Codigo_Produto,desc_produto as Produto,unidade_medida as Unidade_Medida,lote,
+            data_validade as Data_Validade,desc_restricao as Restricao,qtd_regul_reser as Qtd_Reservada,
+            qtd_produto as Qtd,qtd_avariada as Qtd_Avariada,peca as Peca,serie as Serie'))
             ->orderBy('desc_produto', 'asc')
             ->get();
 
