@@ -71,5 +71,9 @@ class RepositoryServiceProvider extends ServiceProvider
             'Stock\Repositories\NewsRepository',
             'Stock\Repositories\NewsRepositoryEloquent'
         );
+        $this->app->bind(
+            'Stock\Repositories\ExtensionRepository',
+            'Stock\Repositories\ExtensionRepositoryEloquent'
+        );
     }
 }

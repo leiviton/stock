@@ -9,8 +9,7 @@ use Prettus\Repository\Contracts\RepositoryInterface;
  *
  * @package namespace Stock\Repositories;
  */
-interface StockRepository extends RepositoryInterface
-{
+interface StockRepository extends RepositoryInterface {
     /**
      * @param $data
      * @param $user
