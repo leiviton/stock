@@ -89,6 +89,17 @@ return [
             'prefix' => '',
         ],
 
+        'sqlsrvyouvita' => [
+            'driver' => 'sqlsrv',
+            'host'      => env('DB_HOST_Y'),
+            'port'      => env('DB_PORT_Y'),
+            'database'  => env('DB_DATABASE_Y'),
+            'username'  => env('DB_USERNAME_Y'),
+            'password'  => env('DB_PASSWORD_Y'),
+            'charset' => 'utf8',
+            'prefix' => ''
+        ],
+
     ],
 
     /*

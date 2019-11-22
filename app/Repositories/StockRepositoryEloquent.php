@@ -291,20 +291,32 @@ class StockRepositoryEloquent extends BaseRepository implements StockRepository
     }
 
     /**
-     * @param $chave
+     * @param $id
      * @return mixed
      */
-    public function findByLogix($chave)
+    public function findById($id)
     {
 
-        $result = $this->model->where('chave_logix', $chave)->first();
+        $result = $this->model->where('codigo_produto', $id)->first();
 
         if ($result) {
-            Log::info('Registro estoque: ' . $result);
             return $this->parserResult($result);
-        } else {
-            Log::info('Registro estoque vazio: ' . $result);
-            return 0;
         }
+
+        return $result;
+    }
+
+    /**
+     * Find data by between values in one field
+     *
+     * @param       $field
+     * @param array $values
+     * @param array $columns
+     *
+     * @return mixed
+     */
+    public function findWhereBetween($field, array $values, $columns = ['*'])
+    {
+        // TODO: Implement findWhereBetween() method.
     }
 }

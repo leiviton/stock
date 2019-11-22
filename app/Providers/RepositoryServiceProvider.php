@@ -75,5 +75,9 @@ class RepositoryServiceProvider extends ServiceProvider
             'Stock\Repositories\ExtensionRepository',
             'Stock\Repositories\ExtensionRepositoryEloquent'
         );
+        $this->app->bind(
+            'Stock\Repositories\StatusPedidoRepository',
+            'Stock\Repositories\StatusPedidoRepositoryEloquent'
+        );
     }
 }

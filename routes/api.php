@@ -9,7 +9,14 @@
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
+Route::group(['prefix' => 'v1/', 'middleware' => 'client'], function () {
+    /*Routes Admin*/
+    Route::group(['prefix' => 'admin', 'namespace' => 'Api\V1\Admin'], function () {
+        /*util*/
+        Route::get('youvita/estoque/{id}', 'YouvitaController@getStock');
+        Route::get('youvita/status', 'YouvitaController@getStatus');
+    });
+});
 Route::group(['prefix' => 'v1/', 'middleware' => 'auth:api'], function () {
     /*Routes Admin*/
     Route::group(['prefix' => 'admin', 'namespace' => 'Api\V1\Admin'], function () {
