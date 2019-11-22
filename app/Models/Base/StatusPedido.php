@@ -27,7 +27,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  */
 class StatusPedido extends Eloquent
 {
-    protected $connection = 'sqlsrvyouvita';
+    protected $connection = 'youvita';
 
     protected $table = 'logix.status_sc';
 }

@@ -89,7 +89,7 @@ return [
             'prefix' => '',
         ],
 
-        'sqlsrvyouvita' => [
+        'youvita' => [
             'driver' => 'sqlsrv',
             'host'      => env('DB_HOST_Y','10.0.0.31'),
             'port'      => env('DB_PORT_Y','1433'),
