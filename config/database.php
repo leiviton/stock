@@ -91,11 +91,11 @@ return [
 
         'sqlsrvyouvita' => [
             'driver' => 'sqlsrv',
-            'host'      => env('DB_HOST_Y'),
-            'port'      => env('DB_PORT_Y'),
-            'database'  => env('DB_DATABASE_Y'),
-            'username'  => env('DB_USERNAME_Y'),
-            'password'  => env('DB_PASSWORD_Y'),
+            'host'      => env('DB_HOST_Y','10.0.0.31'),
+            'port'      => env('DB_PORT_Y','1433'),
+            'database'  => env('DB_DATABASE_Y','LGXTSTDRI'),
+            'username'  => env('DB_USERNAME_Y','portal.estoque'),
+            'password'  => env('DB_PASSWORD_Y','Portaldrs'),
             'charset' => 'utf8',
             'prefix' => ''
         ],
