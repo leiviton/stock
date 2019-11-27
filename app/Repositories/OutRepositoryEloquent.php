@@ -89,7 +89,8 @@ class OutRepositoryEloquent extends BaseRepository implements OutRepository
                             return $query->where($data['field'], 'like', '%' . $data['value'] . '%');
                         }
                     })
-                    ->select(DB::raw('tipo_estoque,data_envio,desc_tipo_estoque,centro,nome_destino_final,numero_ordem,sum(outs.qtd_enviada) AS qtd_enviada,codigo_produto,desc_produto,lote,data_validade,desc_produto,unidade_medida,serie_nf,centro'))
+                    //->select(DB::raw('tipo_estoque,data_envio,desc_tipo_estoque,centro,nome_destino_final,numero_ordem,sum(outs.qtd_enviada) AS qtd_enviada,codigo_produto,desc_produto,lote,data_validade,desc_produto,unidade_medida,serie_nf,centro'))
+                    ->sum('qtd_enviada')
                     ->groupBy('codigo_produto')
                     ->groupBy('serie_nf')
                     ->groupBy('data_envio')
@@ -238,17 +239,12 @@ class OutRepositoryEloquent extends BaseRepository implements OutRepository
         $order[1] = $order[1] ?? 'desc';
         //dd($user->role);
         //dd($lote);
-        if ($lote != '') {
+        //if ($lote != '') {
 
             $results = $this->model
                 ->where('depositante', $cnpj)
                 ->where('tipo_estoque', $lote)
-                ->where(function ($query) use ($dataEnd,$dateStart) {
-                    if ($dataEnd) {
-                        return $query->whereRaw('data_envio BETWEEN ? AND ?', [$dateStart, $dataEnd]);
-                    }
-                    return $query;
-                })
+                ->whereBetween("data_envio",[$dateStart,$dataEnd])
                 ->select(DB::raw('depositante,tipo_estoque,data_envio,desc_tipo_estoque,nome_destino_final,numero_ordem,
                 sum(qtd_enviada) AS qtd_enviada,codigo_produto,lote,data_validade,desc_produto,
                 unidade_medida,serie_nf,centro'))
@@ -268,13 +264,14 @@ class OutRepositoryEloquent extends BaseRepository implements OutRepository
                 ->orderBy($order[0], $order[1])
                 ->paginate();
 
-        } else {
+        /*} else {
             //dd('a');
             $results = $this->model->whereBetween("data_envio", [$dateStart, $dataEnd])
                 ->where('depositante', $cnpj)
                 ->select(DB::raw('depositante,tipo_estoque,data_envio,desc_tipo_estoque,nome_destino_final,numero_ordem,
                 sum(qtd_enviada) AS qtd_enviada,codigo_produto,desc_produto,lote,data_validade,
                 unidade_medida,serie_nf,centro'))
+                //->sum('qtd_enviada')
                 ->groupBy('codigo_produto')
                 ->groupBy('serie_nf')
                 ->groupBy('data_envio')
@@ -290,7 +287,7 @@ class OutRepositoryEloquent extends BaseRepository implements OutRepository
                 ->groupBy('depositante')
                 ->orderBy($order[0], $order[1])
                 ->paginate(30);
-        }
+        }*/
 
         if ($results) {
             return $this->parserResult($results);

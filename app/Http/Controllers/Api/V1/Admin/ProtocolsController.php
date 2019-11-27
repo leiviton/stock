@@ -36,4 +36,13 @@ class ProtocolsController extends Controller
     {
         return $this->service->getProtocols($request->get('cnpj'));
     }
+
+    /**
+     * @param $id
+     * @return mixed
+     */
+    public function getProtocols($id)
+    {
+        return $this->service->getProtocols($id);
+    }
 }
