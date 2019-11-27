@@ -17,6 +17,7 @@ Route::group(['prefix' => 'v1/', 'middleware' => 'client'], function () {
         Route::get('youvita/status', 'YouvitaController@getStatus');
     });
 });
+
 Route::group(['prefix' => 'v1/', 'middleware' => 'auth:api'], function () {
     /*Routes Admin*/
     Route::group(['prefix' => 'admin', 'namespace' => 'Api\V1\Admin'], function () {
@@ -44,7 +45,9 @@ Route::group(['prefix' => 'v1/', 'middleware' => 'auth:api'], function () {
         Route::delete('user/{id}', 'UserController@delete');
         Route::patch('user/{id}', 'UserController@updateStatus');
         Route::patch('user/password/{id}', 'UserController@updatePassword');
+
         Route::get('protocol', 'ProtocolsController@index');
+        Route::get('protocol/{id}', 'ProtocolsController@getProtocols');
 
         /*Stock*/
         Route::post('stock', 'StocksController@store');

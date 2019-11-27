@@ -25,7 +25,7 @@ interface StockRepository extends RepositoryInterface {
      * @param string $lote
      * @return mixed
      */
-    public function orderByStocks($user, $cnpj,$lote = '');
+    public function orderByStocks($user, $cnpj,$lote);
 
     /**
      * @param $id
