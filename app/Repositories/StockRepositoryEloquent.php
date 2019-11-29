@@ -193,7 +193,6 @@ class StockRepositoryEloquent extends BaseRepository implements StockRepository
      */
     public function orderByStocks($user, $cnpj, $lote)
     {
-        $dataEnd = new \DateTime();
         $order[0] = $order[0] ?? 'data_atual';
         $order[1] = $order[1] ?? 'desc';
         //if ($lote != '') {
@@ -201,7 +200,7 @@ class StockRepositoryEloquent extends BaseRepository implements StockRepository
                 $results = $this->model
                     ->where('depositante', $cnpj)
                     ->where('tipo_estoque', $lote)
-                    /*->select(DB::raw('tipo_estoque,desc_tipo_estoque, sum(stocks.qtd_produto) AS qtd_produto,sum(stocks.qtd_regul_reser) AS qtd_regul_reser,codigo_produto,desc_produto,lote,data_validade,unidade_medida'))
+                    ->select(DB::raw('tipo_estoque,desc_tipo_estoque, sum(stocks.qtd_produto) AS qtd_produto,sum(stocks.qtd_regul_reser) AS qtd_regul_reser,codigo_produto,desc_produto,lote,data_validade,unidade_medida'))
                     ->groupBy('codigo_produto')
                     ->groupBy('desc_produto')
                     ->groupBy('tipo_estoque')
@@ -209,7 +208,7 @@ class StockRepositoryEloquent extends BaseRepository implements StockRepository
                     ->groupBy('data_validade')
                     ->groupBy('desc_tipo_estoque')
                     ->groupBy('depositante')
-                    ->groupBy('unidade_medida')*/
+                    ->groupBy('unidade_medida')
                     ->orderBy('desc_tipo_estoque', 'asc')
                     ->orderBy('qtd_produto', 'asc')
                     ->paginate();
