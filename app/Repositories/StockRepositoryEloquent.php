@@ -200,7 +200,8 @@ class StockRepositoryEloquent extends BaseRepository implements StockRepository
                 $results = $this->model
                     ->where('depositante', $cnpj)
                     ->where('tipo_estoque', $lote)
-                    ->select(DB::raw('tipo_estoque,desc_tipo_estoque, sum(stocks.qtd_produto) AS qtd_produto,sum(stocks.qtd_regul_reser) AS qtd_regul_reser,codigo_produto,desc_produto,lote,data_validade,unidade_medida'))
+                    ->select(DB::raw('tipo_estoque,desc_tipo_estoque,qtd_produto,qtd_regul_reser,codigo_produto,desc_produto,lote,data_validade,unidade_medida'))
+                    //->select(DB::raw('tipo_estoque,desc_tipo_estoque, sum(stocks.qtd_produto) AS qtd_produto,sum(stocks.qtd_regul_reser) AS qtd_regul_reser,codigo_produto,desc_produto,lote,data_validade,unidade_medida'))
                     ->groupBy('codigo_produto')
                     ->groupBy('desc_produto')
                     ->groupBy('tipo_estoque')
@@ -216,7 +217,8 @@ class StockRepositoryEloquent extends BaseRepository implements StockRepository
                 $results = $this->model
                     ->where('tipo_estoque', $lote)
                     ->where('depositante', $cnpj)
-                    ->select(DB::raw('tipo_estoque,desc_tipo_estoque, sum(stocks.qtd_produto) AS qtd_produto,sum(stocks.qtd_regul_reser) AS qtd_regul_reser,codigo_produto,desc_produto,lote,data_validade,unidade_medida'))
+                    //->select(DB::raw('tipo_estoque,desc_tipo_estoque, sum(stocks.qtd_produto) AS qtd_produto,sum(stocks.qtd_regul_reser) AS qtd_regul_reser,codigo_produto,desc_produto,lote,data_validade,unidade_medida'))
+                    ->select(DB::raw('tipo_estoque,desc_tipo_estoque,qtd_produto,qtd_regul_reser,codigo_produto,desc_produto,lote,data_validade,unidade_medida'))
                     ->groupBy('codigo_produto')
                     ->groupBy('desc_produto')
                     ->groupBy('tipo_estoque')
@@ -232,7 +234,8 @@ class StockRepositoryEloquent extends BaseRepository implements StockRepository
 
             $results = $this->model
                 ->where('depositante', $cnpj)
-                ->select(DB::raw('tipo_estoque,desc_tipo_estoque, sum(stocks.qtd_produto) AS qtd_produto,sum(stocks.qtd_regul_reser) AS qtd_regul_reser,codigo_produto,desc_produto,lote,data_validade,unidade_medida'))
+                //->select(DB::raw('tipo_estoque,desc_tipo_estoque, sum(stocks.qtd_produto) AS qtd_produto,sum(stocks.qtd_regul_reser) AS qtd_regul_reser,codigo_produto,desc_produto,lote,data_validade,unidade_medida'))
+                ->select(DB::raw('tipo_estoque,desc_tipo_estoque,qtd_produto,qtd_regul_reser,codigo_produto,desc_produto,lote,data_validade,unidade_medida'))
                 ->groupBy('codigo_produto')
                 ->groupBy('desc_produto')
                 ->groupBy('tipo_estoque')
