@@ -195,8 +195,8 @@ class StockRepositoryEloquent extends BaseRepository implements StockRepository
     {
         $order[0] = $order[0] ?? 'data_atual';
         $order[1] = $order[1] ?? 'desc';
-        //if ($lote != '') {
-            //if ($user->role == 'user_company') {
+        if ($lote != '') {
+            if ($user->role == 'user_company') {
                 $results = $this->model
                     ->where('depositante', $cnpj)
                     ->where('tipo_estoque', $lote)
@@ -212,7 +212,7 @@ class StockRepositoryEloquent extends BaseRepository implements StockRepository
                     ->orderBy('desc_tipo_estoque', 'asc')
                     ->orderBy('qtd_produto', 'asc')
                     ->paginate();
-            /*} else {
+            } else {
                 $results = $this->model
                     ->where('tipo_estoque', $lote)
                     ->where('depositante', $cnpj)
@@ -226,9 +226,9 @@ class StockRepositoryEloquent extends BaseRepository implements StockRepository
                     ->groupBy('unidade_medida')
                     ->orderBy('desc_tipo_estoque', 'asc')
                     ->orderBy('qtd_produto', 'asc')
-                    ->paginate();*/
-            //}
-        /*} else {
+                    ->paginate();
+            }
+        } else {
 
             $results = $this->model
                 ->where('depositante', $cnpj)
@@ -244,7 +244,7 @@ class StockRepositoryEloquent extends BaseRepository implements StockRepository
                 ->orderBy('qtd_produto', 'asc')
                 ->paginate();
 
-        }*/
+        }
 
         if ($results) {
             return $this->parserResult($results);
