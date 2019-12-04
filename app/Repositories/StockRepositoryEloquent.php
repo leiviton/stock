@@ -298,7 +298,7 @@ class StockRepositoryEloquent extends BaseRepository implements StockRepository
     public function findById($id)
     {
 
-        $result = $this->model->where('codigo_produto', $id)->get();
+        $result = $this->model->where('codigo_produto',$id)->get();
 
         if ($result) {
             return $this->parserResult($result);
