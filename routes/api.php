@@ -28,6 +28,8 @@ Route::group(['prefix' => 'v1/', 'middleware' => 'auth:api'], function () {
         Route::get('consulta/{recibo}', 'UtilController@consultaProtocolo');
         Route::get('danfe', 'UtilController@emitirDanfe');
         Route::get('comprovei', 'ComproveiController@index');
+        Route::get('report', 'UtilController@reports');
+        Route::get('report/gnre', 'UtilController@getGnre');
         Route::get('comprovei/agent', 'ComproveiController@getAgents');
         Route::get('comprovei/send', 'ComproveiController@sendComprovei');
         Route::delete('file/delete/{image}/{folder}', 'UtilController@deleteFile');
