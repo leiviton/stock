@@ -86,7 +86,7 @@ return [
             'username'  => env('DB_USERNAME_C'),
             'password'  => env('DB_PASSWORD_C'),
             'charset' => 'utf8',
-            'prefix' => '',
+            'prefix' => ''
         ],
 
         'youvita' => [
