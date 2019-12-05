@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use Stock\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
+use Stock\Jobs\NotifyUserExport;
 use Stock\Services\NFeService;
 
 class UtilController extends Controller
@@ -54,28 +55,32 @@ class UtilController extends Controller
      */
     public function reports(Request $request)
     {
+        set_time_limit(0);
+
         $dataEnd = $this->clear($this->invertDate((string)$request->get('end')));
 
         $dataStart = $this->clear($this->invertDate((string)$request->get('start')));
 
-        if($request->get('type') == 'avulso')
-        {
-            $query =  DB::connection('sqlsrvcomprovei')->select('SELECT * FROM dbo.relfin01(?,?)',[$dataStart,$dataEnd]);
+        if ($request->get('type') == 'avulso') {
+            $query = DB::connection('sqlsrvcomprovei')->select('SELECT * FROM dbo.relfin01(?,?)', [$dataStart, $dataEnd]);
             $name = 'AV_' . $dataStart;
         } else {
-            $query =  DB::connection('sqlsrvcomprovei')->select('SELECT * FROM dbo.relfin02(?,?)',[$dataStart,$dataEnd]);
+            $query = DB::connection('sqlsrvcomprovei')->select('SELECT * FROM dbo.relfin02(?,?)', [$dataStart, $dataEnd]);
             $name = 'GN_' . $dataStart;
         }
 
-        $query= json_decode( json_encode($query), true);
+        //$user = \Auth::user();
 
-        Excel::create($name, function($excel) use($query) {
-            $excel->sheet('Sheet 1', function($sheet) use($query) {
+        $query = json_decode(json_encode($query), true);
+
+        Excel::create($name, function ($excel) use ($query) {
+            $excel->sheet('Sheet 1', function ($sheet) use ($query) {
                 $sheet->fromArray($query);
             });
         })->store('xlsx', public_path() . '/storage/excel/finance');
 
-        return response()->json(['link' => env('APP_URL') . '/storage/excel/finance/' . (string)$name . '.xlsx']);
+        return response()->json(['link' => env('APP_URL') . '/storage/excel/finance/' . (string)$name . '.xlsx', 200]);
+        //return response()->json(['message' => 'Seu relatório está em processamento, você receberá um email quando estiver tudo pronto']);
     }
 
     /**
@@ -87,9 +92,9 @@ class UtilController extends Controller
 
         $dataStart = $this->clear($this->invertDate((string)date('d/m/Y')));
 
-        $query =  DB::connection('sqlsrvcomprovei')->select('SELECT * FROM dbo.relfin01(?,?)',[$dataStart,$dataEnd]);
+        $query = DB::connection('sqlsrvcomprovei')->select('SELECT * FROM dbo.relfin01(?,?)', [$dataStart, $dataEnd]);
 
-        $query = json_decode( json_encode($query), true);
+        $query = json_decode(json_encode($query), true);
 
         return $query;
     }
@@ -111,20 +116,24 @@ class UtilController extends Controller
         return response()->json(['data' => $result]);
     }
 
-    public function emitirNfe() {
+    public function emitirNfe()
+    {
         return $this->NFeService->emitirNfe();
     }
 
-    public function consultaProtocolo($recibo) {
+    public function consultaProtocolo($recibo)
+    {
         return $this->NFeService->consultaProtocolo($recibo);
     }
 
     /**
      * @return string
      */
-    public function emitirDanfe() {
+    public function emitirDanfe()
+    {
         return $this->NFeService->geraDanfe();
     }
+
     /**
      * @param $valor
      * @return mixed|string
