@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="utf-8">
     <base href="/">
@@ -40,9 +40,9 @@
             });
     }
 </script>
-<script type="text/javascript" src="runtime.be18ff74c759ad5df6fe.js"></script>
+<script type="text/javascript" src="runtime.cfa63d57d51062bb297d.js"></script>
 <script type="text/javascript" src="polyfills.aca04ef57459e933ca5d.js"></script>
 <script type="text/javascript" src="scripts.2db4cbc668a10a0c2a68.js"></script>
-<script type="text/javascript" src="main.a2fb795b963daa570754.js"></script>
+<script type="text/javascript" src="main.c43ff09ba6741cd6094c.js"></script>
 </body>
 </html>
