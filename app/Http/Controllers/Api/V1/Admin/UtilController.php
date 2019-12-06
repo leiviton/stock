@@ -62,7 +62,7 @@ class UtilController extends Controller
         $dataStart = $this->clear($this->invertDate((string)$request->get('start')));
 
         if ($request->get('type') == 'avulso') {
-            $query = DB::connection('sqlsrvcomprovei')->select('SELECT * FROM dbo.relfin01(?,?)', [$dataStart, $dataEnd]);
+            $query = DB::connection('sqlsrvcomprovei')->select('SELECT * FROM dbo.relfin01(?,?) ORDER BY ? ASC', [$dataStart, $dataEnd,'CLIENTE']);
             $name = 'AV_' . $dataStart;
         } else {
             $query = DB::connection('sqlsrvcomprovei')->select('SELECT * FROM dbo.relfin02(?,?)', [$dataStart, $dataEnd]);
@@ -79,7 +79,7 @@ class UtilController extends Controller
             });
         })->store('xlsx', public_path() . '/storage/excel/finance');
 
-        return response()->json(['link' => env('APP_URL') . '/storage/excel/finance/' . (string)$name . '.xlsx', 200]);
+        return response()->json(['link' => env('APP_URL') . '/storage/excel/finance/' . (string)$name . '.xlsx']);
         //return response()->json(['message' => 'Seu relatório está em processamento, você receberá um email quando estiver tudo pronto']);
     }
 
