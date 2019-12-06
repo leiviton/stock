@@ -1,29 +1,21 @@
 version: '3'
 services:
-    stock-angular:
-      image: stock-angular
-      container_name: stock-angular
-      build: ../front-stock
-      ports:
-        - 81:80
-      networks:
-        - stock-network
     stock:
       build: .
       container_name: stock
-      entrypoint:  dockerize -template ./.docker/app/.env:.env -wait tcp://db-stock:3306 -timeout 40s ./.docker/entrypoint.sh
+      entrypoint:  dockerize -template ./.docker/app/.env:.env -wait tcp://10.0.0.36:3306 -timeout 40s ./.docker/entrypoint.sh
       environment:
-        - DB_HOST=127.0.0.1
-        - DB_PORT=3307
+        - DB_HOST=10.0.0.36
+        - DB_PORT=3306
         - DB_DATABASE=api_stock
-        - DB_USERNAME=leiviton
-        - DB_PASSWORD=lorenzo2005
+        - DB_USERNAME=b2abd
+        - DB_PASSWORD=leiviton01
+        - APP_URL=http://10.0.108.137:8001
       volumes:
         - .:/var/www
       networks:
         - stock-network
       depends_on:
-        - db-stock
         - redis-stock
 
     nginx-stock:
@@ -39,22 +31,6 @@ services:
         - stock-network
       depends_on:
         - stock
-    db-stock:
-      image: mysql:5.7
-      command: --innodb-use-native-aio=0
-      container_name: db-stock
-      restart: always
-      tty: true
-      ports:
-        - "3306:3305"
-      volumes:
-        - ./.docker/dbdata:/var/lib/mysql
-      environment:
-        - MYSQL_DATABASE=laravel
-        - MYSQL_ROOT_PASSWORD=root
-        - MYSQL_USER=root
-      networks:
-        - stock-network
 
     redis-stock:
       image: redis:alpine
