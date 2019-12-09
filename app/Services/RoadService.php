@@ -8,6 +8,7 @@
 
 namespace Stock\Services;
 
+use Carbon\Carbon;
 use Stock\Repositories\CompanyRepository;
 use Stock\Repositories\RoadRepository;
 use Illuminate\Support\Facades\DB;
@@ -97,12 +98,68 @@ class RoadService
      * @param $id
      * @param $lote
      * @return mixed
+     * @throws \Exception
      */
     public function getAll($id,$lote)
     {
         $user = \Auth::guard()->user();
         $cnpj = $this->limpaCPF_CNPJ($this->companyRepository->find($id)->cnpj);
-        return $this->repository->skipPresenter(false)->orderByRoads($user,$cnpj,$lote);
+        $dataEnd = new \DateTime();
+        $dataStart = (new Carbon())->subDay(90);
+        $order[0] = $order[0] ?? 'data_recebimento';
+        $order[1] = $order[1] ?? 'desc';
+
+
+        $result = DB::connection('sqlsrv')->table('logix.entries')->where('depositante',$cnpj);
+        //return $result;//$this->repository->skipPresenter(false)->orderByRoads($user,$cnpj,$lote);
+
+        if ($lote != '') {
+            $results = DB::connection('sqlsrv')->table('logix.entries')
+                ->where('tipo_estoque', $lote)
+                ->where('depositante', $cnpj)
+                ->where(function ($query) use ($dataEnd, $dataStart) {
+                    return $query->whereRaw('data_recebimento BETWEEN ? AND ?', [$dataStart, $dataEnd]);
+                })
+                ->select(DB::raw('tipo_estoque,data_recebimento,desc_tipo_estoque,qtd_recebida,sum(qtd_rejeitada) as qtd_rejeitada,codigo_produto,desc_produto,lote,data_validade,desc_restricao,unidade_medida,serie_nf'))
+                ->groupBy('codigo_produto')
+                ->groupBy('serie_nf')
+                ->groupBy('data_recebimento')
+                ->groupBy('desc_produto')
+                ->groupBy('tipo_estoque')
+                ->groupBy('lote')
+                ->groupBy('data_validade')
+                ->groupBy('desc_restricao')
+                ->groupBy('desc_tipo_estoque')
+                ->groupBy('unidade_medida')
+                ->groupBy('qtd_recebida')
+                ->orderBy($order[0], $order[1])
+                ->paginate();
+        } else {
+            //dd($dataStart);
+            $results = DB::connection('sqlsrv')->table('logix.entries')
+                ->where('depositante', $cnpj)
+                ->where(function ($query) use ($dataEnd, $dataStart) {
+                    return $query->whereRaw('data_recebimento BETWEEN ? AND ?', [$dataStart, $dataEnd]);
+                })
+                ->select(DB::raw('depositante,tipo_estoque,data_recebimento,desc_tipo_estoque,qtd_recebida,sum(qtd_rejeitada) as qtd_rejeitada,codigo_produto,desc_produto,lote,data_validade,desc_restricao,unidade_medida,serie_nf'))
+                ->groupBy('codigo_produto')
+                ->groupBy('serie_nf')
+                ->groupBy('data_recebimento')
+                ->groupBy('desc_produto')
+                ->groupBy('tipo_estoque')
+                ->groupBy('lote')
+                ->groupBy('data_validade')
+                ->groupBy('desc_restricao')
+                ->groupBy('desc_tipo_estoque')
+                ->groupBy('unidade_medida')
+                ->groupBy('depositante')
+                ->groupBy('qtd_recebida')
+                ->orderBy($order[0], $order[1])
+                ->paginate();
+
+        }
+
+        return $results;
     }
 
     /**
