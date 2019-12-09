@@ -11,6 +11,10 @@
 |
 */
 
-Route::get('/phpinfo', function () {
-    echo phpinfo();
+Route::get('/', function () {
+    return view('welcome');
+});
+
+Route::get('/php', function () {
+    return phpinfo();
 });

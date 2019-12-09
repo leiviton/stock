@@ -62,10 +62,10 @@ class UtilController extends Controller
         $dataStart = $this->clear($this->invertDate((string)$request->get('start')));
 
         if ($request->get('type') == 'avulso') {
-            $query = DB::connection('sqlsrvcomprovei')->select('SELECT * FROM dbo.relfin01(?,?) ORDER BY ? ASC', [$dataStart, $dataEnd,'CLIENTE']);
+            $query = DB::connection('sqlsrvcomprovei')->select('SELECT * FROM dbo.relfin01(?,?) ORDER BY ? ASC',[$dataStart, $dataEnd,'CLIENTE']);
             $name = 'AV_' . $dataStart;
         } else {
-            $query = DB::connection('sqlsrvcomprovei')->select('SELECT * FROM dbo.relfin02(?,?)', [$dataStart, $dataEnd]);
+            $query = DB::connection('sqlsrvcomprovei')->select('SELECT * FROM dbo.relfin02(?,?) ORDER BY ? ASC',[$dataStart, $dataEnd,'CLIENTE']);
             $name = 'GN_' . $dataStart;
         }
 
