@@ -62,6 +62,7 @@ class RoadController extends Controller
      * @param $id
      * @param Request $request
      * @return mixed
+     * @throws \Exception
      */
     public function getAll($id,Request $request)
     {
