@@ -86,10 +86,7 @@ return [
             'username'  => env('DB_USERNAME_C'),
             'password'  => env('DB_PASSWORD_C'),
             'charset' => 'utf8',
-            'prefix' => '',
-            'options' => [
-                PDO::ATTR_TIMEOUT => 1000  // 240 seconds.
-            ]
+            'prefix' => ''
         ],
 
         'youvita' => [

@@ -80,7 +80,6 @@ class UtilController extends Controller
         })->store('xlsx', public_path() . '/storage/excel/finance');
 
         return response()->json(['link' => env('APP_URL') . '/storage/excel/finance/' . (string)$name . '.xlsx']);
-        //return response()->json(['message' => 'Seu relatório está em processamento, você receberá um email quando estiver tudo pronto']);
     }
 
     /**
@@ -97,6 +96,37 @@ class UtilController extends Controller
         $query = json_decode(json_encode($query), true);
 
         return $query;
+    }
+
+    /**
+     * @return \Illuminate\Support\Collection
+     */
+    public function getReportCompras(Request $request)
+    {
+        $start = $this->clear($this->invertDate($request->get('start')));
+
+        $end = $this->clear($this->invertDate($request->get('end')));
+
+        $dataPesquisa = $request->get('dataPesquisa');
+
+        $filial = $request->get('filial');
+
+        if($filial == 'todos')
+        {
+            $query = DB::connection('sqlsrvcomprovei')->table('dbo.RELNFCC')->whereBetween($dataPesquisa,[$start,$end])->get();
+        }else {
+            $query = DB::connection('sqlsrvcomprovei')->table('dbo.RELNFCC')->whereBetween($dataPesquisa,[$start,$end])->where('FILIAL',$filial)->get();
+        }
+        $name = 'CC_' . $start;
+        $query = json_decode(json_encode($query), true);
+
+        Excel::create($name, function ($excel) use ($query) {
+            $excel->sheet('Sheet 1', function ($sheet) use ($query) {
+                $sheet->fromArray($query);
+            });
+        })->store('xlsx', public_path() . '/storage/excel/finance');
+
+        return response()->json(['link' => env('APP_URL') . '/storage/excel/finance/' . (string)$name . '.xlsx']);
     }
 
     /**
