@@ -111,10 +111,10 @@ class UserController extends Controller
                 'password_repeat' => 'required|same:password'
             ],
             [
-                'password.required' => 'Senha é obritaoria',
-                'password.length' => 'Tamanho da senha invádio',
+                'password.required' => 'Senha é obritoria',
+                'password.length' => 'Tamanho da senha invalido',
                 'password_repeat.same' => 'Campo confirmar senha diferente de senha',
-                'password_repeat.required' => 'Campo confirmar senha é obritaorio'
+                'password_repeat.required' => 'Campo confirmar senha é obritoria'
             ]
         );
 
