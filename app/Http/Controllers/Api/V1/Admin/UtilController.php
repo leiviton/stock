@@ -124,8 +124,8 @@ class UtilController extends Controller
             $query[$i]['DATA_EMISSAO'] = strrev($query[$i]['DATA_EMISSAO']);
             $query[$i]['DATA_LANCTO'] = strrev($query[$i]['DATA_LANCTO']);
 
-            $query[$i]['DATA_EMISSAO'] = substr($query[$i]['DATA_EMISSAO'],0,2).'/'.substr($query[$i]['DATA_EMISSAO'],2,2).substr($query[$i]['DATA_EMISSAO'],4,4);
-            $query[$i]['DATA_LANCTO'] = substr($query[$i]['DATA_LANCTO'],0,2).'/'.substr($query[$i]['DATA_LANCTO'],2,2).substr($query[$i]['DATA_LANCTO'],4,4);
+           /* $query[$i]['DATA_EMISSAO'] = substr($query[$i]['DATA_EMISSAO'],0,2).'/'.substr($query[$i]['DATA_EMISSAO'],2,2).'/'.substr($query[$i]['DATA_EMISSAO'],4,4);
+            $query[$i]['DATA_LANCTO'] = substr($query[$i]['DATA_LANCTO'],0,2).'/'.substr($query[$i]['DATA_LANCTO'],2,2).'/'.substr($query[$i]['DATA_LANCTO'],4,4);*/
         }
 
         return $query;
