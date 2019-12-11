@@ -117,6 +117,29 @@ class UtilController extends Controller
         }else {
             $query = DB::connection('sqlsrvcomprovei')->table('dbo.RELNFCC')->whereBetween($dataPesquisa,[$start,$end])->where('FILIAL',$filial)->get();
         }
+
+        return $query;
+    }
+
+    /**
+     * @return \Illuminate\Support\Collection
+     */
+    public function exportCompras(Request $request)
+    {
+        $start = $this->clear($this->invertDate($request->get('start')));
+
+        $end = $this->clear($this->invertDate($request->get('end')));
+
+        $dataPesquisa = $request->get('dataPesquisa');
+
+        $filial = $request->get('filial');
+
+        if($filial == 'todos')
+        {
+            $query = DB::connection('sqlsrvcomprovei')->table('dbo.RELNFCC')->whereBetween($dataPesquisa,[$start,$end])->get();
+        }else {
+            $query = DB::connection('sqlsrvcomprovei')->table('dbo.RELNFCC')->whereBetween($dataPesquisa,[$start,$end])->where('FILIAL',$filial)->get();
+        }
         $name = 'CC_' . $start;
         $query = json_decode(json_encode($query), true);
 
