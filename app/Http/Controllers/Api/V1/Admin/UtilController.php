@@ -113,9 +113,9 @@ class UtilController extends Controller
 
         if($filial == 'todos')
         {
-            $query = DB::connection('sqlsrvcomprovei')->table('dbo.RELNFCC')->whereBetween($dataPesquisa,[$start,$end])->get();
+            $query = DB::connection('sqlsrvcomprovei')->table('dbo.RELNFCC')->whereBetween($dataPesquisa,[$start,$end])->orderBy('NOME_FOR','ASC')->get();
         }else {
-            $query = DB::connection('sqlsrvcomprovei')->table('dbo.RELNFCC')->whereBetween($dataPesquisa,[$start,$end])->where('FILIAL',$filial)->get();
+            $query = DB::connection('sqlsrvcomprovei')->table('dbo.RELNFCC')->whereBetween($dataPesquisa,[$start,$end])->where('FILIAL',$filial)->orderBy('NOME_FOR','ASC')->get();
         }
 
         return $query;
@@ -136,9 +136,9 @@ class UtilController extends Controller
 
         if($filial == 'todos')
         {
-            $query = DB::connection('sqlsrvcomprovei')->table('dbo.RELNFCC')->whereBetween($dataPesquisa,[$start,$end])->get();
+            $query = DB::connection('sqlsrvcomprovei')->table('dbo.RELNFCC')->whereBetween($dataPesquisa,[$start,$end])->orderBy('NOME_FOR','ASC')->get();
         }else {
-            $query = DB::connection('sqlsrvcomprovei')->table('dbo.RELNFCC')->whereBetween($dataPesquisa,[$start,$end])->where('FILIAL',$filial)->get();
+            $query = DB::connection('sqlsrvcomprovei')->table('dbo.RELNFCC')->whereBetween($dataPesquisa,[$start,$end])->where('FILIAL',$filial)->orderBy('NOME_FOR','ASC')->get();
         }
         $name = 'CC_' . $start;
         $query = json_decode(json_encode($query), true);
