@@ -29,6 +29,7 @@ Route::group(['prefix' => 'v1/', 'middleware' => 'auth:api'], function () {
         Route::get('danfe', 'UtilController@emitirDanfe');
         Route::get('comprovei', 'ComproveiController@index');
         Route::get('report', 'UtilController@reports');
+        Route::get('consulta', 'UtilController@getClient');
         Route::get('report/compras', 'UtilController@getReportCompras');
         Route::get('report/compras/export', 'UtilController@exportCompras');
         Route::get('report/gnre', 'UtilController@getGnre');

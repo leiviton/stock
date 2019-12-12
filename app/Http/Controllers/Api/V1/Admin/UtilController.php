@@ -61,15 +61,25 @@ class UtilController extends Controller
 
         $dataStart = $this->clear($this->invertDate((string)$request->get('start')));
 
-        if ($request->get('type') == 'avulso') {
-            $query = DB::connection('sqlsrvcomprovei')->select('SELECT * FROM dbo.relfin01(?,?) ORDER BY ? ASC',[$dataStart, $dataEnd,'CLIENTE']);
-            $name = 'AV_' . $dataStart;
-        } else {
-            $query = DB::connection('sqlsrvcomprovei')->select('SELECT * FROM dbo.relfin02(?,?) ORDER BY ? ASC',[$dataStart, $dataEnd,'CLIENTE']);
-            $name = 'GN_' . $dataStart;
-        }
+        $cnpj= $request->get('cnpj');
 
-        //$user = \Auth::user();
+        if ($request->get('type') == 'avulso') {
+            $name = 'AV_' . $dataStart;
+            if ($cnpj == '') {
+                $query = DB::connection('sqlsrvcomprovei')->select('SELECT * FROM dbo.relfin01(?,?) ORDER BY CLIENTE ASC', [$dataStart, $dataEnd]);
+            } else{
+                $cnpj = $cnpj.'%';
+                $query = DB::connection('sqlsrvcomprovei')->select("SELECT * FROM dbo.relfin01(?,?) WHERE CNPJ LIKE ? ORDER BY CLIENTE ASC", [$dataStart, $dataEnd, $cnpj]);
+            }
+        } else {
+            $name = 'GN_' . $dataStart;
+            if ($cnpj == '') {
+                $query = DB::connection('sqlsrvcomprovei')->select('SELECT * FROM dbo.relfin02(?,?) ORDER BY CLIENTE ASC', [$dataStart, $dataEnd]);
+            } else {
+                $cnpj = $cnpj.'%';
+                $query = DB::connection('sqlsrvcomprovei')->select('SELECT * FROM dbo.relfin02(?,?) WHERE CNPJ LIKE ? ORDER BY CLIENTE ASC', [$dataStart, $dataEnd,$cnpj]);
+            }
+        }
 
         $query = json_decode(json_encode($query), true);
 
@@ -85,15 +95,29 @@ class UtilController extends Controller
     /**
      * @return array|mixed
      */
-    public function getGnre()
+    public function getGnre(Request $request)
     {
-        $dataEnd = $this->clear($this->invertDate((string)date('d/m/Y')));
+        set_time_limit(0);
 
-        $dataStart = $this->clear($this->invertDate((string)date('d/m/Y')));
+        $dataEnd = $this->clear($this->invertDate((string)$request->get('end')));
 
-        $query = DB::connection('sqlsrvcomprovei')->select('SELECT * FROM dbo.relfin01(?,?)', [$dataStart, $dataEnd]);
+        $dataStart = $this->clear($this->invertDate((string)$request->get('start')));
 
-        $query = json_decode(json_encode($query), true);
+        $cnpj= $request->get('cnpj');
+
+        if ($request->get('type') == 'avulso') {
+            if ($cnpj == '') {
+                $query = DB::connection('sqlsrvcomprovei')->select('SELECT * FROM dbo.relfin01(?,?) ORDER BY ? ASC', [$dataStart, $dataEnd, 'CLIENTE']);
+            } else{
+                $query = DB::connection('sqlsrvcomprovei')->select('SELECT * FROM dbo.relfin01(?,?) WHERE CNPJ = ? ORDER BY ? ASC', [$dataStart, $dataEnd, $cnpj, 'CLIENTE']);
+            }
+        } else {
+            if ($cnpj == '') {
+                $query = DB::connection('sqlsrvcomprovei')->select('SELECT * FROM dbo.relfin02(?,?) ORDER BY ? ASC', [$dataStart, $dataEnd, 'CLIENTE']);
+            } else {
+                $query = DB::connection('sqlsrvcomprovei')->select('SELECT * FROM dbo.relfin02(?,?) WHERE CNPJ = ? ORDER BY ? ASC', [$dataStart, $dataEnd, $cnpj, 'CLIENTE']);
+            }
+        }
 
         return $query;
     }
@@ -111,19 +135,26 @@ class UtilController extends Controller
 
         $filial = $request->get('filial');
 
+        $cnpj= $request->get('cnpj');
+
         if($filial == 'todos')
         {
-            $query = DB::connection('sqlsrvcomprovei')->table('dbo.RELNFCC')->whereBetween($dataPesquisa,[$start,$end])->orderBy('NOME_FOR','ASC')->get();
+            if ($cnpj == '') {
+                $query = DB::connection('sqlsrvcomprovei')->table('dbo.RELNFCC')->whereBetween($dataPesquisa,[$start,$end])->orderBy('NOME_FOR','ASC')->get();
+            } else {
+                $query = DB::connection('sqlsrvcomprovei')->table('dbo.RELNFCC')->whereBetween($dataPesquisa,[$start,$end])->orderBy('NOME_FOR','ASC')->where('CNPJ','like',"$cnpj%")->get();
+            }
         }else {
-            $query = DB::connection('sqlsrvcomprovei')->table('dbo.RELNFCC')->whereBetween($dataPesquisa,[$start,$end])->where('FILIAL',$filial)->orderBy('NOME_FOR','ASC')->get();
+            if ($cnpj == '') {
+                $query = DB::connection('sqlsrvcomprovei')->table('dbo.RELNFCC')->whereBetween($dataPesquisa, [$start, $end])->where('FILIAL', $filial)->orderBy('NOME_FOR', 'ASC')->get();
+            } else {
+                $query = DB::connection('sqlsrvcomprovei')->table('dbo.RELNFCC')->whereBetween($dataPesquisa, [$start, $end])->where('FILIAL', $filial)->where('CNPJ','like',"$cnpj%")->orderBy('NOME_FOR', 'ASC')->get();
+            }
         }
 
         $query = json_decode(json_encode($query), true);
 
         for($i = 0; $i < count($query) ; $i++) {
-            /*$query[$i]['DATA_EMISSAO'] = strrev($query[$i]['DATA_EMISSAO']);
-            $query[$i]['DATA_LANCTO'] = strrev($query[$i]['DATA_LANCTO']);*/
-
             $query[$i]['DATA_EMISSAO'] = substr($query[$i]['DATA_EMISSAO'],6,2).'/'.substr($query[$i]['DATA_EMISSAO'],4,2).'/'.substr($query[$i]['DATA_EMISSAO'],0,4);
             $query[$i]['DATA_LANCTO'] = substr($query[$i]['DATA_LANCTO'],6,2).'/'.substr($query[$i]['DATA_LANCTO'],4,2).'/'.substr($query[$i]['DATA_LANCTO'],0,4);
         }
@@ -144,11 +175,22 @@ class UtilController extends Controller
 
         $filial = $request->get('filial');
 
+        $cnpj= $request->get('cnpj');
+
         if($filial == 'todos')
         {
-            $query = DB::connection('sqlsrvcomprovei')->table('dbo.RELNFCC')->whereBetween($dataPesquisa,[$start,$end])->orderBy('NOME_FOR','ASC')->get();
+            if ($cnpj == '') {
+                $query = DB::connection('sqlsrvcomprovei')->table('dbo.RELNFCC')->whereBetween($dataPesquisa,[$start,$end])->orderBy('NOME_FOR','ASC')->get();
+            } else {
+
+                $query = DB::connection('sqlsrvcomprovei')->table('dbo.RELNFCC')->whereBetween($dataPesquisa,[$start,$end])->orderBy('NOME_FOR','ASC')->where('CNPJ','like',"$cnpj%")->get();
+            }
         }else {
-            $query = DB::connection('sqlsrvcomprovei')->table('dbo.RELNFCC')->whereBetween($dataPesquisa,[$start,$end])->where('FILIAL',$filial)->orderBy('NOME_FOR','ASC')->get();
+            if ($cnpj == '') {
+                $query = DB::connection('sqlsrvcomprovei')->table('dbo.RELNFCC')->whereBetween($dataPesquisa, [$start, $end])->where('FILIAL', $filial)->orderBy('NOME_FOR', 'ASC')->get();
+            } else {
+                $query = DB::connection('sqlsrvcomprovei')->table('dbo.RELNFCC')->whereBetween($dataPesquisa, [$start, $end])->where('FILIAL', $filial)->where('CNPJ','like',"$cnpj%")->orderBy('NOME_FOR', 'ASC')->get();
+            }
         }
         $name = 'CC_' . $start;
         $query = json_decode(json_encode($query), true);
@@ -156,9 +198,6 @@ class UtilController extends Controller
         //strrev
 
         for($i = 0; $i < count($query) ; $i++) {
-            /*$query[$i]['DATA_EMISSAO'] = strrev($query[$i]['DATA_EMISSAO']);
-            $query[$i]['DATA_LANCTO'] = strrev($query[$i]['DATA_LANCTO']);*/
-
             $query[$i]['DATA_EMISSAO'] = substr($query[$i]['DATA_EMISSAO'],6,2).'/'.substr($query[$i]['DATA_EMISSAO'],4,2).'/'.substr($query[$i]['DATA_EMISSAO'],0,4);
             $query[$i]['DATA_LANCTO'] = substr($query[$i]['DATA_LANCTO'],6,2).'/'.substr($query[$i]['DATA_LANCTO'],4,2).'/'.substr($query[$i]['DATA_LANCTO'],0,4);
         }
@@ -197,6 +236,16 @@ class UtilController extends Controller
     public function consultaProtocolo($recibo)
     {
         return $this->NFeService->consultaProtocolo($recibo);
+    }
+
+    /**
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     */
+    public function getClient()
+    {
+        $result = DB::connection('sqlsrvcomprovei')->table('dbo.CADCLIFOR')->paginate();
+
+        return $result;
     }
 
     /**
