@@ -61,23 +61,44 @@ class UtilController extends Controller
 
         $dataStart = $this->clear($this->invertDate((string)$request->get('start')));
 
-        $cnpj= $request->get('cnpj');
+        $cnpj = $request->get('cnpj');
+
+        $difal = $request->get('difal');
 
         if ($request->get('type') == 'avulso') {
             $name = 'AV_' . $dataStart;
             if ($cnpj == '') {
-                $query = DB::connection('sqlsrvcomprovei')->select('SELECT * FROM dbo.relfin01(?,?) ORDER BY CLIENTE ASC', [$dataStart, $dataEnd]);
+                if ($difal == 'nao')
+                {
+                    $query = DB::connection('sqlsrvcomprovei')->select('SELECT EMPRESA,NF_DE_SAIDA,SERIE,ITEM_NF,CST,CODIGO,DESC_PROD,EMISSAO_NF,ID_CLIENTE,CNPJ,CLIENTE,DESTINATARIO,PROTOCOLO,TRANSPORTADORA,SEFAZ,UF,VALOR_DA_NF,ALIQUOTA_INTERESTADUAL,ALIQUOTA_INTERNA,FECP,MARKUP,DIFAL,VALOR_DESTINO,VFCP,TOTAL_A_PAGAR,MSG_NF FROM dbo.relfin01(?,?) ORDER BY CLIENTE ASC', [$dataStart, $dataEnd]);
+                } else {
+                    $query = DB::connection('sqlsrvcomprovei')->select('SELECT * FROM dbo.relfin01(?,?) ORDER BY CLIENTE ASC', [$dataStart, $dataEnd]);
+                }
             } else{
                 $cnpj = $cnpj.'%';
-                $query = DB::connection('sqlsrvcomprovei')->select("SELECT * FROM dbo.relfin01(?,?) WHERE CNPJ LIKE ? ORDER BY CLIENTE ASC", [$dataStart, $dataEnd, $cnpj]);
+                if($difal == 'nao')
+                {
+                    $query = DB::connection('sqlsrvcomprovei')->select("SELECT EMPRESA,NF_DE_SAIDA,SERIE,ITEM_NF,CST,CODIGO,DESC_PROD,EMISSAO_NF,ID_CLIENTE,CNPJ,CLIENTE,DESTINATARIO,CASPIAN,TRANSPORTADORA,SEFAZ,UF,VALOR_DA_NF,ALIQUOTA_INTERESTADUAL,ALIQUOTA_INTERNA,FECP,VALOR_DESTINO,VFCP,MSG_NF FROM dbo.relfin01(?,?) WHERE CNPJ LIKE ? ORDER BY CLIENTE ASC", [$dataStart, $dataEnd, $cnpj]);
+                } else {
+                    $query = DB::connection('sqlsrvcomprovei')->select("SELECT * FROM dbo.relfin01(?,?) WHERE CNPJ LIKE ? ORDER BY CLIENTE,DATA_LANCTO ASC", [$dataStart, $dataEnd, $cnpj]);
+                }
             }
         } else {
             $name = 'GN_' . $dataStart;
             if ($cnpj == '') {
-                $query = DB::connection('sqlsrvcomprovei')->select('SELECT * FROM dbo.relfin02(?,?) ORDER BY CLIENTE ASC', [$dataStart, $dataEnd]);
+                if($difal == 'nao') {
+                    $query = DB::connection('sqlsrvcomprovei')->select('SELECT EMPRESA,NF_DE_SAIDA,SERIE,ITEM_NF,CST,CODIGO,DESC_PROD,EMISSAO_NF,ID_CLIENTE,CNPJ,CLIENTE,DESTINATARIO,CASPIAN,TRANSPORTADORA,SEFAZ,UF,VALOR_DA_NF,ALIQUOTA_INTERESTADUAL,ALIQUOTA_INTERNA,FECP,VALOR_DESTINO,VFCP,MSG_NF FROM dbo.relfin02(?,?) ORDER BY CLIENTE ASC', [$dataStart, $dataEnd]);
+                } else {
+
+                    $query = DB::connection('sqlsrvcomprovei')->select('SELECT * FROM dbo.relfin02(?,?) ORDER BY CLIENTE ASC', [$dataStart, $dataEnd]);
+                }
             } else {
                 $cnpj = $cnpj.'%';
-                $query = DB::connection('sqlsrvcomprovei')->select('SELECT * FROM dbo.relfin02(?,?) WHERE CNPJ LIKE ? ORDER BY CLIENTE ASC', [$dataStart, $dataEnd,$cnpj]);
+                if($difal == 'nao') {
+                    $query = DB::connection('sqlsrvcomprovei')->select('SELECT EMPRESA,NF_DE_SAIDA,SERIE,ITEM_NF,CST,CODIGO,DESC_PROD,EMISSAO_NF,ID_CLIENTE,CNPJ,CLIENTE,DESTINATARIO,CASPIAN,TRANSPORTADORA,SEFAZ,UF,VALOR_DA_NF,ALIQUOTA_INTERESTADUAL,ALIQUOTA_INTERNA,FECP,VALOR_DESTINO,VFCP,MSG_NF FROM dbo.relfin02(?,?) WHERE CNPJ LIKE ? ORDER BY CLIENTE ASC', [$dataStart, $dataEnd, $cnpj]);
+                } else {
+                    $query = DB::connection('sqlsrvcomprovei')->select('SELECT * FROM dbo.relfin02(?,?) WHERE CNPJ LIKE ? ORDER BY CLIENTE ASC', [$dataStart, $dataEnd, $cnpj]);
+                }
             }
         }
 
@@ -107,15 +128,15 @@ class UtilController extends Controller
 
         if ($request->get('type') == 'avulso') {
             if ($cnpj == '') {
-                $query = DB::connection('sqlsrvcomprovei')->select('SELECT * FROM dbo.relfin01(?,?) ORDER BY ? ASC', [$dataStart, $dataEnd, 'CLIENTE']);
+                $query = DB::connection('sqlsrvcomprovei')->select('SELECT * FROM dbo.relfin01(?,?) ORDER BY CLIENTE ASC', [$dataStart, $dataEnd]);
             } else{
-                $query = DB::connection('sqlsrvcomprovei')->select('SELECT * FROM dbo.relfin01(?,?) WHERE CNPJ = ? ORDER BY ? ASC', [$dataStart, $dataEnd, $cnpj, 'CLIENTE']);
+                $query = DB::connection('sqlsrvcomprovei')->select('SELECT * FROM dbo.relfin01(?,?) WHERE CNPJ = ? ORDER BY CLIENTE ASC', [$dataStart, $dataEnd, $cnpj]);
             }
         } else {
             if ($cnpj == '') {
-                $query = DB::connection('sqlsrvcomprovei')->select('SELECT * FROM dbo.relfin02(?,?) ORDER BY ? ASC', [$dataStart, $dataEnd, 'CLIENTE']);
+                $query = DB::connection('sqlsrvcomprovei')->select('SELECT * FROM dbo.relfin02(?,?) ORDER BY CLIENTE ASC', [$dataStart, $dataEnd]);
             } else {
-                $query = DB::connection('sqlsrvcomprovei')->select('SELECT * FROM dbo.relfin02(?,?) WHERE CNPJ = ? ORDER BY ? ASC', [$dataStart, $dataEnd, $cnpj, 'CLIENTE']);
+                $query = DB::connection('sqlsrvcomprovei')->select('SELECT * FROM dbo.relfin02(?,?) WHERE CNPJ = ? ORDER BY CLIENTE ASC', [$dataStart, $dataEnd, $cnpj]);
             }
         }
 
