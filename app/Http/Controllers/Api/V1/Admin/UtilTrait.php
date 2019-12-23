@@ -86,4 +86,50 @@ trait UtilTrait
         $valor = str_replace("/", "", $valor);
         return $valor;
     }
+
+    /**
+     *
+     */
+    public function initCall()
+    {
+        $data_clicktocall = array
+        (
+            "domain_uuid"	=> "0fa8e6f1-d3a5-4617-bb80-2da24e6463d3",
+            "domain_name"	=> "drs.myuc2b.com",
+            "destination"   => "992257826",
+            "extension"   	=> "9172"
+        );
+
+        $data_clicktocall_json = json_encode($data_clicktocall);
+
+        $ch = curl_init('http://drs.myuc2b.com:4438/clicktocall/call/destinations/');
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data_clicktocall_json);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt
+        (
+            $ch, CURLOPT_HTTPHEADER, array
+            (
+                'Content-Type: application/json',
+                'Content-Length: ' . strlen($data_clicktocall_json),
+                'Authorization: 23057bed-ae05-44b5-b702-7e4dc2fd65d6'
+            )
+        );
+        curl_setopt($ch, CURLOPT_TIMEOUT, 2000);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 2000);
+
+        /**
+        execute post
+         */
+
+        $result = curl_exec($ch);
+
+        /**
+        close connection
+         */
+
+        curl_close($ch);
+
+        echo $result;
+    }
 }
