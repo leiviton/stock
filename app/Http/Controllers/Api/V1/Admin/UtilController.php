@@ -61,7 +61,7 @@ class UtilController extends Controller
 
         $dataStart = $this->clear($this->invertDate((string)$request->get('start')));
 
-        $cnpj = $request->get('cnpj');
+        $cnpj = substr($this->clear($request->get('cnpj')),1,8);
 
         $difal = $request->get('difal');
 
@@ -80,7 +80,7 @@ class UtilController extends Controller
                 {
                     $query = DB::connection('sqlsrvcomprovei')->select("SELECT EMPRESA,NF_DE_SAIDA,SERIE,ITEM_NF,CST,CODIGO,DESC_PROD,EMISSAO_NF,ID_CLIENTE,CNPJ,CLIENTE,DESTINATARIO,CASPIAN,TRANSPORTADORA,SEFAZ,UF,VALOR_DA_NF,ALIQUOTA_INTERESTADUAL,ALIQUOTA_INTERNA,FECP,VALOR_DESTINO,VFCP,MSG_NF FROM dbo.relfin01(?,?) WHERE CNPJ LIKE ? ORDER BY CLIENTE ASC", [$dataStart, $dataEnd, $cnpj]);
                 } else {
-                    $query = DB::connection('sqlsrvcomprovei')->select("SELECT * FROM dbo.relfin01(?,?) WHERE CNPJ LIKE ? ORDER BY CLIENTE,DATA_LANCTO ASC", [$dataStart, $dataEnd, $cnpj]);
+                    $query = DB::connection('sqlsrvcomprovei')->select("SELECT * FROM dbo.relfin01(?,?) WHERE CNPJ LIKE ? ORDER BY CLIENTE ASC", [$dataStart, $dataEnd, $cnpj]);
                 }
             }
         } else {
@@ -124,19 +124,36 @@ class UtilController extends Controller
 
         $dataStart = $this->clear($this->invertDate((string)$request->get('start')));
 
-        $cnpj= $request->get('cnpj');
+        $cnpj = substr($this->clear($request->get('cnpj')),1,8);
+
+        $difal = $request->get('difal');
 
         if ($request->get('type') == 'avulso') {
+            $name = 'AV_' . $dataStart;
             if ($cnpj == '') {
-                $query = DB::connection('sqlsrvcomprovei')->select('SELECT * FROM dbo.relfin01(?,?) ORDER BY CLIENTE ASC', [$dataStart, $dataEnd]);
+                if ($difal == 'nao')
+                {
+                    $query = DB::connection('sqlsrvcomprovei')->select('SELECT EMPRESA,NF_DE_SAIDA,SERIE,ITEM_NF,CST,CODIGO,DESC_PROD,EMISSAO_NF,ID_CLIENTE,CNPJ,CLIENTE,DESTINATARIO,PROTOCOLO,TRANSPORTADORA,SEFAZ,UF,VALOR_DA_NF,ALIQUOTA_INTERESTADUAL,ALIQUOTA_INTERNA,FECP,MARKUP,DIFAL,VALOR_DESTINO,VFCP,TOTAL_A_PAGAR,MSG_NF FROM dbo.relfin01(?,?) ORDER BY CLIENTE ASC', [$dataStart, $dataEnd]);
+                } else {
+                    $query = DB::connection('sqlsrvcomprovei')->select('SELECT * FROM dbo.relfin01(?,?) ORDER BY CLIENTE ASC', [$dataStart, $dataEnd]);
+                }
             } else{
-                $query = DB::connection('sqlsrvcomprovei')->select('SELECT * FROM dbo.relfin01(?,?) WHERE CNPJ = ? ORDER BY CLIENTE ASC', [$dataStart, $dataEnd, $cnpj]);
+                $cnpj = $cnpj.'%';
+                if($difal == 'nao')
+                {
+                    $query = DB::connection('sqlsrvcomprovei')->select("SELECT EMPRESA,NF_DE_SAIDA,SERIE,ITEM_NF,CST,CODIGO,DESC_PROD,EMISSAO_NF,ID_CLIENTE,CNPJ,CLIENTE,DESTINATARIO,PROTOCOLO,TRANSPORTADORA,SEFAZ,UF,VALOR_DA_NF,ALIQUOTA_INTERESTADUAL,ALIQUOTA_INTERNA,FECP,MARKUP,DIFAL,VALOR_DESTINO,VFCP,TOTAL_A_PAGAR,MSG_NF FROM dbo.relfin01(?,?) WHERE CNPJ LIKE ? ORDER BY CLIENTE ASC", [$dataStart, $dataEnd, $cnpj]);
+                } else {
+                    $query = DB::connection('sqlsrvcomprovei')->select("SELECT * FROM dbo.relfin01(?,?) WHERE CNPJ LIKE ? ORDER BY CLIENTE,DATA_LANCTO ASC", [$dataStart, $dataEnd, $cnpj]);
+                }
             }
         } else {
+            $name = 'GN_' . $dataStart;
             if ($cnpj == '') {
-                $query = DB::connection('sqlsrvcomprovei')->select('SELECT * FROM dbo.relfin02(?,?) ORDER BY CLIENTE ASC', [$dataStart, $dataEnd]);
+                    $query = DB::connection('sqlsrvcomprovei')->select('SELECT * FROM dbo.relfin02(?,?) ORDER BY CLIENTE ASC', [$dataStart, $dataEnd]);
             } else {
-                $query = DB::connection('sqlsrvcomprovei')->select('SELECT * FROM dbo.relfin02(?,?) WHERE CNPJ = ? ORDER BY CLIENTE ASC', [$dataStart, $dataEnd, $cnpj]);
+                $cnpj = $cnpj.'%';
+                    $query = DB::connection('sqlsrvcomprovei')->select('SELECT * FROM dbo.relfin02(?,?) WHERE CNPJ LIKE ? ORDER BY CLIENTE ASC', [$dataStart, $dataEnd, $cnpj]);
+
             }
         }
 
@@ -156,7 +173,7 @@ class UtilController extends Controller
 
         $filial = $request->get('filial');
 
-        $cnpj= $request->get('cnpj');
+        $cnpj = substr($this->clear($request->get('cnpj')),1,8);
 
         if($filial == 'todos')
         {
@@ -196,7 +213,7 @@ class UtilController extends Controller
 
         $filial = $request->get('filial');
 
-        $cnpj= $request->get('cnpj');
+        $cnpj = substr($this->clear($request->get('cnpj')),1,8);
 
         if($filial == 'todos')
         {
