@@ -43,7 +43,7 @@ class ProtocolRepositoryEloquent extends BaseRepository implements ProtocolRepos
      */
     public function getProtocolsCompany($cnpj)
     {
-        $result = $this->model->where('empresa_deposit',$cnpj)->where('sit_registro',1)->get();
+        $result = $this->model->where('empresa_deposit',$cnpj)->where('sit_registro',1)->orderBy('des_tip_estoque','asc')->get();
 
         if ($result){
             return $this->parserResult($result);
