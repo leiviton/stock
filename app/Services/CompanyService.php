@@ -76,7 +76,7 @@ class CompanyService
      */
     public function getCompanies()
     {
-        return $this->repository->skipPresenter(false)->paginate();
+        return $this->repository->skipPresenter(false)->orderBy('nome')->paginate(40);
     }
 
     /**
