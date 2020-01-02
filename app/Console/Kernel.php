@@ -17,9 +17,6 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        StockCron::class,
-        RoadsCron::class,
-        OutsCron::class,
         ProtocolsCron::class
     ];
 
@@ -31,14 +28,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        /*$schedule->command('stocks:cron')->timezone('America/Sao_Paulo')
-            ->dailyAt('04:00');
-        $schedule->command('roads:cron')->timezone('America/Sao_Paulo')
-            ->dailyAt('03:00');
-        $schedule->command('outs:cron')->timezone('America/Sao_Paulo')
-            ->dailyAt('02:00');
         $schedule->command('protocols:cron')->timezone('America/Sao_Paulo')
-            ->dailyAt('07:00');*/
+            ->dailyAt('14:30');
     }
 
     /**
