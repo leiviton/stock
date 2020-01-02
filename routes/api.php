@@ -86,6 +86,7 @@ Route::group(['prefix' => 'v1/', 'middleware' => 'auth:api'], function () {
         Route::post('company', 'CompaniesController@store');
         Route::post('company/upload', 'CompaniesController@upload');
         Route::get('company', 'CompaniesController@index');
+        Route::get('company/all', 'CompaniesController@getAll');
         Route::get('company/{id}', 'CompaniesController@edit');
         Route::put('company/{id}', 'CompaniesController@update');
 

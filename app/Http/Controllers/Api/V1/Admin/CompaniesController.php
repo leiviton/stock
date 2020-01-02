@@ -38,6 +38,14 @@ class CompaniesController extends Controller
     }
 
     /**
+     * @return mixed
+     */
+    public function getAll()
+    {
+        return $this->service->getAll();
+    }
+
+    /**
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      * @throws \Exception

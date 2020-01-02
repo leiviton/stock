@@ -2,6 +2,7 @@
 
 namespace Stock\Http\Controllers\Api\V1\Admin;
 
+use DateTime;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
@@ -52,10 +53,20 @@ class UtilController extends Controller
     /**
      * @param Request $request
      * @return string
+     * @throws \Exception
      */
     public function reports(Request $request)
     {
         set_time_limit(0);
+
+
+        $start = new DateTime($this->invertDate($request->get('start')));
+        $end = new DateTime($this->invertDate($request->get('end')));
+
+        if($start > $end)
+        {
+            return response()->json([ 'title' => 'Erro','status' => 'error', 'message' => 'Data final maior que data inicial'],400);
+        }
 
         $dataEnd = $this->clear($this->invertDate((string)$request->get('end')));
 
@@ -115,11 +126,19 @@ class UtilController extends Controller
 
     /**
      * @return array|mixed
+     * @throws \Exception
      */
     public function getGnre(Request $request)
     {
         set_time_limit(0);
 
+        $start = new DateTime($this->invertDate($request->get('start')));
+        $end = new DateTime($this->invertDate($request->get('end')));
+
+        if($start > $end)
+        {
+            return response()->json([ 'title' => 'Erro','status' => 'error', 'message' => 'Data final maior que data inicial'],400);
+        }
         $dataEnd = $this->clear($this->invertDate((string)$request->get('end')));
 
         $dataStart = $this->clear($this->invertDate((string)$request->get('start')));
@@ -162,9 +181,19 @@ class UtilController extends Controller
 
     /**
      * @return \Illuminate\Support\Collection
+     * @throws \Exception
      */
     public function getReportCompras(Request $request)
     {
+
+        $start1 = new DateTime($this->invertDate($request->get('start')));
+        $end1 = new DateTime($this->invertDate($request->get('end')));
+
+        if($start1 > $end1)
+        {
+            return response()->json([ 'title' => 'Erro','status' => 'error', 'message' => 'Data final maior que data inicial'],400);
+        }
+
         $start = $this->clear($this->invertDate($request->get('start')));
 
         $end = $this->clear($this->invertDate($request->get('end')));
@@ -202,9 +231,19 @@ class UtilController extends Controller
 
     /**
      * @return \Illuminate\Support\Collection
+     * @throws \Exception
      */
     public function exportCompras(Request $request)
     {
+
+        $start = new DateTime($this->invertDate($request->get('start')));
+        $end = new DateTime($this->invertDate($request->get('end')));
+
+        if($start > $end)
+        {
+            return response()->json([ 'title' => 'Erro','status' => 'error', 'message' => 'Data final maior que data inicial'],400);
+        }
+
         $start = $this->clear($this->invertDate($request->get('start')));
 
         $end = $this->clear($this->invertDate($request->get('end')));
