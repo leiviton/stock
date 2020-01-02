@@ -83,6 +83,7 @@ class CompanyService
      * @param $id
      * @param $data
      * @return array
+     * @throws \Exception
      */
     public function update($id, $data) {
         DB::beginTransaction();
@@ -102,5 +103,13 @@ class CompanyService
             DB::rollBack();
             return ['status' => 'error', 'message' => $exception->getMessage(), 'title' => 'Erro'];
         }
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAll()
+    {
+        return $this->repository->skipPresenter(false)->orderBy('nome')->all();
     }
 }
