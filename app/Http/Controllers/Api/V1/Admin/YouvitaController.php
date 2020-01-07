@@ -53,7 +53,7 @@ class YouvitaController extends Controller
      */
     public function getProducts()
     {
-        $result = DB::connection('sqlsrv')->table('logix.products')->get();
+        $result = DB::connection('youvita')->table('logix.products')->get();
 
         return $result;
     }
