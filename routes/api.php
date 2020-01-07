@@ -15,6 +15,7 @@ Route::group(['prefix' => 'v1/', 'middleware' => 'client'], function () {
         /*util*/
         Route::get('youvita/estoque/{id}', 'YouvitaController@getStock');
         Route::get('youvita/status', 'YouvitaController@getStatus');
+        Route::get('youvita/products', 'YouvitaController@getProducts');
     });
 });
 

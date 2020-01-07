@@ -8,10 +8,9 @@
 
 namespace Stock\Http\Controllers\Api\V1\Admin;
 
+use Illuminate\Support\Facades\DB;
 use Stock\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Stock\Services\ExtensionsService;
-use Stock\Services\NewsService;
 use Stock\Services\YouvitaService;
 
 class YouvitaController extends Controller
@@ -47,5 +46,15 @@ class YouvitaController extends Controller
     {
         $data = $request->all();
         return $this->service->getStatus($data);
+    }
+
+    /**
+     * @return \Illuminate\Support\Collection
+     */
+    public function getProducts()
+    {
+        $result = DB::connection('sqlsrv')->table('logix.products')->get();
+
+        return $result;
     }
 }
