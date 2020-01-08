@@ -19,6 +19,9 @@ Route::group(['prefix' => 'v1/', 'middleware' => 'client'], function () {
     });
 });
 
+Route::get('news', 'NewsController@index');
+Route::get('news/{id}', 'NewsController@edit');
+
 Route::group(['prefix' => 'v1/', 'middleware' => 'auth:api'], function () {
     /*Routes Admin*/
     Route::group(['prefix' => 'admin', 'namespace' => 'Api\V1\Admin'], function () {
@@ -94,8 +97,6 @@ Route::group(['prefix' => 'v1/', 'middleware' => 'auth:api'], function () {
         /*News*/
         Route::post('news', 'NewsController@store');
         Route::post('news/upload', 'NewsController@upload');
-        Route::get('news', 'NewsController@index');
-        Route::get('news/{id}', 'NewsController@edit');
         Route::put('news/{id}', 'NewsController@update');
         /*Extensions*/
         Route::post('extension', 'ExtensionsController@store');
