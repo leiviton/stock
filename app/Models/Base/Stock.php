@@ -44,7 +44,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  */
 class Stock extends Eloquent
 {
-    protected $connection = 'sqlsrv';
+    protected $connection = 'youvita';
 
     protected $keyType = 'string';
 
