@@ -31,11 +31,12 @@ class YouvitaController extends Controller
 
     /**
      * @param $id
+     * @param $tipo
      * @return mixed
      */
-    public function getStock($id)
+    public function getStock($id,$tipo)
     {
-        return $this->service->getStock($id);
+        return $this->service->getStock($id,$tipo);
     }
 
     /**

@@ -13,7 +13,7 @@ Route::group(['prefix' => 'v1/', 'middleware' => 'client'], function () {
     /*Routes Admin*/
     Route::group(['prefix' => 'admin', 'namespace' => 'Api\V1\Admin'], function () {
         /*util*/
-        Route::get('youvita/estoque/{id}', 'YouvitaController@getStock');
+        Route::get('youvita/estoque/{id}/{tipo}', 'YouvitaController@getStock');
         Route::get('youvita/status', 'YouvitaController@getStatus');
         Route::get('youvita/products', 'YouvitaController@getProducts');
     });

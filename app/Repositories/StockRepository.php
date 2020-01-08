@@ -29,9 +29,10 @@ interface StockRepository extends RepositoryInterface {
 
     /**
      * @param $id
+     * @param $tipo
      * @return mixed
      */
-    public function findById($id);
+    public function findById($id,$tipo);
 
     /**
      * @param $data
