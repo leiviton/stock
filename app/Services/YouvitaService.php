@@ -50,7 +50,7 @@ class YouvitaService
      */
     public function getStock($id,$tipo)
     {
-        return $this->stockRepository->skipPresenter(false)->findById($id,$tipo);
+        return $this->stockRepository->skipPresenter(true)->findById($id,$tipo);
     }
 
 }

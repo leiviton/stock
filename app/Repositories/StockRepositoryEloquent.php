@@ -301,10 +301,10 @@ class StockRepositoryEloquent extends BaseRepository implements StockRepository
         $result = $this->model
             ->where('codigo_produto',$id)
             ->where('tipo_estoque',$tipo)
-            ->select(DB::raw('codigo_produto,sum(qtd_produto) AS qtd_produto'))
+            ->select(DB::raw('sum(qtd_produto) AS qtd_produto'))
             //->select(DB::raw('tipo_estoque,desc_tipo_estoque,qtd_produto,qtd_regul_reser,codigo_produto,desc_produto,lote,data_validade,unidade_medida'))
             ->groupBy('codigo_produto')
-            ->get();
+            ->first();
 
         if ($result) {
             return $this->parserResult($result);
