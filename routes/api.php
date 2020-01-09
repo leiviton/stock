@@ -21,6 +21,9 @@ Route::group(['prefix' => 'v1/', 'middleware' => 'client'], function () {
 
 Route::get('news', 'NewsController@index');
 Route::get('news/{id}', 'NewsController@edit');
+Route::get('bank/{id}', 'BankIdeaController@edit');
+Route::get('bank', 'BankIdeaController@index');
+Route::post('bank', 'BankIdeaController@store');
 
 Route::group(['prefix' => 'v1/', 'middleware' => 'auth:api'], function () {
     /*Routes Admin*/
