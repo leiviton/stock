@@ -18,12 +18,17 @@ Route::group(['prefix' => 'v1/', 'middleware' => 'client'], function () {
         Route::get('youvita/products', 'YouvitaController@getProducts');
     });
 });
+Route::group(['prefix' => 'v1/'], function () {
+    /*Routes Admin*/
+    Route::group(['prefix' => 'admin', 'namespace' => 'Api\V1\Admin'], function () {
+        Route::get('news', 'NewsController@index');
+        Route::get('news/{id}', 'NewsController@edit');
+        Route::get('bank/{id}', 'BankIdeaController@edit');
+        Route::get('bank', 'BankIdeaController@index');
+        Route::post('bank', 'BankIdeaController@store');
 
-Route::get('news', 'NewsController@index');
-Route::get('news/{id}', 'NewsController@edit');
-Route::get('bank/{id}', 'BankIdeaController@edit');
-Route::get('bank', 'BankIdeaController@index');
-Route::post('bank', 'BankIdeaController@store');
+    });
+});
 
 Route::group(['prefix' => 'v1/', 'middleware' => 'auth:api'], function () {
     /*Routes Admin*/
@@ -46,7 +51,7 @@ Route::group(['prefix' => 'v1/', 'middleware' => 'auth:api'], function () {
         Route::delete('file/delete/{image}/{folder}', 'UtilController@deleteFile');
 
         /*Notas fiscais*/
-        Route::get('notas','NotaFiscalController@index');
+        Route::get('notas', 'NotaFiscalController@index');
 
         /*Users*/
         Route::post('user', 'UserController@store');
