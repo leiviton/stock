@@ -5,6 +5,7 @@ namespace Stock\Models;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Foundation\Auth\Access\Authorizable;
+use Illuminate\Notifications\Messages\MailMessage;
 use Laravel\Passport\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
@@ -14,6 +15,7 @@ use Prettus\Repository\Traits\TransformableTrait;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
+use Stock\Notifications\ResetPassword;
 
 /**
  * Class User.
@@ -79,5 +81,10 @@ class User extends \Stock\Models\Base\User implements Transformable,Authenticata
     public function getQueueableRelations()
     {
         // TODO: Implement getQueueableRelations() method.
+    }
+
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new ResetPassword($token, $this->email));
     }
 }

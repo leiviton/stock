@@ -18,3 +18,5 @@ Route::get('/', function () {
 Route::get('/php', function () {
     return phpinfo();
 });
+
+Auth::routes();

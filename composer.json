@@ -6,6 +6,7 @@
     "type": "project",
     "require": {
         "php": ">=7.0.0",
+        "ext-pdo": "*",
         "barryvdh/laravel-cors": "^0.11.3",
         "fideloper/proxy": "~3.3",
         "jimmyjs/laravel-report-generator": "^1.1",
@@ -13,14 +14,14 @@
         "laravel/passport": "4.0.*",
         "laravel/tinker": "~1.0",
         "league/fractal": "^0.17.0",
+        "lucascudo/laravel-pt-br-localization": "^1.0",
         "maatwebsite/excel": "2.*",
         "nfephp-org/sped-da": "^0.1.23",
         "nfephp-org/sped-nfe": "^5.0",
         "paragonie/random_compat": "2.*",
         "prettus/l5-repository": "^2.6",
         "reliese/laravel": "^0.0.13",
-        "zendframework/zend-soap": "^2.8",
-        "ext-pdo": "*"
+        "zendframework/zend-soap": "^2.8"
     },
     "require-dev": {
         "filp/whoops": "~2.0",

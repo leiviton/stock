@@ -9,12 +9,33 @@
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+Route::group([
+    'namespace' => 'Auth',
+    'middleware' => 'api',
+    'prefix' => 'password'
+], function () {
+    Route::post('create', 'PasswordResetController@create');
+    Route::get('find/{token}', 'PasswordResetController@find');
+    Route::post('reset', 'PasswordResetController@reset');
+});
+
 Route::group(['prefix' => 'v1/', 'middleware' => 'client'], function () {
     /*Routes Admin*/
     Route::group(['prefix' => 'admin', 'namespace' => 'Api\V1\Admin'], function () {
         /*util*/
-        Route::get('youvita/estoque/{id}', 'YouvitaController@getStock');
+        Route::get('youvita/estoque/{id}/{tipo}', 'YouvitaController@getStock');
         Route::get('youvita/status', 'YouvitaController@getStatus');
+        Route::get('youvita/products', 'YouvitaController@getProducts');
+    });
+});
+Route::group(['prefix' => 'v1/'], function () {
+    /*Routes Admin*/
+    Route::group(['prefix' => 'admin', 'namespace' => 'Api\V1\Admin'], function () {
+        Route::get('news', 'NewsController@index');
+        Route::get('news/{id}', 'NewsController@edit');
+        Route::get('bank/{id}', 'BankIdeaController@edit');
+        Route::get('bank', 'BankIdeaController@index');
+        Route::post('bank', 'BankIdeaController@store');
     });
 });
 
@@ -39,7 +60,7 @@ Route::group(['prefix' => 'v1/', 'middleware' => 'auth:api'], function () {
         Route::delete('file/delete/{image}/{folder}', 'UtilController@deleteFile');
 
         /*Notas fiscais*/
-        Route::get('notas','NotaFiscalController@index');
+        Route::get('notas', 'NotaFiscalController@index');
 
         /*Users*/
         Route::post('user', 'UserController@store');
@@ -93,8 +114,6 @@ Route::group(['prefix' => 'v1/', 'middleware' => 'auth:api'], function () {
         /*News*/
         Route::post('news', 'NewsController@store');
         Route::post('news/upload', 'NewsController@upload');
-        Route::get('news', 'NewsController@index');
-        Route::get('news/{id}', 'NewsController@edit');
         Route::put('news/{id}', 'NewsController@update');
         /*Extensions*/
         Route::post('extension', 'ExtensionsController@store');

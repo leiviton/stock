@@ -79,5 +79,9 @@ class RepositoryServiceProvider extends ServiceProvider
             'Stock\Repositories\StatusPedidoRepository',
             'Stock\Repositories\StatusPedidoRepositoryEloquent'
         );
+        $this->app->bind(
+            'Stock\Repositories\BankIdeaRepository',
+            'Stock\Repositories\BankIdeaRepositoryEloquent'
+        );
     }
 }

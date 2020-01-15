@@ -293,12 +293,21 @@ class StockRepositoryEloquent extends BaseRepository implements StockRepository
 
     /**
      * @param $id
+     * @param $tipo
      * @return mixed
      */
-    public function findById($id)
+    public function findById($id,$tipo)
     {
+        $tipo = explode(',',$tipo);
 
-        $result = $this->model->where('codigo_produto',$id)->get();
+        //dd($tipo);
+        $result = $this->model
+            ->where('codigo_produto',$id)
+            ->whereIn('tipo_estoque',$tipo)
+            ->select(DB::raw('sum(qtd_produto) AS qtd_produto'))
+            //->select(DB::raw('tipo_estoque,desc_tipo_estoque,qtd_produto,qtd_regul_reser,codigo_produto,desc_produto,lote,data_validade,unidade_medida'))
+            ->groupBy('codigo_produto')
+            ->first();
 
         if ($result) {
             return $this->parserResult($result);
