@@ -9,6 +9,16 @@
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+Route::group([
+    'namespace' => 'Auth',
+    'middleware' => 'api',
+    'prefix' => 'password'
+], function () {
+    Route::post('create', 'PasswordResetController@create');
+    Route::get('find/{token}', 'PasswordResetController@find');
+    Route::post('reset', 'PasswordResetController@reset');
+});
+
 Route::group(['prefix' => 'v1/', 'middleware' => 'client'], function () {
     /*Routes Admin*/
     Route::group(['prefix' => 'admin', 'namespace' => 'Api\V1\Admin'], function () {
@@ -26,7 +36,6 @@ Route::group(['prefix' => 'v1/'], function () {
         Route::get('bank/{id}', 'BankIdeaController@edit');
         Route::get('bank', 'BankIdeaController@index');
         Route::post('bank', 'BankIdeaController@store');
-
     });
 });
 
