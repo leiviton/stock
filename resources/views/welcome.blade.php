@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="Drs Portal WMS Online.">
     <meta name="author" content="DRS Tecnologia">
-    <title>DRS Portal</title>
+    <title>DRS Portal 360</title>
     <!-- Favicon -->
     <link href="./images/icons/144.png" rel="icon" type="image/png">
     <!-- Fonts -->
@@ -40,7 +40,7 @@
             });
     }
 </script>
-<script type="text/javascript" src="runtime.265832b9cf1431fb07be.js"></script>
+<script type="text/javascript" src="runtime.5c7de43c7d7f18de029b.js"></script>
 <script type="text/javascript" src="polyfills.aca04ef57459e933ca5d.js"></script>
 <script type="text/javascript" src="scripts.2db4cbc668a10a0c2a68.js"></script>
 <script type="text/javascript" src="main.4f58d7fbdda88bb58f43.js"></script>
