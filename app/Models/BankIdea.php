@@ -21,7 +21,7 @@ class BankIdea extends \Stock\Models\Base\BankIdea implements Transformable
      */
     protected $fillable = [
         'nome',
-        'sobrenome',
+        'celular',
         'email',
         'titulo',
         'descricao'

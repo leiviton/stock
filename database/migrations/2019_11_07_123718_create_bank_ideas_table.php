@@ -16,7 +16,7 @@ class CreateBankIdeasTable extends Migration
         Schema::create('bank_ideas', function (Blueprint $table) {
             $table->increments('id');
             $table->string('nome');
-            $table->string('sobrenome');
+            $table->string('celullar');
             $table->string('email');
             $table->string('titulo');
             $table->text('descricao');

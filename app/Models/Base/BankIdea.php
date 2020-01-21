@@ -14,7 +14,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * 
  * @property int $id
  * @property string $nome
- * @property string $sobrenome
+ * @property string $celular
  * @property string $email
  * @property string $titulo
  * @property string $descricao
