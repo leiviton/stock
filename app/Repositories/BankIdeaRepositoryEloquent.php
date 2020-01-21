@@ -16,6 +16,7 @@ use Stock\Validators\BankIdeaValidator;
  */
 class BankIdeaRepositoryEloquent extends BaseRepository implements BankIdeaRepository
 {
+    protected $skipPresenter = true;
     /**
      * Specify Model class name
      *
