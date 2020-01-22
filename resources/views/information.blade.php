@@ -3,8 +3,10 @@
 <head>
     <base href='/'>
     <meta charset="utf-8"/>
-    <link rel="apple-touch-icon" sizes="76x76" href="./intranet/assets/img/apple-icon.png"/>
-    <link rel="icon" type="image/png" href="./intranet/assets/img/favicon.png"/>
+    <link rel="apple-touch-icon" sizes="76x76"
+          href="http://drsgroup.com.br/2016/wp-content/themes/drsgroup/assets/images/logo-drs-group.jpg"/>
+    <link rel="icon" type="image/png"
+          href="http://drsgroup.com.br/2016/wp-content/themes/drsgroup/assets/images/logo-drs-group.jpg"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
 
     <title>DRS Portal Intranet</title>
