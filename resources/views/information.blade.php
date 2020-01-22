@@ -3,11 +3,16 @@
 <head>
     <base href='/'>
     <meta charset="utf-8"/>
+    <link rel="manifest" href="/intranet/manifest.json">
+    <meta name="theme-color" content="#2bbbad">
     <link rel="apple-touch-icon" sizes="76x76"
           href="http://drsgroup.com.br/2016/wp-content/themes/drsgroup/assets/images/logo-drs-group.jpg"/>
     <link rel="icon" type="image/png"
           href="http://drsgroup.com.br/2016/wp-content/themes/drsgroup/assets/images/logo-drs-group.jpg"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+
+    <meta name="description" content="Drs Portal Intranet.">
+    <meta name="author" content="DRS Tecnologia">
 
     <title>DRS Portal Intranet</title>
 
@@ -19,15 +24,32 @@
     <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
 
 
-    <link rel="stylesheet" href="styles.9d2fbc20c7026a89469d.css">
+    <link rel="stylesheet" href="styles.8593c5c79e3533724f13.css">
 </head>
 <body>
 <app-root>
 </app-root>
-<script type="text/javascript" src="runtime.631bb0e6c538f73be359.js"></script>
+<noscript>
+    <h3 style="color:#3f51b5; font-family: Helvetica; margin: 2rem;">
+        Aplicativo indisponível.
+    </h3>
+</noscript>
+
+<script>
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/intranet/service-worker.js')
+            .then(function (registration) {
+                console.log('ServiceWorker registration successful with scope: ', registration.scope);
+            })
+            .catch(function (err) {
+                console.log('SerivceWorker registration failed: ', err);
+            });
+    }
+</script>
+<script type="text/javascript" src="runtime.bc2887e40a2319e90cee.js"></script>
 <script type="text/javascript" src="polyfills.f8f8239de0fe580b5c3d.js"></script>
 <script type="text/javascript" src="scripts.2cc9101aa9ed72da1ec4.js"></script>
-<script type="text/javascript" src="main.37a72774be4dc38c7cae.js"></script>
+<script type="text/javascript" src="main.5d6db3141f853861dfba.js"></script>
 </body>
 
 
