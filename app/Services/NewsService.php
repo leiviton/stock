@@ -63,13 +63,14 @@ class NewsService
      */
     public function getNews()
     {
-        return $this->repository->skipPresenter(false)->paginate();
+        return $this->repository->skipPresenter(false)->orderBy('created_at','desc')->paginate();
     }
 
     /**
      * @param $id
      * @param $data
      * @return array
+     * @throws \Exception
      */
     public function update($id, $data) {
         DB::beginTransaction();
