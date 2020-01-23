@@ -360,6 +360,7 @@
   @include panel-gradient($green);
   position: relative;
   overflow: hidden;
+  background-size: 100%;
 
   .header{
     .title{
