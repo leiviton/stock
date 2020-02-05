@@ -328,7 +328,7 @@ class RoadRepositoryEloquent extends BaseRepository implements RoadRepository
                 unidade_medida as Unidade_Medida,lote as Lote,data_validade as Validade,
                 desc_restricao as Restricao,serie as Serie,peca as Peca,sum(qtd_recebida) as Qtd_Recebida,
                 sum(qtd_rejeitada) as Qtd_Avariada,sum(qtd_fiscal) as Qtd_Fiscal,serie_nf_definitiva as NFE,serie_nf_provisória as NFE_Provisoria
-                    ,usuario_inclusao as RECEBIDO_POR,temperatura as TEMPERATURA,area as AREA_DE_ARMAZENAMENTO,portaria_34498 as PORTARIA_344_98,transportadora as TRANSPORTADORA,guia as GUIA_DA_TRANSPORTADORA,conferente_1 as 1º_CONFERENTE,conferente_2 as 2º_CONFERENTE,liberado_em as DATA_DA_LIBERAÇÃO'))
+                    ,usuario_inclusao as RECEBIDO_POR,temperatura as TEMPERATURA,area as AREA_DE_ARMAZENAMENTO,portaria_34498 as PORTARIA_344_98,transportadora as TRANSPORTADORA,guia as GUIA_DA_TRANSPORTADORA,conferente_1 as 1_CONFERENTE,conferente_2 as 2_CONFERENTE,liberado_em as DATA_DA_LIBERAÇÃO'))
             ->groupBy('data_recebimento')
             ->groupBy('tipo_estoque')
             ->groupBy('desc_tipo_estoque')
