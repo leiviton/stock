@@ -12,15 +12,17 @@ class IntegrationLogix extends Mailable
 
     public $para;
     public $erro;
+    public $solicitacao;
 
     /**
      * IntegrationLogix constructor.
      * @param $para
      * @param $order
      */
-    public function __construct($para)
+    public function __construct($para, $solicitacao)
     {
         $this->para = $para;
+        $this->solicitacao = $solicitacao;
     }
 
     /**
@@ -31,7 +33,6 @@ class IntegrationLogix extends Mailable
     public function build()
     {
         return $this
-            ->from($this->para,'Portal DRS')
-            ->subject('Erro integração')->markdown('mail.invoice.order');
+            ->subject('Solicitação de compra')->markdown('mail.invoice.order');
     }
 }

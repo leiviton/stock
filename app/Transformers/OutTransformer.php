@@ -24,8 +24,6 @@ class OutTransformer extends TransformerAbstract
     {
         return [
             'id'         => (int) $model->id,
-            'chave_logix'         => $model->chave_logix,
-            'data_geracao' => $model->data_geracao,
             'depositante' => $model->depositante,
             'razao_social' => $model->razao_social,
             'tipo_estoque' => $model->tipo_estoque,
@@ -45,6 +43,8 @@ class OutTransformer extends TransformerAbstract
             'serie' => $model->serie,
             'peca' => $model->peca,
             'pedido_venda' => $model->pedido_venda,
+            'temperatura' => $model->temperatura,
+            'serie_nf_entrada' => $model->serie_nf_entrada,
             /* place your other model properties here */
             'created_at' => $model->created_at,
             'updated_at' => $model->updated_at

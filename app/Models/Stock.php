@@ -20,8 +20,6 @@ class Stock extends \Stock\Models\Base\Stock implements Transformable
      * @var array
      */
     protected $fillable = [
-        'chave_logix',
-        'data_geracao',
         'depositante',
         'cnpj_origem',
         'data_atual',
@@ -41,7 +39,9 @@ class Stock extends \Stock\Models\Base\Stock implements Transformable
         'avaria',
         'peca',
         'serie',
-        'company_id'
+        'company_id',
+        'ua_palete',
+        'endereco'
     ];
 
 }

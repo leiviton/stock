@@ -28,7 +28,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property string $unidade_medida
  * @property string $lote
  * @property string $data_validade
- * @property string $serie_nf
+ * @property string $serie_nf_definitiva
  * @property string $tipo_nf
  * @property string $qtd_recebida
  * @property string $qtd_rejeitada
@@ -48,7 +48,7 @@ class Road extends Eloquent
 {
     protected $connection = 'sqlsrv';
 
-    protected $table = 'logix.entries';
+    protected $table = 'logix.entriestst';
 
 	protected $casts = [
 		'company_id' => 'int'

@@ -44,6 +44,7 @@ Route::group(['prefix' => 'v1/', 'middleware' => 'auth:api'], function () {
     Route::group(['prefix' => 'admin', 'namespace' => 'Api\V1\Admin'], function () {
         /*util*/
         Route::get('cnpj/{cnpj}', 'UtilController@getCnpj');
+        Route::get('sendemail', 'UtilController@sendNotificationSolicitation');
         Route::get('cep/{cep}', 'UtilController@getCep');
         Route::get('calls', 'UtilController@initCall');
         Route::get('emitir', 'UtilController@emitirNfe');

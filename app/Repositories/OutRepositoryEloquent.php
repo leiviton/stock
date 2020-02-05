@@ -56,6 +56,8 @@ class OutRepositoryEloquent extends BaseRepository implements OutRepository
      */
     public function orderFilter($data, $user, $cnpj, $lote = '')
     {
+
+        set_time_limit(0);
         $order[0] = $order[0] ?? 'data_envio';
         $order[1] = $order[1] ?? 'asc';
         //dd($lote);
@@ -63,7 +65,7 @@ class OutRepositoryEloquent extends BaseRepository implements OutRepository
             if ($data['value'] == '') {
                 $results = $this->model
                     ->where('depositante', $cnpj)
-                    ->select(DB::raw('tipo_estoque,data_envio,desc_tipo_estoque,centro,nome_destino_final,numero_ordem,sum(outs.qtd_enviada) AS qtd_enviada,codigo_produto,desc_produto,lote,data_validade,desc_produto,unidade_medida,serie_nf,centro'))
+                    ->select(DB::raw('tipo_estoque,data_envio,temperatura,serie_nf_entrada,desc_tipo_estoque,centro,nome_destino_final,numero_ordem,sum(outs.qtd_enviada) AS qtd_enviada,codigo_produto,desc_produto,lote,data_validade,desc_produto,unidade_medida,serie_nf,centro'))
                     ->groupBy('codigo_produto')
                     ->groupBy('serie_nf')
                     ->groupBy('data_envio')
@@ -76,6 +78,8 @@ class OutRepositoryEloquent extends BaseRepository implements OutRepository
                     ->groupBy('desc_tipo_estoque')
                     ->groupBy('unidade_medida')
                     ->groupBy('numero_ordem')
+                    ->groupBy('temperatura')
+                    ->groupBy('serie_nf_entrada')
                     ->orderBy($order[0], $order[1])
                     ->get();
             } else {
@@ -111,7 +115,7 @@ class OutRepositoryEloquent extends BaseRepository implements OutRepository
                 $results = $this->model
                     ->where('depositante', $cnpj)
                     ->where('tipo_estoque', $lote)
-                    ->select(DB::raw('tipo_estoque,data_envio,desc_tipo_estoque,centro,nome_destino_final,numero_ordem,sum(outs.qtd_enviada) AS qtd_enviada,codigo_produto,desc_produto,lote,data_validade,desc_produto,unidade_medida,serie_nf,centro'))
+                    ->select(DB::raw('tipo_estoque,data_envio,serie_nf_entrada,desc_tipo_estoque,centro,nome_destino_final,numero_ordem,sum(outs.qtd_enviada) AS qtd_enviada,codigo_produto,desc_produto,lote,data_validade,desc_produto,unidade_medida,serie_nf,centro'))
                     ->groupBy('codigo_produto')
                     ->groupBy('serie_nf')
                     ->groupBy('data_envio')
@@ -137,7 +141,7 @@ class OutRepositoryEloquent extends BaseRepository implements OutRepository
                             return $query->where($data['field'], 'like', '%' . $data['value'] . '%');
                         }
                     })
-                    ->select(DB::raw('tipo_estoque,data_envio,desc_tipo_estoque,centro,nome_destino_final,numero_ordem,sum(outs.qtd_enviada) AS qtd_enviada,codigo_produto,desc_produto,lote,data_validade,desc_produto,unidade_medida,serie_nf,centro'))
+                    ->select(DB::raw('tipo_estoque,data_envio,temperatura,serie_nf_entrada,desc_tipo_estoque,centro,nome_destino_final,numero_ordem,sum(outs.qtd_enviada) AS qtd_enviada,codigo_produto,desc_produto,lote,data_validade,desc_produto,unidade_medida,serie_nf,centro'))
                     ->groupBy('codigo_produto')
                     ->groupBy('serie_nf')
                     ->groupBy('data_envio')
@@ -170,6 +174,8 @@ class OutRepositoryEloquent extends BaseRepository implements OutRepository
      */
     public function orderFilterData($data, $cnpj, $lote = '')
     {
+
+        set_time_limit(0);
         $order[0] = $order[0] ?? 'data_envio';
         $order[1] = $order[1] ?? 'asc';
         //dd($lote);
@@ -178,7 +184,7 @@ class OutRepositoryEloquent extends BaseRepository implements OutRepository
                     ->where('depositante', $cnpj)
                    // ->where('tipo_estoque', $lote)
                     ->whereBetween('data_envio',[$data['start'],$data['end']])
-                    ->select(DB::raw('tipo_estoque,data_envio,desc_tipo_estoque,centro,nome_destino_final,numero_ordem,sum(outs.qtd_enviada) AS qtd_enviada,codigo_produto,desc_produto,lote,data_validade,desc_produto,unidade_medida,serie_nf,centro'))
+                    ->select(DB::raw('tipo_estoque,data_envio,temperatura,serie_nf_entrada,desc_tipo_estoque,centro,nome_destino_final,numero_ordem,sum(outs.qtd_enviada) AS qtd_enviada,codigo_produto,desc_produto,lote,data_validade,desc_produto,unidade_medida,serie_nf,centro'))
                     ->groupBy('codigo_produto')
                     ->groupBy('serie_nf')
                     ->groupBy('data_envio')
@@ -198,7 +204,7 @@ class OutRepositoryEloquent extends BaseRepository implements OutRepository
                     ->where('depositante', $cnpj)
                     ->where('tipo_estoque', $lote)
                     ->whereBetween("data_envio",[$data['start'],$data['end']])
-                    ->select(DB::raw('tipo_estoque,data_envio,desc_tipo_estoque,centro,nome_destino_final,numero_ordem,sum(outs.qtd_enviada) AS qtd_enviada,codigo_produto,desc_produto,lote,data_validade,desc_produto,unidade_medida,serie_nf,centro'))
+                    ->select(DB::raw('tipo_estoque,data_envio,temperatura,serie_nf_entrada,desc_tipo_estoque,centro,nome_destino_final,numero_ordem,sum(outs.qtd_enviada) AS qtd_enviada,codigo_produto,desc_produto,lote,data_validade,desc_produto,unidade_medida,serie_nf,centro'))
                     ->groupBy('codigo_produto')
                     ->groupBy('serie_nf')
                     ->groupBy('data_envio')
@@ -233,6 +239,8 @@ class OutRepositoryEloquent extends BaseRepository implements OutRepository
      */
     public function orderByOuts($user, $cnpj, $lote = '')
     {
+
+        set_time_limit(0);
         $dataEnd = date_format(new \DateTime(),'Y-m-d');
         $dateStart = $this->invertDate(date_format((new Carbon())->subDay(90),'d/m/Y'));
         $order[0] = $order[0] ?? 'data_envio';
@@ -245,7 +253,7 @@ class OutRepositoryEloquent extends BaseRepository implements OutRepository
                 ->where('depositante', $cnpj)
                 ->where('tipo_estoque', $lote)
                 ->whereBetween("data_envio",[$dateStart,$dataEnd])
-                ->select(DB::raw('depositante,tipo_estoque,data_envio,desc_tipo_estoque,nome_destino_final,numero_ordem,
+                ->select(DB::raw('depositante,tipo_estoque,temperatura,serie_nf_entrada,data_envio,desc_tipo_estoque,nome_destino_final,numero_ordem,
                 sum(qtd_enviada) AS qtd_enviada,codigo_produto,lote,data_validade,desc_produto,
                 unidade_medida,serie_nf,centro'))
                 ->groupBy('codigo_produto')
@@ -261,6 +269,8 @@ class OutRepositoryEloquent extends BaseRepository implements OutRepository
                 ->groupBy('unidade_medida')
                 ->groupBy('numero_ordem')
                 ->groupBy('depositante')
+                ->groupBy('temperatura')
+                ->groupBy('serie_nf_entrada')
                 ->orderBy($order[0], $order[1])
                 ->paginate();
 
@@ -301,13 +311,14 @@ class OutRepositoryEloquent extends BaseRepository implements OutRepository
      * @return mixed
      */
     public function getQueryAdmin($data) {
+        set_time_limit(0);
         $query = $this->model->where(function ($query) use ($data) {
             return $query->whereRaw('data_envio BETWEEN ? AND ?',
                 [$data['start'], $data['end']])->where('depositante',$this->limpaCPF_CNPJ($data['cnpj']));
         })->select(DB::raw('desc_tipo_estoque as Protocolo,codigo_produto as Codigo,desc_produto as Produto,
         unidade_medida as Unidade_Medida,lote as Lote,data_validade as Validade,data_envio as Envio,serie_nf as NFe,
         nome_destino_final as Destino,centro as Centro,numero_ordem as Ordem,
-        sum(qtd_enviada) as Qtd,serie as Serie,peca as Peça'))
+        sum(qtd_enviada) as Qtd,serie as Serie,peca as Peça,temperatura as Temperatura,serie_nf_entrada as NFe_entrada'))
             ->groupBy('data_envio')
             ->groupBy('desc_tipo_estoque')
             ->groupBy('codigo_produto')
@@ -322,6 +333,8 @@ class OutRepositoryEloquent extends BaseRepository implements OutRepository
             ->groupBy('serie')
             ->groupBy('peca')
             ->groupBy('numero_ordem')
+            ->groupBy('temperatura')
+            ->groupBy('serie_nf_entrada')
             ->orderBy('data_envio','asc')
             ->get();
 
@@ -410,5 +423,19 @@ class OutRepositoryEloquent extends BaseRepository implements OutRepository
             $result = implode("/", array_reverse(explode("-", $date)));
             return $result;
         }
+    }
+
+    /**
+     * Find data by between values in one field
+     *
+     * @param       $field
+     * @param array $values
+     * @param array $columns
+     *
+     * @return mixed
+     */
+    public function findWhereBetween($field, array $values, $columns = ['*'])
+    {
+        // TODO: Implement findWhereBetween() method.
     }
 }

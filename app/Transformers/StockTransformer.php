@@ -45,6 +45,8 @@ class StockTransformer extends TransformerAbstract
             'avaria' => $model->avaria,
             'peca' => $model->peca,
             'serie' => $model->serie,
+            'ua_palete' => $model->ua_palete,
+            'endereco' => $model->endereco,
             /* place your other model properties here */
             'created_at' => $model->created_at,
             'updated_at' => $model->updated_at

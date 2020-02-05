@@ -4,17 +4,13 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Portal DRS</title>
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 </head>
 <body>
 <div class="flex-center position-ref full-height">
-    <h2 class="title">Integração Portal/Logix: {{ date('d/m/Y H:s:i') }}</h2>
-    <p>Finalizou</p>
+    <h2 class="title">Olá você acabou de criar uma solicitação de compra data/hora {{ date('d/m/Y H:s:i') }}</h2>
+    <p>Sua solicitação número: {{ $solicitacao->num_solicit }}</p>
     Obrigado,<br>
-    {{ config('app.name') }}
+    Drs Group Ltda
 </div>
 </body>
 </html>
