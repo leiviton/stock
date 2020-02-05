@@ -2,13 +2,16 @@
 
 namespace Stock\Http\Controllers\Api\V1\Admin;
 
+use ApiWebSac\Mail\InvoiceOrder;
 use DateTime;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Maatwebsite\Excel\Facades\Excel;
 use Stock\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Stock\Jobs\NotifyUserExport;
+use Stock\Mail\IntegrationLogix;
 use Stock\Services\NFeService;
 
 class UtilController extends Controller
@@ -373,6 +376,32 @@ class UtilController extends Controller
         } else if (count(explode("-", $date)) > 1) {
             $result = implode("/", array_reverse(explode("-", $date)));
             return $result;
+        }
+    }
+
+    public function sendNotificationSolicitation()
+    {
+        $result = DB::connection('sqlsrvcomprovei')->select("SELECT C1_NUM num_solicit,C1_DESCRI descri_prod,C1_QUANT qtd_prod, 
+		    C1_SOLICIT solicitante,
+		    rtrim(C1_EMAIL) email
+        FROM SC1010 WHERE D_E_L_E_T_ = '' 
+			AND C1_FILIAL = '0100' 
+			AND C1_QUJE = '0' 
+			AND C1_COTACAO ='' 
+			AND C1_APROV LIKE '%L%' 
+			AND C1_RESIDUO = '' 
+			AND C1_DATPRF >= '20200129'
+			AND C1_XENVEML <> '1'");
+
+
+
+        if(count($result) > 0){
+            foreach ($result as $res) {
+                Mail::to(['suporteti@drsgroup.com.br'])
+                    ->queue(new IntegrationLogix('allan.santos@drsgroup.com.br', $res));
+
+                DB::connection('sqlsrvcomprovei')->update("UPDATE SC1010 SET C1_XENVEML = 1 WHERE RTRIM(C1_NUM) = ?",[$res->num_solicit]);
+            }
         }
     }
 }

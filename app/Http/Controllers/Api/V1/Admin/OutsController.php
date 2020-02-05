@@ -37,9 +37,9 @@ class OutsController extends Controller
      */
     public function index($id,Request $request)
     {
-        /*$result = DB::connection('sqlsrvyouvita')->table('logix.status_sc')->where('depositante','000251699000162')->get();
-        dd($result[0]);
-        */
+        /*$result = DB::connection('sqlsrv')->table('stocks')->where('depositante','082277955000155');
+        dd($result);*/
+
         $lote = $request->get('protocol') ? $request->get('protocol') : '';
         return $this->service->getOuts($request->all(),$id,$lote);
     }

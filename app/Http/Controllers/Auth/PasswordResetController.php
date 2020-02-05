@@ -3,9 +3,10 @@
 namespace Stock\Http\Controllers\Auth;
 
 use Carbon\Carbon;
+use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\Request;
 use Stock\Http\Controllers\Controller;
-use Stock\Models\PasswordReset;
+use Stock\Models\ResetPassword;
 use Stock\Models\User;
 use Stock\Notifications\PasswordResetRequest;
 use Stock\Notifications\PasswordResetSuccess;
@@ -66,15 +67,12 @@ class PasswordResetController extends Controller
         }
         return response()->json($passwordReset);
     }
-     /**
+
+    /**
      * Reset password
      *
-     * @param  [string] email
-     * @param  [string] password
-     * @param  [string] password_confirmation
-     * @param  [string] token
-     * @return [string] message
-     * @return [json] user object
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse [string] message
      */
     public function reset(Request $request)
     {
@@ -87,6 +85,8 @@ class PasswordResetController extends Controller
             ['token', $request->token],
             ['email', $request->email]
         ])->first();
+
+        dd('teste');
         if (!$passwordReset)
             return response()->json([
                 'message' => 'This password reset token is invalid.'
@@ -99,7 +99,6 @@ class PasswordResetController extends Controller
         $user->password = bcrypt($request->password);
         $user->save();
         $passwordReset->delete();
-        $user->notify(new PasswordResetSuccess($passwordReset));
         return response()->json($user);
     }
 }

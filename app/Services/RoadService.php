@@ -102,17 +102,19 @@ class RoadService
      */
     public function getAll($id,$lote)
     {
+        set_time_limit(0);
         $user = \Auth::guard()->user();
         $cnpj = $this->limpaCPF_CNPJ($this->companyRepository->find($id)->cnpj);
-        $dataEnd = new \DateTime();
-        $dataStart = (new Carbon())->subDay(90);
+        /*$dataEnd = new \DateTime();
+        $dataStart = (new Carbon())->subDay(45);
         $order[0] = $order[0] ?? 'data_recebimento';
-        $order[1] = $order[1] ?? 'desc';
+        $order[1] = $order[1] ?? 'desc';*/
 
 
-        $result = DB::connection('sqlsrv')->table('logix.entries')->where('depositante',$cnpj);
-        //return $result;//$this->repository->skipPresenter(false)->orderByRoads($user,$cnpj,$lote);
+        //$result = DB::connection('sqlsrv')->table('logix.entries')->where('depositante',$cnpj);
+        return $this->repository->skipPresenter(false)->orderByRoads($user,$cnpj,$lote);
 
+        /*return $results;
         if ($lote != '') {
             $results = DB::connection('sqlsrv')->table('logix.entries')
                 ->where('tipo_estoque', $lote)
@@ -120,9 +122,13 @@ class RoadService
                 ->where(function ($query) use ($dataEnd, $dataStart) {
                     return $query->whereRaw('data_recebimento BETWEEN ? AND ?', [$dataStart, $dataEnd]);
                 })
-                ->select(DB::raw('tipo_estoque,data_recebimento,desc_tipo_estoque,qtd_recebida,sum(qtd_rejeitada) as qtd_rejeitada,codigo_produto,desc_produto,lote,data_validade,desc_restricao,unidade_medida,serie_nf'))
+                ->select(DB::raw('tipo_estoque,data_recebimento,desc_tipo_estoque,qtd_recebida,
+                sum(qtd_rejeitada) as qtd_rejeitada,codigo_produto,desc_produto,lote,data_validade,
+                desc_restricao,unidade_medida,serie_nf_definitiva,erie_nf_provisória
+                    ,usuario_inclusao,temperatura,area,portaria_34498,transportadora,guia,conferente_1,
+                    conferente_2,liberado_em'))
                 ->groupBy('codigo_produto')
-                ->groupBy('serie_nf')
+                ->groupBy('serie_nf_definitiva')
                 ->groupBy('data_recebimento')
                 ->groupBy('desc_produto')
                 ->groupBy('tipo_estoque')
@@ -141,9 +147,12 @@ class RoadService
                 ->where(function ($query) use ($dataEnd, $dataStart) {
                     return $query->whereRaw('data_recebimento BETWEEN ? AND ?', [$dataStart, $dataEnd]);
                 })
-                ->select(DB::raw('depositante,tipo_estoque,data_recebimento,desc_tipo_estoque,qtd_recebida,sum(qtd_rejeitada) as qtd_rejeitada,codigo_produto,desc_produto,lote,data_validade,desc_restricao,unidade_medida,serie_nf'))
+                ->select(DB::raw('depositante,tipo_estoque,data_recebimento,
+                desc_tipo_estoque,qtd_recebida,sum(qtd_rejeitada) as qtd_rejeitada,
+                codigo_produto,desc_produto,lote,data_validade,desc_restricao,unidade_medida,serie_nf_definitiva,erie_nf_provisória
+                    ,usuario_inclusao,temperatura,area,portaria_34498,transportadora,guia,conferente_1,conferente_2,liberado_em'))
                 ->groupBy('codigo_produto')
-                ->groupBy('serie_nf')
+                ->groupBy('serie_nf_definitiva')
                 ->groupBy('data_recebimento')
                 ->groupBy('desc_produto')
                 ->groupBy('tipo_estoque')
@@ -157,9 +166,7 @@ class RoadService
                 ->orderBy($order[0], $order[1])
                 ->paginate();
 
-        }
-
-        return $results;
+        }*/
     }
 
     /**

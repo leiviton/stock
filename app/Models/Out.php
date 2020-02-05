@@ -41,6 +41,8 @@ class Out extends \Stock\Models\Base\Out implements Transformable
         'serie',
         'peca',
         'pedido_venda',
-        'company_id'
+        'company_id',
+        'temperatura',
+        'serie_nf_entrada'
     ];
 }
