@@ -311,7 +311,6 @@ class OutRepositoryEloquent extends BaseRepository implements OutRepository
      * @return mixed
      */
     public function getQueryAdmin($data) {
-        set_time_limit(0);
         $query = $this->model->where(function ($query) use ($data) {
             return $query->whereRaw('data_envio BETWEEN ? AND ?',
                 [$data['start'], $data['end']])->where('depositante',$this->limpaCPF_CNPJ($data['cnpj']));
