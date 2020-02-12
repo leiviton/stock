@@ -56,6 +56,7 @@ class RoadRepositoryEloquent extends BaseRepository implements RoadRepository
      */
     public function orderFilter($data, $user, $cnpj, $lote = '')
     {
+        set_time_limit(0);
         $order[0] = $order[0] ?? 'data_recebimento';
         $order[1] = $order[1] ?? 'asc';
         if ($lote == '') {
@@ -63,7 +64,7 @@ class RoadRepositoryEloquent extends BaseRepository implements RoadRepository
                 //dd('a');
                 $results = $this->model
                     ->where('depositante', $cnpj)
-                    ->select(DB::raw('tipo_estoque,data_recebimento,desc_tipo_estoque, qtd_recebida,
+                    ->select(DB::raw('tipo_estoque,data_recebimento,desc_tipo_estoque, sum(qtd_recebida) as qtd_recebida,
                     sum(qtd_rejeitada) as qtd_rejeitada,codigo_produto,desc_produto,lote
                     ,data_validade,desc_produto,desc_restricao,unidade_medida,serie_nf_definitiva as serie_nf,serie_nf_provisória
                     ,usuario_inclusao,temperatura,area,portaria_34498,transportadora,guia,conferente_1,conferente_2,liberado_em'))
@@ -77,7 +78,18 @@ class RoadRepositoryEloquent extends BaseRepository implements RoadRepository
                     ->groupBy('desc_restricao')
                     ->groupBy('desc_tipo_estoque')
                     ->groupBy('unidade_medida')
+                    ->groupBy('depositante')
                     ->groupBy('qtd_recebida')
+                    ->groupBy('serie_nf_provisória')
+                    ->groupBy('usuario_inclusao')
+                    ->groupBy('temperatura')
+                    ->groupBy('area')
+                    ->groupBy('portaria_34498')
+                    ->groupBy('transportadora')
+                    ->groupBy('guia')
+                    ->groupBy('conferente_1')
+                    ->groupBy('conferente_2')
+                    ->groupBy('liberado_em')
                     ->orderBy($order[0], $order[1])
                     ->get();
             } else {
@@ -86,9 +98,9 @@ class RoadRepositoryEloquent extends BaseRepository implements RoadRepository
                     ->where(function ($query) use ($data) {
                         return $query->where($data['field'], 'like', '%' . $data['value'] . '%');
                     })
-                    ->select(DB::raw('tipo_estoque,data_recebimento,desc_tipo_estoque, qtd_recebida,
+                    ->select(DB::raw('tipo_estoque,data_recebimento,desc_tipo_estoque, sum(qtd_recebida) as qtd_recebida,
                     sum(qtd_rejeitada) as qtd_rejeitada,codigo_produto,desc_produto,lote
-                    ,data_validade,desc_produto,desc_restricao,unidade_medida,serie_nf_definitiva,serie_nf_provisória
+                    ,data_validade,desc_produto,desc_restricao,unidade_medida,serie_nf_definitiva as serie_nf,serie_nf_provisória
                     ,usuario_inclusao,temperatura,area,portaria_34498,transportadora,guia,conferente_1,conferente_2,liberado_em'))
                     ->groupBy('codigo_produto')
                     ->groupBy('serie_nf_definitiva')
@@ -100,7 +112,18 @@ class RoadRepositoryEloquent extends BaseRepository implements RoadRepository
                     ->groupBy('desc_restricao')
                     ->groupBy('desc_tipo_estoque')
                     ->groupBy('unidade_medida')
+                    ->groupBy('depositante')
                     ->groupBy('qtd_recebida')
+                    ->groupBy('serie_nf_provisória')
+                    ->groupBy('usuario_inclusao')
+                    ->groupBy('temperatura')
+                    ->groupBy('area')
+                    ->groupBy('portaria_34498')
+                    ->groupBy('transportadora')
+                    ->groupBy('guia')
+                    ->groupBy('conferente_1')
+                    ->groupBy('conferente_2')
+                    ->groupBy('liberado_em')
                     ->orderBy($order[0], $order[1])
                     ->paginate();
             }
@@ -110,9 +133,9 @@ class RoadRepositoryEloquent extends BaseRepository implements RoadRepository
                 $results = $this->model
                     ->where('depositante', $cnpj)
                     ->where('tipo_estoque', $lote)
-                    ->select(DB::raw('tipo_estoque,data_recebimento,desc_tipo_estoque, qtd_recebida,
+                    ->select(DB::raw('tipo_estoque,data_recebimento,desc_tipo_estoque, sum(qtd_recebida) as qtd_recebida,
                     sum(qtd_rejeitada) as qtd_rejeitada,codigo_produto,desc_produto,lote
-                    ,data_validade,desc_produto,desc_restricao,unidade_medida,serie_nf_definitiva,serie_nf_provisória
+                    ,data_validade,desc_produto,desc_restricao,unidade_medida,serie_nf_definitiva as serie_nf,serie_nf_provisória
                     ,usuario_inclusao,temperatura,area,portaria_34498,transportadora,guia,conferente_1,conferente_2,liberado_em'))
                     ->groupBy('codigo_produto')
                     ->groupBy('serie_nf_definitiva')
@@ -124,6 +147,18 @@ class RoadRepositoryEloquent extends BaseRepository implements RoadRepository
                     ->groupBy('desc_restricao')
                     ->groupBy('desc_tipo_estoque')
                     ->groupBy('unidade_medida')
+                    ->groupBy('depositante')
+                    ->groupBy('qtd_recebida')
+                    ->groupBy('serie_nf_provisória')
+                    ->groupBy('usuario_inclusao')
+                    ->groupBy('temperatura')
+                    ->groupBy('area')
+                    ->groupBy('portaria_34498')
+                    ->groupBy('transportadora')
+                    ->groupBy('guia')
+                    ->groupBy('conferente_1')
+                    ->groupBy('conferente_2')
+                    ->groupBy('liberado_em')
                     ->orderBy($order[0], $order[1])
                     ->get();
             } else {
@@ -133,9 +168,9 @@ class RoadRepositoryEloquent extends BaseRepository implements RoadRepository
                     ->where(function ($query) use ($data) {
                         return $query->where($data['field'], 'like', '%' . $data['value'] . '%');
                     })
-                    ->select(DB::raw('tipo_estoque,data_recebimento,desc_tipo_estoque, qtd_recebida,
+                    ->select(DB::raw('tipo_estoque,data_recebimento,desc_tipo_estoque, sum(qtd_recebida) as qtd_recebida,
                     sum(qtd_rejeitada) as qtd_rejeitada,codigo_produto,desc_produto,lote
-                    ,data_validade,desc_produto,desc_restricao,unidade_medida,serie_nf_definitiva,serie_nf_provisória
+                    ,data_validade,desc_produto,desc_restricao,unidade_medida,serie_nf_definitiva as serie_nf,serie_nf_provisória
                     ,usuario_inclusao,temperatura,area,portaria_34498,transportadora,guia,conferente_1,conferente_2,liberado_em'))
                     ->groupBy('codigo_produto')
                     ->groupBy('serie_nf_definitiva')
@@ -147,6 +182,18 @@ class RoadRepositoryEloquent extends BaseRepository implements RoadRepository
                     ->groupBy('desc_restricao')
                     ->groupBy('desc_tipo_estoque')
                     ->groupBy('unidade_medida')
+                    ->groupBy('depositante')
+                    ->groupBy('qtd_recebida')
+                    ->groupBy('serie_nf_provisória')
+                    ->groupBy('usuario_inclusao')
+                    ->groupBy('temperatura')
+                    ->groupBy('area')
+                    ->groupBy('portaria_34498')
+                    ->groupBy('transportadora')
+                    ->groupBy('guia')
+                    ->groupBy('conferente_1')
+                    ->groupBy('conferente_2')
+                    ->groupBy('liberado_em')
                     ->orderBy($order[0], $order[1])
                     ->paginate();
             }
@@ -167,6 +214,8 @@ class RoadRepositoryEloquent extends BaseRepository implements RoadRepository
      */
     public function orderFilterData($data, $cnpj, $lote = '')
     {
+
+        set_time_limit(0);
         $order[0] = $order[0] ?? 'data_recebimento';
         $order[1] = $order[1] ?? 'asc';
         //dd($lote);
@@ -174,7 +223,7 @@ class RoadRepositoryEloquent extends BaseRepository implements RoadRepository
             $results = $this->model
                 ->where('depositante', $cnpj)
                 ->whereBetween("data_recebimento", [$data['start'], $data['end']])
-                ->select(DB::raw('tipo_estoque,data_recebimento,desc_tipo_estoque, qtd_recebida,
+                ->select(DB::raw('tipo_estoque,data_recebimento,desc_tipo_estoque, sum(qtd_recebida) as qtd_recebida,
                     sum(qtd_rejeitada) as qtd_rejeitada,codigo_produto,desc_produto,lote
                     ,data_validade,desc_produto,desc_restricao,unidade_medida,serie_nf_definitiva,serie_nf_provisória
                     ,usuario_inclusao,temperatura,area,portaria_34498,transportadora,guia,conferente_1,conferente_2,liberado_em'))
@@ -188,6 +237,18 @@ class RoadRepositoryEloquent extends BaseRepository implements RoadRepository
                 ->groupBy('desc_restricao')
                 ->groupBy('desc_tipo_estoque')
                 ->groupBy('unidade_medida')
+                ->groupBy('depositante')
+                ->groupBy('qtd_recebida')
+                ->groupBy('serie_nf_provisória')
+                ->groupBy('usuario_inclusao')
+                ->groupBy('temperatura')
+                ->groupBy('area')
+                ->groupBy('portaria_34498')
+                ->groupBy('transportadora')
+                ->groupBy('guia')
+                ->groupBy('conferente_1')
+                ->groupBy('conferente_2')
+                ->groupBy('liberado_em')
                 ->orderBy($order[0], $order[1])
                 ->get();
         } else {
@@ -195,7 +256,7 @@ class RoadRepositoryEloquent extends BaseRepository implements RoadRepository
                 ->where('depositante', $cnpj)
                 ->where('tipo_estoque', $lote)
                 ->whereBetween("data_recebimento", [$data['start'], $data['end']])
-                ->select(DB::raw('tipo_estoque,data_recebimento,desc_tipo_estoque, qtd_recebida,
+                ->select(DB::raw('tipo_estoque,data_recebimento,desc_tipo_estoque, sum(qtd_recebida) as qtd_recebida,
                     sum(qtd_rejeitada) as qtd_rejeitada,codigo_produto,desc_produto,lote
                     ,data_validade,desc_produto,desc_restricao,unidade_medida,serie_nf_definitiva,serie_nf_provisória
                     ,usuario_inclusao,temperatura,area,portaria_34498,transportadora,guia,conferente_1,conferente_2,liberado_em'))
@@ -209,6 +270,18 @@ class RoadRepositoryEloquent extends BaseRepository implements RoadRepository
                 ->groupBy('desc_restricao')
                 ->groupBy('desc_tipo_estoque')
                 ->groupBy('unidade_medida')
+                ->groupBy('depositante')
+                ->groupBy('qtd_recebida')
+                ->groupBy('serie_nf_provisória')
+                ->groupBy('usuario_inclusao')
+                ->groupBy('temperatura')
+                ->groupBy('area')
+                ->groupBy('portaria_34498')
+                ->groupBy('transportadora')
+                ->groupBy('guia')
+                ->groupBy('conferente_1')
+                ->groupBy('conferente_2')
+                ->groupBy('liberado_em')
                 ->orderBy($order[0], $order[1])
                 ->get();
 
@@ -230,6 +303,7 @@ class RoadRepositoryEloquent extends BaseRepository implements RoadRepository
      */
     public function orderByRoads($user, $cnpj, $lote = '')
     {
+        set_time_limit(0);
         $dataEnd = new \DateTime();
         $dataStart = (new Carbon())->subDay(90);
         $order[0] = $order[0] ?? 'data_recebimento';
@@ -241,7 +315,7 @@ class RoadRepositoryEloquent extends BaseRepository implements RoadRepository
                 ->where(function ($query) use ($dataEnd, $dataStart) {
                     return $query->whereRaw('data_recebimento BETWEEN ? AND ?', [$dataStart, $dataEnd]);
                 })
-                ->select(DB::raw('tipo_estoque,data_recebimento,desc_tipo_estoque, qtd_recebida,
+                ->select(DB::raw('tipo_estoque,data_recebimento,desc_tipo_estoque,sum(qtd_recebida) as qtd_recebida,
                     sum(qtd_rejeitada) as qtd_rejeitada,codigo_produto,desc_produto,lote
                     ,data_validade,desc_produto,desc_restricao,unidade_medida,serie_nf_definitiva,serie_nf_provisória
                     ,usuario_inclusao,temperatura,area,portaria_34498,transportadora,guia,conferente_1,conferente_2,liberado_em'))
@@ -275,7 +349,7 @@ class RoadRepositoryEloquent extends BaseRepository implements RoadRepository
                 ->where(function ($query) use ($dataEnd, $dataStart) {
                     return $query->whereRaw('data_recebimento BETWEEN ? AND ?', [$dataStart, $dataEnd]);
                 })
-                ->select(DB::raw('tipo_estoque,data_recebimento,desc_tipo_estoque, qtd_recebida,
+                ->select(DB::raw('tipo_estoque,data_recebimento,desc_tipo_estoque, sum(qtd_recebida) as qtd_recebida,
                     sum(qtd_rejeitada) as qtd_rejeitada,codigo_produto,desc_produto,lote
                     ,data_validade,desc_produto,desc_restricao,unidade_medida,serie_nf_definitiva,serie_nf_provisória
                     ,usuario_inclusao,temperatura,area,portaria_34498,transportadora,guia,conferente_1,conferente_2,liberado_em'))
@@ -319,6 +393,7 @@ class RoadRepositoryEloquent extends BaseRepository implements RoadRepository
      */
     public function getQueryAdmin($data)
     {
+        set_time_limit(0);
         $query = $this->model->where(function ($query) use ($data) {
             return $query->whereRaw('data_recebimento BETWEEN ? AND ?',
                 [$data['start'], $data['end']])->where('depositante', $this->limpaCPF_CNPJ($data['cnpj']));
@@ -372,6 +447,7 @@ class RoadRepositoryEloquent extends BaseRepository implements RoadRepository
      */
     public function getQueryUser($data)
     {
+        set_time_limit(0);
         $query = $this->model->where(function ($query) use ($data) {
             return $query->whereRaw('data_recebimento BETWEEN ? AND ?',
                 [$data['start'], $data['end']])->where('tipo_estoque', $data['protocol']);

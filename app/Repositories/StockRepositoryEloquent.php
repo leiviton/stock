@@ -63,6 +63,7 @@ class StockRepositoryEloquent extends BaseRepository implements StockRepository
      */
     public function orderFilter($data, $user, $cnpj, $lote = '')
     {
+        set_time_limit(0);
         $order[0] = $order[0] ?? 'data_atual';
         $order[1] = $order[1] ?? 'desc';
         if ($lote == '') {
@@ -193,6 +194,7 @@ class StockRepositoryEloquent extends BaseRepository implements StockRepository
      */
     public function orderByStocks($user, $cnpj, $lote)
     {
+        set_time_limit(0);
         $order[0] = $order[0] ?? 'data_atual';
         $order[1] = $order[1] ?? 'desc';
         if ($lote != '') {
@@ -266,6 +268,7 @@ class StockRepositoryEloquent extends BaseRepository implements StockRepository
      */
     public function getQueryAdmin($data)
     {
+        set_time_limit(0);
         $query = $this->model->where('depositante', $data['cnpj'])
             ->select(DB::raw('tipo_estoque as Protocolo,desc_tipo_estoque as DescProtocolo,ua_palete as UA_Palete,endereco as Endereço,
             codigo_produto as Codigo_Produto,desc_produto as Produto,unidade_medida as Unidade_Medida,lote,
@@ -283,6 +286,7 @@ class StockRepositoryEloquent extends BaseRepository implements StockRepository
      */
     public function getQueryUser($data)
     {
+        set_time_limit(0);
         $query = $this->model->where('tipo_estoque', $data['protocol'])
             ->select(DB::raw('tipo_estoque as Protocolo', 'desc_tipo_estoque as DescProtocolo',
                 'codigo_produto as CodigoProduto', 'desc_produto as DescProduto', 'unidade_medida as UnidadeMedida', 'lote',
