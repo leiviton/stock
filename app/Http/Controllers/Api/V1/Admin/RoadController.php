@@ -36,6 +36,7 @@ class RoadController extends Controller
      */
     public function index($id,Request $request)
     {
+        set_time_limit(0);
         $lote = $request->get('protocolo') ? $request->get('protocolo') : '';
         return $this->service->getRoads($request->all(),$id, $lote);
     }
@@ -48,6 +49,7 @@ class RoadController extends Controller
      */
     public function filterData($id, Request $request)
     {
+        set_time_limit(0);
         if($this->service->diffDays($request->get('start'),$request->get('end')) > 31) {
             return response()->json([ 'title' => 'Erro','status' => 'error', 'message' => 'Intervalo de datas não pode ser maior que 31 dias'],406);
         }else if($this->service->diffDays($request->get('start'),$request->get('end')) < 0) {
@@ -66,6 +68,7 @@ class RoadController extends Controller
      */
     public function getAll($id,Request $request)
     {
+        set_time_limit(0);
         $lote = $request->get('protocolo') ? $request->get('protocolo') : '';
         return $this->service->getAll($id,$lote);
     }
@@ -77,6 +80,7 @@ class RoadController extends Controller
      */
     public function export(Request $request)
     {
+        set_time_limit(0);
         $data = $request->all();
 
         $data['start'] = $this->service->invertDate($request->get('start'));

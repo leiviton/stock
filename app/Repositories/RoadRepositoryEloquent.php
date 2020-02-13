@@ -56,7 +56,6 @@ class RoadRepositoryEloquent extends BaseRepository implements RoadRepository
      */
     public function orderFilter($data, $user, $cnpj, $lote = '')
     {
-        set_time_limit(0);
         $order[0] = $order[0] ?? 'data_recebimento';
         $order[1] = $order[1] ?? 'asc';
         if ($lote == '') {
