@@ -51,10 +51,10 @@ class BankIdeaController extends Controller
         $result = $this->repository->create($data);
 
         if ($result->id) {
-
+            //dd("aquu");
             $ideia = $this->repository->find($result->id);
 
-            Mail::queue(new IntegrationBankIdeia("'leiviton.silva@drsgroup.com.br", $ideia));
+            Mail::queue(new IntegrationBankIdeia("inova@drsgroup.com.br", $ideia));
 
             return response()->json(['message' => 'Idea enviada com sucesso', 'status' => 'success',
                 'title' => 'Sucesso'], 201);
