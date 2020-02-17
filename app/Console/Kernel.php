@@ -4,7 +4,9 @@ namespace Stock\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Stock\Console\Commands\AprovCron;
 use Stock\Console\Commands\EmailCron;
+use Stock\Console\Commands\PedidoCron;
 use Stock\Console\Commands\ProtocolsCron;
 
 class Kernel extends ConsoleKernel
@@ -16,7 +18,9 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         ProtocolsCron::class,
-        EmailCron::class
+        EmailCron::class,
+        PedidoCron::class,
+        AprovCron::class
     ];
 
     /**
@@ -31,6 +35,8 @@ class Kernel extends ConsoleKernel
             ->dailyAt('14:30');
 
         $schedule->command('emails:cron')->timezone('America/Sao_Paulo')->everyFiveMinutes();
+        $schedule->command('pedido:cron')->timezone('America/Sao_Paulo')->everyFiveMinutes();
+        $schedule->command('aprov:cron')->timezone('America/Sao_Paulo')->everyFiveMinutes();
     }
 
     /**

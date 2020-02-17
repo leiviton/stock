@@ -7,24 +7,22 @@
 </head>
 <body>
 <div class="flex-center position-ref full-height">
-    <h1 class="title">Olá {{ $solicitacao[0]->solicitante }}, você realizou uma solicitação de compras: {{ $order }}</h1>
+    <h1 class="title"><p>
+            Olá {{$solicitacao[0]->solicitante}}, foi gerado um pedido de compras através da solicitação de compras: {{ $order }}</p>
+    </h1>
     <hr>
     <table>
         <thead>
         <tr>
             <td>
-                Produto
-            </td>
-            <td>
-                Quantidade
+                Pedido:
             </td>
         </tr>
         </thead>
         <tbody>
         @foreach($solicitacao as $s)
             <tr>
-                <td>{{$s->descri_prod}}</td>
-                <td>{{(int)$s->qtd_prod}}</td>
+                <td>{{$s->num_pedido}}</td>
             </tr>
         @endforeach
         </tbody>
