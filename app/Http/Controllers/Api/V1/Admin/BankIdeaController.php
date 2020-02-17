@@ -10,7 +10,9 @@ namespace Stock\Http\Controllers\Api\V1\Admin;
 
 use Stock\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Stock\Mail\IntegrationBankIdeia;
 use Stock\Repositories\BankIdeaRepository;
+use Illuminate\Support\Facades\Mail;
 
 class BankIdeaController extends Controller
 {
@@ -49,6 +51,11 @@ class BankIdeaController extends Controller
         $result = $this->repository->create($data);
 
         if ($result->id) {
+
+            $ideia = $this->repository->find($result->id);
+
+            Mail::to('leiviton.silva@drsgroup.com.br')->queue(new IntegrationBankIdeia("'leiviton.silva@drsgroup.com.br", $ideia));
+
             return response()->json(['message' => 'Idea enviada com sucesso', 'status' => 'success',
                 'title' => 'Sucesso'], 201);
         } else {

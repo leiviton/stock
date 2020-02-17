@@ -6,7 +6,6 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Stock\Mail\IntegrationEmail;
-use Stock\Mail\IntegrationLogix;
 
 class PedidoCron extends Command
 {
