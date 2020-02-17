@@ -9,6 +9,7 @@
 <div class="flex-center position-ref full-height">
     <h1 class="title"><p>
             Olá {{$solicitacao[0]->solicitante}}, foi gerado um pedido de compras através da solicitação de compras: {{ $order }}</p>
+    <p>Favor aguardar aprovação do pedido.</p>
     </h1>
     <hr>
     <table>

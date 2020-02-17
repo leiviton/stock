@@ -33,6 +33,7 @@ class EmailCron extends Command
     }
 
 
+
     /**
      * Execute the console command.
      *
@@ -46,10 +47,9 @@ class EmailCron extends Command
 	RTRIM(C1_DESCRI) descri_prod,
 	C1_QUANT qtd_prod, 
 	RTRIM(C1_NOMESOL) solicitante,
-	RTRIM(C1_EMAIL) email,
-	C1_XENVEML env_email
+	RTRIM(C1_EMAIL) email
 FROM SC1010 
-	WHERE D_E_L_E_T_ ='' AND env_email <> '1'
+	WHERE D_E_L_E_T_ ='' AND C1_XENVEML <> '1'
 	AND C1_QUJE = '0' 
 	AND C1_COTACAO ='' 
 	AND C1_APROV LIKE '%L%' 
@@ -83,8 +83,7 @@ FROM SC1010
                                     RTRIM(C1_DESCRI) descri_prod,
                                     C1_QUANT qtd_prod, 
                                     RTRIM(C1_NOMESOL) solicitante,
-                                    RTRIM(C1_EMAIL) email,
-                                    C1_XENVEML env_email
+                                    RTRIM(C1_EMAIL) email
                                 FROM SC1010 
                                     WHERE D_E_L_E_T_ ='' 
                                     AND C1_QUJE = '0' 
@@ -97,7 +96,7 @@ FROM SC1010
 
                 Mail::queue(new IntegrationLogix($result[0]->email, $result, $solicitUnique[$j]));
 
-                DB::connection('sqlsrvcomprovei')->update("UPDATE SC1010 SET C1_XENVEML = '!' WHERE C1_NUM = ?", [$solicitUnique[$j]]);
+                DB::connection('sqlsrvcomprovei')->update("UPDATE SC1010 SET C1_XENVEML = '1' WHERE C1_NUM = ?", [$solicitUnique[$j]]);
             }
 
             return response()->json(['message' => 'Finalizado envio de email']);

@@ -34,9 +34,9 @@ class Kernel extends ConsoleKernel
         $schedule->command('protocols:cron')->timezone('America/Sao_Paulo')
             ->dailyAt('14:30');
 
-        $schedule->command('emails:cron')->timezone('America/Sao_Paulo')->everyFiveMinutes();
-        $schedule->command('pedido:cron')->timezone('America/Sao_Paulo')->everyFiveMinutes();
-        $schedule->command('aprov:cron')->timezone('America/Sao_Paulo')->everyFiveMinutes();
+        $schedule->command('emails:cron')->timezone('America/Sao_Paulo')->everyMinute();
+        $schedule->command('pedido:cron')->timezone('America/Sao_Paulo')->everyMinute();
+        $schedule->command('aprov:cron')->timezone('America/Sao_Paulo')->everyMinute();
     }
 
     /**

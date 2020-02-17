@@ -385,12 +385,12 @@ FROM SC7010 C7
 		LEFT JOIN SCR010 CR ON (CR.D_E_L_E_T_ ='' AND CR.CR_FILIAL = C7.C7_FILIAL AND CR.CR_NUM = C7.C7_NUM)
 		LEFT JOIN SAK010 AK ON (AK.D_E_L_E_T_ ='' AND AK.AK_FILIAL = CR.CR_FILIAL AND AK.AK_USER = CR.CR_USER)
 		LEFT JOIN SAL010 AL ON (AL.D_E_L_E_T_ ='' AND AL.AL_FILIAL = CR.CR_FILIAL AND AL.AL_USER = CR.CR_USER AND AL.AL_COD = CR.CR_GRUPO)
-WHERE C7_EMISSAO >= '20200216' AND C7.D_E_L_E_T_ ='' AND CR_ENVMAIL <> '1'
+WHERE C7_EMISSAO >= '20200213' AND C7.D_E_L_E_T_ ='' AND CR_ENVMAIL <> '1'
 GROUP BY C7_NUM, C7_NUMSC,AK_EMAIL, AK_NOME, CR_STATUS, AL.AL_NIVEL, CR_EMISSAO");
             if (count($arraySolicitationNumber) > 0) {
                 for ($j = 0; $j < sizeof($arraySolicitationNumber); $j++) {
                     if ($arraySolicitationNumber[$j]->status_aprov == '02') {
-                        Mail::queue(new IntegrationAprov($arraySolicitationNumber[$j]->email_aprov, $arraySolicitationNumber[$j], $arraySolicitationNumber[$j]));
+                        Mail::queue(new IntegrationAprov($arraySolicitationNumber[$j]->email_aprov, $arraySolicitationNumber[$j], $arraySolicitationNumber[$j]->num_pedido));
                         DB::connection('sqlsrvcomprovei')->update("UPDATE SCR010 SET CR_ENVMAIL = '1' WHERE CR_NUM = ? AND CR_STATUS = '02'", [$arraySolicitationNumber[$j]->num_pedido]);
                     }
                 }
