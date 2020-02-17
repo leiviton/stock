@@ -14,6 +14,7 @@ use Stock\Jobs\NotifyUserExport;
 use Stock\Mail\IntegrationAprov;
 use Stock\Mail\IntegrationEmail;
 use Stock\Mail\IntegrationLogix;
+use Stock\Mail\IntegrationPedAprov;
 use Stock\Services\NFeService;
 
 class UtilController extends Controller
@@ -374,25 +375,22 @@ class UtilController extends Controller
     public function sendNotificationSolicitation()
     {
         $arraySolicitationNumber = DB::connection('sqlsrvcomprovei')
-            ->select("SELECT RTRIM(C7.C7_NUM) num_pedido, 
-		RTRIM(C7.C7_NUMSC) num_solicit,  
-		AK_EMAIL email_aprov, 
-		AK_NOME	nome_aprov, 
-		CR_STATUS status_aprov,  
-		AL.AL_NIVEL nivel_aprov,
-		CR_EMISSAO emissao
-FROM SC7010 C7
-		LEFT JOIN SCR010 CR ON (CR.D_E_L_E_T_ ='' AND CR.CR_FILIAL = C7.C7_FILIAL AND CR.CR_NUM = C7.C7_NUM)
-		LEFT JOIN SAK010 AK ON (AK.D_E_L_E_T_ ='' AND AK.AK_FILIAL = CR.CR_FILIAL AND AK.AK_USER = CR.CR_USER)
-		LEFT JOIN SAL010 AL ON (AL.D_E_L_E_T_ ='' AND AL.AL_FILIAL = CR.CR_FILIAL AND AL.AL_USER = CR.CR_USER AND AL.AL_COD = CR.CR_GRUPO)
-WHERE C7_EMISSAO >= '20200213' AND C7.D_E_L_E_T_ ='' AND CR_ENVMAIL <> '1'
-GROUP BY C7_NUM, C7_NUMSC,AK_EMAIL, AK_NOME, CR_STATUS, AL.AL_NIVEL, CR_EMISSAO");
+            ->select("SELECT	RTRIM(SC7.C7_NUM) num_pedido,
+		RTRIM(SC7.C7_NUMSC) num_solicit,
+		RTRIM(SC1.C1_NOMESOL) solicitante,
+		RIGHT(SC7.C7_DATPRF,2)+'/'+SUBSTRING(SC7.C7_DATPRF,5,2)+'/'+LEFT(SC7.C7_DATPRF,4) AS data_entrega,
+		RTRIM(SC1.C1_EMAIL) email
+FROM SC7010 SC7
+	LEFT JOIN SC1010 SC1 ON (SC1.D_E_L_E_T_='' AND SC1.C1_FILIAL = SC7.C7_FILIAL AND SC1.C1_NUM = SC7.C7_NUMSC)
+WHERE C7_RESIDUO ='' AND C7_CONTRA ='' AND C7_CONAPRO <> 'B' AND SC7.C7_NUMSC <> '' AND SC7.C7_EMISSAO >= '20200216' 
+AND C7_XENVAPR <> '1'
+GROUP BY SC7.C7_NUM, SC7.C7_NUMSC, SC1.C1_NOMESOL, SC1.C1_EMAIL, SC7.C7_XENVEML, SC7.C7_DATPRF, C7_XENVAPR");
+
+
             if (count($arraySolicitationNumber) > 0) {
                 for ($j = 0; $j < sizeof($arraySolicitationNumber); $j++) {
-                    if ($arraySolicitationNumber[$j]->status_aprov == '02') {
-                        Mail::queue(new IntegrationAprov($arraySolicitationNumber[$j]->email_aprov, $arraySolicitationNumber[$j], $arraySolicitationNumber[$j]->num_pedido));
-                        DB::connection('sqlsrvcomprovei')->update("UPDATE SCR010 SET CR_ENVMAIL = '1' WHERE CR_NUM = ? AND CR_STATUS = '02'", [$arraySolicitationNumber[$j]->num_pedido]);
-                    }
+                        Mail::queue(new IntegrationPedAprov($arraySolicitationNumber[$j]->email, $arraySolicitationNumber[$j], $arraySolicitationNumber[$j]->num_pedido));
+                        DB::connection('sqlsrvcomprovei')->update("UPDATE SC7010 SET C7_XENVAPR = '1' WHERE C7_NUM = ?", [$arraySolicitationNumber[$j]->num_pedido]);
                 }
             }else{
                 return response()->json(['message' => 'Sem pedidos nessa data email']);

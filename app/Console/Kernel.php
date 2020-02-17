@@ -20,7 +20,8 @@ class Kernel extends ConsoleKernel
         ProtocolsCron::class,
         EmailCron::class,
         PedidoCron::class,
-        AprovCron::class
+        AprovCron::class,
+        PedidoCron::class
     ];
 
     /**
@@ -37,6 +38,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('emails:cron')->timezone('America/Sao_Paulo')->everyMinute();
         $schedule->command('pedido:cron')->timezone('America/Sao_Paulo')->everyMinute();
         $schedule->command('aprov:cron')->timezone('America/Sao_Paulo')->everyMinute();
+        $schedule->command('pedidoaprov:cron')->timezone('America/Sao_Paulo')->everyMinute();
     }
 
     /**
