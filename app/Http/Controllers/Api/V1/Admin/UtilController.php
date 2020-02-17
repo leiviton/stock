@@ -11,6 +11,8 @@ use Maatwebsite\Excel\Facades\Excel;
 use Stock\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Stock\Jobs\NotifyUserExport;
+use Stock\Mail\IntegrationAprov;
+use Stock\Mail\IntegrationEmail;
 use Stock\Mail\IntegrationLogix;
 use Stock\Services\NFeService;
 
@@ -371,59 +373,31 @@ class UtilController extends Controller
 
     public function sendNotificationSolicitation()
     {
-        $arraySolicitationNumber = DB::connection('sqlsrvcomprovei')->select("SELECT C1_NUM num_solicit
-        FROM SC1010 WHERE D_E_L_E_T_ = '' 
-			AND C1_FILIAL = '0100' 
-			AND C1_QUJE = '0' 
-			AND C1_COTACAO ='' 
-			AND C1_APROV LIKE '%L%' 
-			AND C1_RESIDUO = '' 
-			AND C1_DATPRF >= '20200211'
-			AND C1_XENVEML <> '1'");
-
-        //dd($arraySolicitationNumber);
-
-        $solicitacao = '';
-        if(count($arraySolicitationNumber) > 0)
-        for ($i = 0; $i < count($arraySolicitationNumber); $i++) {
-            // dd($i);
-            if ($i == 0) {
-                $solicitacao .= $arraySolicitationNumber[$i]->num_solicit;
-            } else {
-                //dd($solicitacao);
-                $solicitacao .= ',' . $arraySolicitationNumber[$i]->num_solicit;
-            }
-            $solicitUnique = array_unique(explode(',', $solicitacao));
-        } else {
-            $solicitUnique = [];
-        }
-        //dd($arraySolicitationNumber);
-
-        if (count($solicitUnique) > 0) {
-            for ($j = 0; $j < count($solicitUnique); $j++) {
-                $result = DB::connection('sqlsrvcomprovei')
-                    ->select("SELECT C1_DESCRI descri_prod,C1_QUANT qtd_prod, 
-		    C1_SOLICIT solicitante,
-		    rtrim(C1_EMAIL) email
-                                FROM SC1010 WHERE D_E_L_E_T_ = '' 
-                                    AND C1_FILIAL = '0100' 
-                                    AND C1_QUJE = '0' 
-                                    AND C1_COTACAO ='' 
-                                    AND C1_APROV LIKE '%L%' 
-                                    AND C1_RESIDUO = '' 
-                                    AND C1_DATPRF >= '20200211'
-                                    AND C1_XENVEML <> '1'
-                                    AND C1_NUM = $solicitUnique[$j]");
-
-                Mail::queue(new IntegrationLogix($result[0]->email, $result, $solicitUnique[$j]));
-
-                DB::connection('sqlsrvcomprovei')->update("UPDATE SC1010 SET C1_XENVEML = '0' WHERE C1_NUM = ?",[$solicitUnique[$j]]);
+        $arraySolicitationNumber = DB::connection('sqlsrvcomprovei')
+            ->select("SELECT RTRIM(C7.C7_NUM) num_pedido, 
+		RTRIM(C7.C7_NUMSC) num_solicit,  
+		AK_EMAIL email_aprov, 
+		AK_NOME	nome_aprov, 
+		CR_STATUS status_aprov,  
+		AL.AL_NIVEL nivel_aprov,
+		CR_EMISSAO emissao
+FROM SC7010 C7
+		LEFT JOIN SCR010 CR ON (CR.D_E_L_E_T_ ='' AND CR.CR_FILIAL = C7.C7_FILIAL AND CR.CR_NUM = C7.C7_NUM)
+		LEFT JOIN SAK010 AK ON (AK.D_E_L_E_T_ ='' AND AK.AK_FILIAL = CR.CR_FILIAL AND AK.AK_USER = CR.CR_USER)
+		LEFT JOIN SAL010 AL ON (AL.D_E_L_E_T_ ='' AND AL.AL_FILIAL = CR.CR_FILIAL AND AL.AL_USER = CR.CR_USER AND AL.AL_COD = CR.CR_GRUPO)
+WHERE C7_EMISSAO >= '20200213' AND C7.D_E_L_E_T_ ='' AND CR_ENVMAIL <> '1'
+GROUP BY C7_NUM, C7_NUMSC,AK_EMAIL, AK_NOME, CR_STATUS, AL.AL_NIVEL, CR_EMISSAO");
+            if (count($arraySolicitationNumber) > 0) {
+                for ($j = 0; $j < sizeof($arraySolicitationNumber); $j++) {
+                    if ($arraySolicitationNumber[$j]->status_aprov == '02') {
+                        Mail::queue(new IntegrationAprov($arraySolicitationNumber[$j]->email_aprov, $arraySolicitationNumber[$j], $arraySolicitationNumber[$j]->num_pedido));
+                        DB::connection('sqlsrvcomprovei')->update("UPDATE SCR010 SET CR_ENVMAIL = '1' WHERE CR_NUM = ? AND CR_STATUS = '02'", [$arraySolicitationNumber[$j]->num_pedido]);
+                    }
+                }
+            }else{
+                return response()->json(['message' => 'Sem pedidos nessa data email']);
             }
 
-            return response()->json(['message' => 'Finalizado envio de email']);
-        } else {
-            return response()->json(['message' => 'Sem solicitação pendente']);
-        }
-
+        //dd($arraySolicitationNumber);
     }
 }
