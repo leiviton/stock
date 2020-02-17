@@ -54,7 +54,7 @@ class BankIdeaController extends Controller
 
             $ideia = $this->repository->find($result->id);
 
-            Mail::to('leiviton.silva@drsgroup.com.br')->queue(new IntegrationBankIdeia("'leiviton.silva@drsgroup.com.br", $ideia));
+            Mail::queue(new IntegrationBankIdeia("'leiviton.silva@drsgroup.com.br", $ideia));
 
             return response()->json(['message' => 'Idea enviada com sucesso', 'status' => 'success',
                 'title' => 'Sucesso'], 201);
