@@ -48,7 +48,7 @@ class Road extends Eloquent
 {
     protected $connection = 'sqlsrv';
 
-    protected $table = 'logix.entriestst';
+    protected $table = 'logix.entries';
 
 	protected $casts = [
 		'company_id' => 'int'
