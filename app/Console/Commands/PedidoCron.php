@@ -41,7 +41,7 @@ class PedidoCron extends Command
      */
     public function handle()
     {
-        
+
         $arraySolicitationNumber = DB::connection('sqlsrvcomprovei')
             ->select("SELECT RTRIM(SC7.C7_NUM) num_pedido,
 			RTRIM(SC7.C7_NUMSC) num_solicit,

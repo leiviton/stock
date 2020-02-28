@@ -75,7 +75,10 @@ return [
             'username'  => env('DB_USERNAME_SECOND'),
             'password'  => env('DB_PASSWORD_SECOND'),
             'charset' => 'utf8',
-            'prefix' => ''
+            'prefix' => '',
+            'options' => [
+                PDO::ATTR_TIMEOUT => 30000,
+            ],
         ],
 
         'sqlsrvcomprovei' => [
@@ -86,7 +89,10 @@ return [
             'username'  => env('DB_USERNAME_C'),
             'password'  => env('DB_PASSWORD_C'),
             'charset' => 'utf8',
-            'prefix' => ''
+            'prefix' => '',
+            'options' => [
+                PDO::ATTR_TIMEOUT => 300000,
+            ],
         ],
 
         'youvita' => [

@@ -304,7 +304,7 @@ class RoadRepositoryEloquent extends BaseRepository implements RoadRepository
     {
         set_time_limit(0);
         $dataEnd = new \DateTime();
-        $dataStart = (new Carbon())->subDay(90);
+        $dataStart = (new Carbon())->subDay(30);
         $order[0] = $order[0] ?? 'data_recebimento';
         $order[1] = $order[1] ?? 'desc';
         if ($lote != '') {
