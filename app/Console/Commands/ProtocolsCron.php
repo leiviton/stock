@@ -57,12 +57,14 @@ class ProtocolsCron extends Command
     public function handle()
     {
         $companies = $this->companyRepository->all();
+        
+        $this->repository->delete();
 
         foreach ($companies as $company) {
 
             $company->cnpj = $this->limpaCPF_CNPJ($company->cnpj);
 
-            $result = DB::connection('sqlsrv')->table('logix.wms_tip_estoque')->where('sit_registro', 1)->where('empresa_deposit', $this->limpaCPF_CNPJ($company->cnpj))->get();
+            $result = DB::connection('sqlsrv')->table('logix.wms_tip_estoque')->where('sit_registro', 1)->where('empresa_deposit', $this->limpaCPF_CNPJ($company->cnpj))->where('empresa','01')->get();
 
             for ($i = 0; $i < count($result); $i++) {
                 //dd($result[$i]->empresa);
